@@ -1,0 +1,39 @@
+#! /bin/bash -l
+
+# https://gist.github.com/Josef-Friedrich/0c835f87c81f74f73449650ecbefe3f1
+
+# Usage: ./zfs-snapshot-recursive.sh <snapshot-name>
+# Description: Create snapshots recursively for all datasets in all
+# zpools.
+
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+#
+# Copyright (C) 2016 Josef Friedrich <josef@friedrich.rocks>
+#
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+#
+#  0. You just DO WHAT THE FUCK YOU WANT TO“
+
+if [ -z "$1" ]; then
+	NAME=$(date +%Y%m%dT%H%M%S)
+else
+	NAME="$1"
+fi
+
+LOG="/tmp/maillog_$(basename $0)"
+echo > $LOG
+POOLS=$(zpool list -H | awk '{print $1}')
+
+for POOL in ${POOLS}; do
+	echo "Create snapshots named '$NAME' for all datasets in zpool '$POOL'." | tee -a $LOG
+	/sbin/zfs snapshot -r ${POOL}@${NAME} 2>&1 | tee -a $LOG
+done
+
+maillog.sh "ZFS snapshots" $LOG
+easy-nsca.sh "ZFS snapshots"
