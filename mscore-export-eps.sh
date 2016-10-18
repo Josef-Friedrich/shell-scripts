@@ -23,10 +23,38 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-mscore --export-to $2.$1 $2.mscx
+_usage() {
+	echo "Usage: $(basename $0) <musescore-file-without-extension>"
+}
 
+_mscore() {
+	mscore --export-to $1.svg "$2"
+}
 
-inkscape \
-	--export-area-drawing \
-	--without-gui \
-	--export-eps=$1.eps $1.svg
+_inkscape() {
+	inkscape \
+		--export-area-drawing \
+		--without-gui \
+		--export-eps="$1".eps "$1".svg
+}
+
+_clean() {
+	rm -f "$1".svg
+}
+
+NAME="$1"
+
+if [ -f "$NAME.mscx" ]; then
+	FILE="$NAME.mscx"
+elif [ -f "$FILE.mscz" ]; then
+	FILE="$NAME.mscz"
+fi
+
+if [ -z "$FILE" ]; then
+	_usage
+	exit 1
+fi
+
+_mscore "$NAME" "$FILE"
+_inkscape "$NAME"
+_clean "$NAME"
