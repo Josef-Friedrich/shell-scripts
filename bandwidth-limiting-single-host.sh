@@ -23,10 +23,23 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+# http://lartc.org/howto/lartc.ratelimit.single.html
+
+if [ "$1" = clear ]; then	
+	tc qdisc del dev $2 root
+	exit
+fi
+
+DEV=$1
+IP=$2
+BANDWIDTH=$3
+
 tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
 
-tc class add dev $DEV parent 1: classid 1:1 cbq rate 512kbit \
+tc class add dev $DEV parent 1: classid 1:1 cbq rate $BANDWIDTH \
 	allot 1500 prio 5 bounded isolated
 
 tc filter add dev $DEV parent 1: protocol ip prio 16 u32 \
 	match ip dst $IP flowid 1:1
+
+# tc qdisc add dev $DEV parent 1:1 sfq perturb 10
