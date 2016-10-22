@@ -28,18 +28,16 @@
 _usage() {
 	echo "Usage: $(basename $0) <dest> <bandwidth>
 
-
-  <dest>: Destination ip address or url
-  <bandwith>: Bandwith rates like '1000kbps'. See tc documentation.
+	<dest>: Destination ip address or url
+	<bandwith>: Bandwith rates like '1000kbps'. See tc documentation.
 
 
 OPTIONS:
 	-d <dev>: Network interface, e. g.: eth1, eno1
 
-
 or
 
- $(basename $0) [-d <network-interface> ] clear
+$(basename $0) [-d <network-interface> ] clear
 "
 }
 
