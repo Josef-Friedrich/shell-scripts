@@ -25,21 +25,35 @@
 
 # http://lartc.org/howto/lartc.ratelimit.single.html
 
-if [ "$1" = clear ]; then	
-	tc qdisc del dev $2 root
+_usage() {
+	echo "Usage: $(basename $0) <dev> <ip> <bandwidth>
+or
+
+ $(basename $0) clear <dev>
+"
+}
+
+if [ -z "$1" ]; then
+	_usage
+	exit 1
+fi
+
+if [ "$1" = clear ]; then
+	sudo tc qdisc del dev $2 root
 	exit
 fi
 
 DEV=$1
 IP=$2
+IP=$(dig +short $IP)
 BANDWIDTH=$3
 
-tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
+sudo tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
 
-tc class add dev $DEV parent 1: classid 1:1 cbq rate $BANDWIDTH \
+sudo tc class add dev $DEV parent 1: classid 1:1 cbq rate $BANDWIDTH \
 	allot 1500 prio 5 bounded isolated
 
-tc filter add dev $DEV parent 1: protocol ip prio 16 u32 \
+sudo tc filter add dev $DEV parent 1: protocol ip prio 16 u32 \
 	match ip dst $IP flowid 1:1
 
-# tc qdisc add dev $DEV parent 1:1 sfq perturb 10
+sudo tc qdisc add dev $DEV parent 1:1 sfq perturb 10
