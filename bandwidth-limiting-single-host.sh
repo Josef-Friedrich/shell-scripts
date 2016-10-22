@@ -26,29 +26,54 @@
 # http://lartc.org/howto/lartc.ratelimit.single.html
 
 _usage() {
-	echo "Usage: $(basename $0) <dev> <ip> <bandwidth>
+	echo "Usage: $(basename $0) <dest> <bandwidth>
+
+
+  <dest>: Destination ip address or url
+  <bandwith>: Bandwith rates like '1000kbps'. See tc documentation.
+
+
+OPTIONS:
+	-d <dev>: Network interface, e. g.: eth1, eno1
+
+
 or
 
- $(basename $0) clear <dev>
+ $(basename $0) [-d <network-interface> ] clear
 "
 }
+
+while getopts ":d:" OPT; do
+	case $OPT in
+		-d)
+			DEV=$OPTARG
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			;;
+	esac
+done
+
+shift $((OPTIND-1))
+
 
 if [ -z "$1" ]; then
 	_usage
 	exit 1
 fi
 
-if [ "$1" = clear ]; then
-	sudo tc qdisc del dev $2 root
-	exit
+IP=$1
+IP=$(dig +short $IP)
+BANDWIDTH=$2
+
+if [ -z "$DEV" ]; then
+	DEV=$(ip route show | grep default | awk '{print $5}')
 fi
 
-DEV=$1
-IP=$2
-IP=$(dig +short $IP)
-BANDWIDTH=$3
-
-DEV=$(ip route show | grep default | awk '{print $5}')
+if [ "$1" = clear ]; then
+	sudo tc qdisc del dev $DEV root
+	exit
+fi
 
 sudo tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
 
