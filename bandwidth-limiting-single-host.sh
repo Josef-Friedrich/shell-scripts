@@ -48,6 +48,8 @@ IP=$2
 IP=$(dig +short $IP)
 BANDWIDTH=$3
 
+DEV=$(ip route show | grep default | awk '{print $5}')
+
 sudo tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
 
 sudo tc class add dev $DEV parent 1: classid 1:1 cbq rate $BANDWIDTH \
