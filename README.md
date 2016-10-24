@@ -6,6 +6,7 @@ A collection of useful shell scripts
 
 * Use tabs for indentation
 * Prefix functions with _
+* Variable names are UPPERCASE
 
 Example:
 
