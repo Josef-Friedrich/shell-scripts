@@ -82,7 +82,6 @@ Options:
 	exit 0
 }
 
-
 while getopts ":b:ht" OPT; do
 	case $OPT in
 		b)
