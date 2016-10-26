@@ -33,8 +33,8 @@ toc"
 SEARCH=""
 PROMPT=""
 for EXTENSION in $EXTENSIONS; do
-  SEARCH="$SEARCH -name \"*.$EXTENSION\" -or "
-  PROMPT="$PROMPT \"$EXTENSION\""
+	SEARCH="$SEARCH -name \"*.$EXTENSION\" -or "
+	PROMPT="$PROMPT \"$EXTENSION\""
 done
 
 echo -n "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|n)? "
@@ -42,8 +42,8 @@ echo -n "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|
 read YES
 
 if [ "$YES" != "y" ]; then
-  echo "User abortion."
-  exit 1
+	echo "User abortion."
+	exit 1
 fi
 
 SEARCH=${SEARCH:0:${#SEARCH}-4}
