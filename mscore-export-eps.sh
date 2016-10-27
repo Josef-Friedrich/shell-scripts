@@ -24,11 +24,19 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) <musescore-file-without-extension>"
+	echo "Usage: $(basename $0) [-h] [<musescore-file>]
+
+Convert MuseScore files to eps using Inkscape. If <musescore-file>
+is omitted all MuseScore files in the current working directory are
+converted.
+
+OPTIONS
+	-h, --help	Show this help message.
+"
 }
 
 _mscore() {
-	mscore --export-to $1.svg "$2"
+	mscore --export-to "$1".svg "$2"
 }
 
 _inkscape() {
@@ -42,19 +50,34 @@ _clean() {
 	rm -f "$1".svg
 }
 
-NAME="$1"
+_do_file() {
+	local SCORE
+	SCORE="$1"
+	local BASENAME
+	BASENAME=$(echo "$FILE" | sed 's/.mscx//g' | sed 's/.mscy//g')
 
-if [ -f "$NAME.mscx" ]; then
-	FILE="$NAME.mscx"
-elif [ -f "$FILE.mscz" ]; then
-	FILE="$NAME.mscz"
-fi
+	echo "Convert $SCORE"
+	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
+	_inkscape "$BASENAME"
+	_clean "$BASENAME"
+}
 
-if [ -z "$FILE" ]; then
+if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
 	_usage
 	exit 1
 fi
 
-_mscore "$NAME" "$FILE"
-_inkscape "$NAME"
-_clean "$NAME"
+FILE="$1"
+
+if [ -z "$FILE" ]; then
+	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
+	for FILE in $FILES; do
+
+		_do_file "$FILE"
+	done
+elif [ -f "$FILE" ]; then
+	_do_file "$FILE"
+else
+	_usage
+	exit 1
+fi
