@@ -46,7 +46,13 @@ _mscore() {
 }
 
 _inkscape() {
-	inkscape \
+	local INKSCAPE
+	if [ "$(uname)" = "Darwin" ]; then
+		INKSCAPE=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
+	else
+		INKSCAPE=inkscape
+	fi
+	$INKSCAPE \
 		--export-area-drawing \
 		--without-gui \
 		--export-eps="$1".eps "$1".svg
