@@ -60,7 +60,8 @@ _clean() {
 
 _do_file() {
 	local SCORE
-	SCORE="$1"
+	SCORE="$(pwd)$1"
+	SCORE=$(echo "$SCORE" | sed 's+./+/+g')
 	local BASENAME
 	BASENAME=$(echo "$FILE" | sed 's/.mscx//g' | sed 's/.mscy//g')
 
