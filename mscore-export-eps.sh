@@ -32,6 +32,7 @@ converted.
 
 OPTIONS
 	-h, --help	Show this help message.
+	-c, --clean 	Remove / clean *.svg files
 "
 }
 
@@ -47,7 +48,9 @@ _inkscape() {
 }
 
 _clean() {
-	rm -f "$1".svg
+	if [ "$CLEAN" = "1" ]; then
+		rm -f "$1".svg
+	fi
 }
 
 _do_file() {
@@ -61,6 +64,11 @@ _do_file() {
 	_inkscape "$BASENAME"
 	_clean "$BASENAME"
 }
+
+if [ "$1" = '-c' ] || [ "$1" = '--clean' ]; then
+	CLEAN="1"
+	shift
+fi
 
 if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
 	_usage
