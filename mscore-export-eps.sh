@@ -37,7 +37,12 @@ OPTIONS
 }
 
 _mscore() {
-	mscore --export-to "$1".svg "$2"
+	if [ "$(uname)" = "Darwin" ]; then
+		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
+			--export-to "$1".svg "$2"
+	else
+		mscore --export-to "$1".svg "$2"
+	fi
 }
 
 _inkscape() {
