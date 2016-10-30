@@ -1,5 +1,9 @@
 #! /bin/sh
 
+INTER_FORMAT=pdf
+#EPS_TOOL=inkscape
+EPS_TOOL=pdftops
+
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
@@ -23,15 +27,17 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-INTER_FORMAT=pdf
-EPS_TOOL=pdftops
 
 _usage() {
 	echo "Usage: $(basename $0) [-h] [<musescore-file>]
 
-Convert MuseScore files to eps using Inkscape. If <musescore-file>
-is omitted all MuseScore files in the current working directory are
-converted.
+Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
+'Inkscape'. If <musescore-file> is omitted all MuseScore files in the
+current working directory are converted.
+
+DEPENDENCIES
+	pdfcrop (included in TeXlive) and pdftops (Poppler toos) or
+	Inkscape
 
 OPTIONS
 	-h, --help	Show this help message.
