@@ -43,7 +43,7 @@ _mscore() {
 		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
 			--export-to "$1".$INTER_FORMAT "$2"
 	else
-		mscore --export-to "$1".$INTER_FORMAT  "$2"
+		mscore --export-to "$1".$INTER_FORMAT "$2"
 	fi
 }
 
@@ -67,15 +67,17 @@ _clean() {
 }
 
 _do_file() {
+	local INPUT
+	INPUT="$1"
 	local SCORE
 	SCORE="$(pwd)$1"
 	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
 	local BASENAME
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
-	echo "Convert $SCORE"
+	echo "Convert $INPUT"
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
-	_inkscape "$BASENAME"
+	_inkscape "$BASENAME" > /dev/null 2>&1
 	_clean "$BASENAME"
 }
 
