@@ -87,7 +87,7 @@ _do_file() {
 	if [ "$EPS_TOOL" = 'inkscape' ]; then
 		_inkscape "$BASENAME" > /dev/null 2>&1
 	else
-		_pdftops "$BASENAME"
+		_pdftops "$BASENAME" > /dev/null 2>&1
 	fi
 	_clean "$BASENAME"
 }
