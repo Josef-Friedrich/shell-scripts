@@ -23,6 +23,8 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+INTER_FORMAT=pdf
+
 _usage() {
 	echo "Usage: $(basename $0) [-h] [<musescore-file>]
 
@@ -39,9 +41,9 @@ OPTIONS
 _mscore() {
 	if [ "$(uname)" = "Darwin" ]; then
 		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
-			--export-to "$1".svg "$2"
+			--export-to "$1".$INTER_FORMAT "$2"
 	else
-		mscore --export-to "$1".svg "$2"
+		mscore --export-to "$1".$INTER_FORMAT  "$2"
 	fi
 }
 
@@ -55,7 +57,7 @@ _inkscape() {
 	$INKSCAPE \
 		--export-area-drawing \
 		--without-gui \
-		--export-eps="$1".eps "$1".svg
+		--export-eps="$1".eps "$1".$INTER_FORMAT
 }
 
 _clean() {
