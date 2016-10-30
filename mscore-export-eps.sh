@@ -34,7 +34,8 @@ converted.
 
 OPTIONS
 	-h, --help	Show this help message.
-	-c, --clean 	Remove / clean *.svg files
+	-n, --no-clean 	Do not remove / clean intermediate
+	                *.$INTER_FORMAT files
 "
 }
 
@@ -61,7 +62,7 @@ _inkscape() {
 }
 
 _clean() {
-	if [ "$CLEAN" = "1" ]; then
+	if [ ! "$NO_CLEAN" = "1" ]; then
 		rm -f "$1".$INTER_FORMAT
 	fi
 }
@@ -81,8 +82,8 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
-if [ "$1" = '-c' ] || [ "$1" = '--clean' ]; then
-	CLEAN="1"
+if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then
+	NO_CLEAN="1"
 	shift
 fi
 
@@ -96,7 +97,6 @@ FILE="$1"
 if [ -z "$FILE" ]; then
 	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
 	for FILE in $FILES; do
-
 		_do_file "$FILE"
 	done
 elif [ -f "$FILE" ]; then
