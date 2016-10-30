@@ -24,6 +24,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 INTER_FORMAT=pdf
+EPS_TOOL=pdftops
 
 _usage() {
 	echo "Usage: $(basename $0) [-h] [<musescore-file>]
@@ -61,6 +62,11 @@ _inkscape() {
 		--export-eps="$1".eps "$1".$INTER_FORMAT
 }
 
+_pdftops() {
+	pdfcrop "$1".pdf "$1".pdf
+	pdftops -eps "$1".pdf
+}
+
 _clean() {
 	if [ ! "$NO_CLEAN" = "1" ]; then
 		rm -f "$1".$INTER_FORMAT
@@ -78,7 +84,11 @@ _do_file() {
 
 	echo "Convert $INPUT"
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
-	_inkscape "$BASENAME" > /dev/null 2>&1
+	if [ "$EPS_TOOL" = 'inkscape' ]; then
+		_inkscape "$BASENAME" > /dev/null 2>&1
+	else
+		_pdftops "$BASENAME"
+	fi
 	_clean "$BASENAME"
 }
 
