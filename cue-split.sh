@@ -16,8 +16,12 @@ if [ "$1" = "" ]
 else
     case $1 in
         -h | --help )
-            echo "Usage: $(basename "$0") [Path]"
-            echo "       The default path is the current directory."
+            echo "Usage: $(basename "$0") [Path]
+	    
+The default path is the current directory.
+
+The folder must contain only one *.cue file and one audio file.
+"
             exit
             ;;
         * )
