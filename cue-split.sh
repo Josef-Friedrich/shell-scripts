@@ -45,7 +45,8 @@ case $TYPE in
 
     *.flac*)
         mkdir split
-        shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.flac -t "%n %p - %t"
+        #shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.flac -t "%n %p - %t"
+        shnsplit -d split -f *.cue *.flac -t "%n %p - %t"
         rm -f split/00*pregap*
         "$CUETAG" *.cue split/*.flac
         exit
