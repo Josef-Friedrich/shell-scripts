@@ -1,5 +1,9 @@
 #! /bin/sh
 
+INTER_FORMAT=pdf
+#EPS_TOOL=inkscape
+EPS_TOOL=pdftops
+
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
@@ -23,25 +27,31 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 _usage() {
 	echo "Usage: $(basename $0) [-h] [<musescore-file>]
 
-Convert MuseScore files to eps using Inkscape. If <musescore-file>
-is omitted all MuseScore files in the current working directory are
-converted.
+Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
+'Inkscape'. If <musescore-file> is omitted all MuseScore files in the
+current working directory are converted.
+
+DEPENDENCIES
+	pdfcrop (included in TeXlive) and pdftops (Poppler toos) or
+	Inkscape
 
 OPTIONS
 	-h, --help	Show this help message.
-	-c, --clean 	Remove / clean *.svg files
+	-n, --no-clean 	Do not remove / clean intermediate
+	                *.$INTER_FORMAT files
 "
 }
 
 _mscore() {
 	if [ "$(uname)" = "Darwin" ]; then
 		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
-			--export-to "$1".svg "$2"
+			--export-to "$1".$INTER_FORMAT "$2"
 	else
-		mscore --export-to "$1".svg "$2"
+		mscore --export-to "$1".$INTER_FORMAT "$2"
 	fi
 }
 
@@ -55,30 +65,41 @@ _inkscape() {
 	$INKSCAPE \
 		--export-area-drawing \
 		--without-gui \
-		--export-eps="$1".eps "$1".svg
+		--export-eps="$1".eps "$1".$INTER_FORMAT
+}
+
+_pdftops() {
+	pdfcrop "$1".pdf "$1".pdf
+	pdftops -eps "$1".pdf
 }
 
 _clean() {
-	if [ "$CLEAN" = "1" ]; then
-		rm -f "$1".svg
+	if [ ! "$NO_CLEAN" = "1" ]; then
+		rm -f "$1".$INTER_FORMAT
 	fi
 }
 
 _do_file() {
+	local INPUT
+	INPUT="$1"
 	local SCORE
 	SCORE="$(pwd)$1"
 	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
 	local BASENAME
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
-	echo "Convert $SCORE"
+	echo "Convert $INPUT"
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
-	_inkscape "$BASENAME"
+	if [ "$EPS_TOOL" = 'inkscape' ]; then
+		_inkscape "$BASENAME" > /dev/null 2>&1
+	else
+		_pdftops "$BASENAME" > /dev/null 2>&1
+	fi
 	_clean "$BASENAME"
 }
 
-if [ "$1" = '-c' ] || [ "$1" = '--clean' ]; then
-	CLEAN="1"
+if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then
+	NO_CLEAN="1"
 	shift
 fi
 
@@ -92,7 +113,6 @@ FILE="$1"
 if [ -z "$FILE" ]; then
 	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
 	for FILE in $FILES; do
-
 		_do_file "$FILE"
 	done
 elif [ -f "$FILE" ]; then
