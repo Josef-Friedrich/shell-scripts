@@ -6,6 +6,7 @@
 # optional dependencies:    flac, mac, wavpack, ttaenc
 # v1.3 sen
 
+CUETAG=cuetag
 
 SDIR=`pwd`
 
@@ -24,11 +25,12 @@ else
     esac
 fi
 
-echo -e "\
+echo "
 
 Directory: $DIR
 ________________________________________
 "
+
 cd "$DIR"
 TYPE=`ls -t1`
 
@@ -37,7 +39,7 @@ case $TYPE in
         mkdir split
         shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.ape -t "%n %p - %t"
         rm -f split/00*pregap*
-        cuetag.sh *.cue split/*.flac
+        "$CUETAG" *.cue split/*.flac
         exit
         ;;
 
@@ -45,19 +47,19 @@ case $TYPE in
         mkdir split
         shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.flac -t "%n %p - %t"
         rm -f split/00*pregap*
-        cuetag.sh *.cue split/*.flac
+        "$CUETAG" *.cue split/*.flac
         exit
         ;;
 
     *.mp3*)
         mp3splt -no "@n @p - @t (split)" -c *.cue *.mp3
-        cuetag.sh *.cue *split\).mp3
+        "$CUETAG" *.cue *split\).mp3
         exit
         ;;
 
     *.ogg*)
         mp3splt -no "@n @p - @t (split)" -c *.cue *.ogg
-        cuetag.sh *.cue *split\).ogg
+        "$CUETAG" *.cue *split\).ogg
         exit
         ;;
 
@@ -65,7 +67,7 @@ case $TYPE in
         mkdir split
         shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.tta -t "%n %p - %t"
         rm -f split/00*pregap*
-        cuetag.sh *.cue split/*.flac
+        "$CUETAG" *.cue split/*.flac
         exit
         ;;
 
@@ -73,7 +75,7 @@ case $TYPE in
         mkdir split
         shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.wv -t "%n %p - %t"
         rm -f split/00*pregap*
-        cuetag.sh *.cue split/*.flac
+        "$CUETAG" *.cue split/*.flac
         exit
         ;;
 
@@ -81,7 +83,7 @@ case $TYPE in
         mkdir split
         shnsplit -d split -f *.cue -o "flac flac -V --best -o %f -" *.wav -t "%n %p - %t"
         rm -f split/00*pregap*
-        cuetag.sh *.cue split/*.flac
+        "$CUETAG" *.cue split/*.flac
         exit
         ;;
 
