@@ -85,58 +85,48 @@ Options:
 	-n New URL
 	-h Show usage
 
-	wordpress-update-url
-	====================
 
-	__wordpress-update-url__ is a small shell script to update the url of
-	wordpress sites.
 
-	This script uses the mysql shell command. To use this script you must have
-	access to the mysql server providing the data for your wordpress site
-	over the shell command.
+__wordpress-update-url__ is a small shell script to update the url of
+wordpress sites.
 
-	# Where is the url stored in the mysql database?
+This script uses the mysql shell command. To use this script you must have
+access to the mysql server providing the data for your wordpress site
+over the shell command.
 
-	* In the table ``wp_options`` in the column ``option_value``.
-	* In the table ``wp_posts`` in the columns ``guid`` and ``post_content``.
+# Where is the url stored in the mysql database?
 
-	# Command line usage:
+	* In the table 'wp_options' in the column 'option_value'.
+	* In the table 'wp_posts' in the columns 'guid' and 'post_content'.
 
-	```
+# Command line usage:
+
 	./wordpress-update-url -u <user> -p <password> -d <database> -n <new-url>
-	```
 
-	## Example:
+## Example:
 
-	```
 	./wordpress-update-url -u root -p 5dtaJ -d wp_db -n http://new-url.com
-	```
 
-	If you use the shell script frequently on the same site, it is recommended
-	to edit the script file and put there your mysql connection and url
-	informations:
+If you use the shell script frequently on the same site, it is recommended
+to edit the script file and put there your mysql connection and url
+informations:
 
-	```
-	MYSQL_USER=""
-	MYSQL_PASSWORD=""
-	MYSQL_DATABASE=""
-	NEW_URL=""
-	```
+	MYSQL_USER=\"\"
+	MYSQL_PASSWORD=\"\"
+	MYSQL_DATABASE=\"\"
+	NEW_URL=\"\"
 
-	## Example:
+## Example:
 
-	```
-	MYSQL_USER="root"
-	MYSQL_PASSWORD="5dtaJ"
-	MYSQL_DATABASE="wp_db"
-	NEW_URL="http://new-url.com"
-	```
+	MYSQL_USER=\"root\"
+	MYSQL_PASSWORD=\"5dtaJ\"
+	MYSQL_DATABASE=\"wp_db\"
+	NEW_URL=\"http://new-url.com\"
 
-	Then you can update your wordpress site executing this short command:
+Then you can update your wordpress site executing this short command:
 
-	```
 	./wordpress-update-url
-	```
+
 "
 }
 
