@@ -28,15 +28,17 @@ fi
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+NAME="$(basename "$0")"
+
 _usage() {
-	echo "Usage: $(basename $0) [-b BODY ] <subject> <text-file-to-send>
+	echo "Usage: $NAME [-b BODY ] <subject> <text-file-to-send>
 
 Wrapper script to easily send log informations by email.
 
 This script is designed to be used in Shell scripts. By design there is
 no '-e' to specify an email address. The email address should be stored
 in the 'rc' (run control) files of your shell (for more informations
-read the next lines). The $(basename $0) script can be used in many
+read the next lines). The $NAME script can be used in many
 places of your scripts. Because the email address is only stored on
 one place, the address can easily be changed and you not have to edit
 all your scripts.
@@ -47,19 +49,19 @@ all your scripts.
 
 	echo 'Some log messages' > /tmp/logs
 	echo '... and more log message' >> /tmp/logs
-	$(basename $0) 'Log subject' /tmp/logs
+	$NAME 'Log subject' /tmp/logs
 
 ## Specify the body text by a command line option:
 
-	$(basename $0) -b 'Some log messages' 'Log subject'
+	$NAME -b 'Some log messages' 'Log subject'
 
-## Pipe to $(basename $0):
+## Pipe to $NAME:
 
-	echo 'Some log messages' | $(basename $0) 'Log subject'
+	echo 'Some log messages' | $NAME 'Log subject'
 
 # How to specify the email address?
 
-1. Edit this script ($0) and
+1. Edit this script ($NAME) and
 place your log email address on line 3
 
 	MAILLOG_EMAIL=yourmail@example.com
@@ -115,13 +117,13 @@ fi
 
 TMP_FILE=/tmp/maillog.sh_$(date +%s)
 if [ ! -f "$FILE" ] && [ -n "$BODY" ]; then
-	echo "$BODY" > $TMP_FILE
-	FILE=$TMP_FILE
+	echo "$BODY" > "$TMP_FILE"
+	FILE="$TMP_FILE"
 fi
 
 if [ ! -f "$FILE" ]; then
 	FILE=$TMP_FILE
-	while read DATA; do
+	while read -r DATA; do
 		echo "$DATA" >> "$FILE"
 		echo "$DATA"
 	done
