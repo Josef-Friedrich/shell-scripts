@@ -52,5 +52,5 @@ for DISK in $(smartctl --scan | awk '{print $1}'); do
 # $DISK
 ########################################################################
 "
-	sudo smartctl $OPTIONS $DISK
+	sudo smartctl "$OPTIONS" "$DISK"
 done
