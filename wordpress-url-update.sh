@@ -75,7 +75,7 @@ _update_post_content() {
 }
 
 _usage() {
-	echo "Usage: $0
+	echo "Usage: $(basename "$0")
 
 Options:
 	-u MySQL user
@@ -87,7 +87,7 @@ Options:
 
 
 
-__wordpress-update-url__ is a small shell script to update the url of
+'wordpress-update-url.sh' is a small shell script to update the url of
 wordpress sites.
 
 This script uses the mysql shell command. To use this script you must have
@@ -138,7 +138,7 @@ while getopts ":u:p:d:o:n:h" OPT; do
 		d) MYSQL_DATABASE="$OPTARG";;
 		o) OLD_URL="$OPTARG";;
 		n) NEW_URL="$OPTARG";;
-		h) _usage;;
+		h) _usage; exit 0 ;;
 
 		\?)
 			echo "Invalid option: -$OPTARG" >&2

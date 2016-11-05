@@ -1,6 +1,8 @@
+[![Build Status](https://travis-ci.org/Josef-Friedrich/shell-scripts.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/shell-scripts)
+
 # shell-scripts
 
-A collection of useful shell scripts
+A collection of hopefully useful shell scripts
 
 ## Coding style
 
