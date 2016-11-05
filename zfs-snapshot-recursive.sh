@@ -1,7 +1,5 @@
 #! /bin/bash -l
 
-# https://gist.github.com/Josef-Friedrich/0c835f87c81f74f73449650ecbefe3f1
-
 # Usage: ./zfs-snapshot-recursive.sh <snapshot-name>
 # Description: Create snapshots recursively for all datasets in all
 # zpools.

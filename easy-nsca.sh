@@ -12,8 +12,6 @@ if [ -d "/usr/lib/nagios/plugins" ]; then
 	NAGIOS_PLUGINS="/usr/lib/nagios/plugins"
 fi
 
-# https://gist.github.com/Josef-Friedrich/556be59f80d3bc1f49510695f67f8a64
-
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>

@@ -1,7 +1,5 @@
 #! /bin/sh
 
-# https://gist.github.com/Josef-Friedrich/3f0aa77b3c6b09c3f5712b2fd630e92f
-
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>

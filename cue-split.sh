@@ -1,7 +1,5 @@
 #! /bin/sh
 
-# https://bbs.archlinux.org/viewtopic.php?id=75774
-
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>

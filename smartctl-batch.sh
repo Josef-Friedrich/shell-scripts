@@ -1,7 +1,5 @@
 #! /bin/sh
 
-# https://gist.github.com/Josef-Friedrich/890be58425dd8f8c41a0de3b42f29fad
-
 # Execute smartctl on all disks
 
 # MIT License

@@ -3,8 +3,6 @@ if [ -z "$MAILLOG_EMAIL" ]; then
 	MAILLOG_EMAIL=logs@example.com
 fi
 
-# https://gist.github.com/Josef-Friedrich/a098e0f34169859d72f893b8c3fb6125
-
 # MIT License
 #
 # Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
