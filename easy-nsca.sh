@@ -36,7 +36,7 @@ fi
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) [<options>] <service> <check-command>
+	echo "Usage: $(basename "$0") [<options>] <service> <check-command>
 
 Environment variables: (to place in your *rc files of your shell)
 
@@ -60,15 +60,17 @@ Options:
 
 Examples:
 
-$(basename $0) \"APT\" \"check_apt -t 100\"
-$(basename $0) \"Disk space\" \"check_disk -w 10% -c 5% /dev/sda1\"
+$(basename "$0") \"APT\" \"check_apt -t 100\"
+$(basename "$0") \"Disk space\" \"check_disk -w 10% -c 5% /dev/sda1\"
 "
 }
 
 _nsca() {
 	if [ -f /usr/sbin/send_nsca ]; then
+		# shellcheck disable=SC2068
 		/usr/sbin/send_nsca $@
 	else
+		# shellcheck disable=SC2068
 		/usr/local/sbin/send_nsca $@
 	fi
 }
@@ -97,8 +99,8 @@ _send_nsca() {
 		_send_nsca_raw "$HOSTNAME" "$SERVICE" 0 "$SERVICE"
 		echo "$SERVICE"
 	elif [ -n "$OUTPUT" ]; then
-		_send_nsca_raw "$HOSTNAME" "$SERVICE" ${RETURN:-0} "$OUTPUT"
-		echo $OUTPUT
+		_send_nsca_raw "$HOSTNAME" "$SERVICE" "${RETURN:-0}" "$OUTPUT"
+		echo "$OUTPUT"
 	else
 		if [ -d ${NAGIOS_PLUGINS} ]; then
 			OUTPUT=$(eval "${NAGIOS_PLUGINS}/${CHECK_COMMAND}")
@@ -106,7 +108,7 @@ _send_nsca() {
 			OUTPUT=$(eval "${CHECK_COMMAND}")
 		fi
 		_send_nsca_raw "$HOSTNAME" "$SERVICE" $? "$OUTPUT"
-		echo $OUTPUT
+		echo "$OUTPUT"
 	fi
 }
 
@@ -117,6 +119,7 @@ while getopts ":c:hH:p:o:r:" OPT; do
 			;;
 		h)
 			_usage
+			exit 0
 			;;
 		H)
 			NSCA_SERVER="$OPTARG"

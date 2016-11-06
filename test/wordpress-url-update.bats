@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bats
 
 @test "execute: wordpress-url-update.sh" {
   run ./wordpress-url-update.sh
