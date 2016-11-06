@@ -29,7 +29,7 @@ EPS_TOOL=pdftops
 
 
 _usage() {
-	echo "Usage: $(basename $0) [-h] [<musescore-file>]
+	echo "Usage: $(basename "$0") [-h] [<musescore-file>]
 
 Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
 'Inkscape'. If <musescore-file> is omitted all MuseScore files in the
@@ -56,7 +56,6 @@ _mscore() {
 }
 
 _inkscape() {
-	local INKSCAPE
 	if [ "$(uname)" = "Darwin" ]; then
 		INKSCAPE=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
 	else
@@ -80,12 +79,9 @@ _clean() {
 }
 
 _do_file() {
-	local INPUT
 	INPUT="$1"
-	local SCORE
 	SCORE="$(pwd)$1"
 	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
-	local BASENAME
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
 	echo "Convert $INPUT"
@@ -105,13 +101,18 @@ fi
 
 if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
 	_usage
-	exit 1
+	exit 0
 fi
 
 FILE="$1"
 
 if [ -z "$FILE" ]; then
 	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
+	if [ "$FILE" = '' ]; then
+		echo 'No files to convert found!'
+		_usage
+		exit 1
+	fi
 	for FILE in $FILES; do
 		_do_file "$FILE"
 	done
