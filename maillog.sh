@@ -79,7 +79,6 @@ Options:
 	-h:       Show this help text.
 	-t:       Send a test mail (no further arguments needed).
 "
-	exit 0
 }
 
 while getopts ":b:ht" OPT; do
@@ -89,6 +88,7 @@ while getopts ":b:ht" OPT; do
 			;;
 		h)
 			_usage
+			exit 0
 			;;
 		t)
 			SUBJECT="Test mail "
@@ -111,6 +111,7 @@ FILE="$2"
 
 if [ -z "$SUBJECT" ]; then
 	_usage
+	exit 1
 fi
 
 TMP_FILE=/tmp/maillog.sh_$(date +%s)
