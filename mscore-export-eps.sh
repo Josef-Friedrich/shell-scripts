@@ -108,7 +108,7 @@ FILE="$1"
 
 if [ -z "$FILE" ]; then
 	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
-	if [ "$FILE" = '' ]; then
+	if [ "$FILES" = '' ]; then
 		echo 'No files to convert found!'
 		_usage
 		exit 1
