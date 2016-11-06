@@ -26,7 +26,7 @@
 CUETAG=cuetag
 FLAC='flac flac -V --best -o %f -'
 FORMAT='%n %p - %t'
-SDIR=`pwd`
+SDIR=$(pwd)
 
 _usage() {
 	echo "Usage: $(basename "$0") [Path]
@@ -44,21 +44,21 @@ if [ "$1" = "" ]
 	then
 		DIR=$SDIR
 else
-		case $1 in
-				-h | --help )
-						_usage
-						exit
-						;;
-				* )
-				DIR=$1
-		esac
+	case $1 in
+		-h|--help)
+			_usage
+			exit
+			;;
+		*)
+		DIR=$1
+	esac
 fi
 
 echo "Directory: $DIR
 "
 
-cd "$DIR"
-TYPE=`ls -t1`
+cd "$DIR" || exit 1
+TYPE=$(ls -t1)
 
 case $TYPE in
 	*.ape*)

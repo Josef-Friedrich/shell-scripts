@@ -33,14 +33,14 @@ else
 	NAME="$1"
 fi
 
-LOG="/tmp/maillog_$(basename $0)"
-echo > $LOG
+LOG="/tmp/maillog_$(basename "$0")"
+echo > "$LOG"
 POOLS=$(zpool list -H | awk '{print $1}')
 
 for POOL in ${POOLS}; do
-	echo "Create snapshots named '$NAME' for all datasets in zpool '$POOL'." | tee -a $LOG
-	/sbin/zfs snapshot -r ${POOL}@${NAME} 2>&1 | tee -a $LOG
+	echo "Create snapshots named '$NAME' for all datasets in zpool '$POOL'." | tee -a "$LOG"
+	/sbin/zfs snapshot -r "${POOL}@${NAME}" 2>&1 | tee -a "$LOG"
 done
 
-maillog.sh "ZFS snapshots" $LOG
+maillog.sh "ZFS snapshots" "$LOG"
 easy-nsca.sh "ZFS snapshots"

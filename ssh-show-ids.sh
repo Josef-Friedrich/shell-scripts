@@ -29,7 +29,7 @@ DSA="$HOME/.ssh/id_dsa.pub"
 show_id_pub() {
 	ID_PUB="$1"
 
-	if [ -f $ID_PUB ]; then
+	if [ -f "$ID_PUB" ]; then
 		echo	"
 $ID_PUB:
 "
@@ -40,7 +40,7 @@ ssh-keygen -E md5 -lf "$ID_PUB"
 
 echo
 
-		cat $ID_PUB
+		cat "$ID_PUB"
 	else
 		echo "
 $ID_PUB not found.
@@ -48,5 +48,5 @@ $ID_PUB not found.
 	fi
 }
 
-show_id_pub $RSA
-show_id_pub $DSA
+show_id_pub "$RSA"
+show_id_pub "$DSA"

@@ -24,7 +24,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _get_snapshots() {
-	if [ -n "$DIRECTORY"]; then
+	if [ -n "$DIRECTORY" ]; then
 		DIRECTORY=$(pwd)
 	fi
 	readarray -t SNAPSHOTS <<< "$(zfs list -t snapshot -o name -r -H "$DIRECTORY")"
@@ -108,11 +108,11 @@ SNAP_SECOND="${SNAPSHOTS[$SECOND]}"
 
 echo "Differences between:
 
-  $SNAP_FIRST   [$(_get_date $SNAP_FIRST)]
+  $SNAP_FIRST   [$(_get_date "$SNAP_FIRST")]
 
     <- and ->
 
-  $SNAP_SECOND   [$(_get_date $SNAP_SECOND)]
+  $SNAP_SECOND   [$(_get_date "$SNAP_SECOND")]
 
 ###########################################################
 "

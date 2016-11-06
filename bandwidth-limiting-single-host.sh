@@ -26,7 +26,7 @@
 # http://lartc.org/howto/lartc.ratelimit.single.html
 
 _usage() {
-	echo "Usage: $(basename $0) <dest> <bandwidth>
+	echo "Usage: $(basename "$0") <dest> <bandwidth>
 
 	<dest>: Destination ip address or url
 	<bandwith>: Bandwith rates like '1000kbps'. See tc documentation.
@@ -37,7 +37,7 @@ OPTIONS:
 
 or
 
-$(basename $0) [-d <network-interface> ] clear
+$(basename "$0") [-d <network-interface> ] clear
 "
 }
 
@@ -61,7 +61,7 @@ if [ -z "$1" ]; then
 fi
 
 IP=$1
-IP=$(dig +short $IP)
+IP=$(dig +short "$IP")
 BANDWIDTH=$2
 
 if [ -z "$DEV" ]; then
@@ -69,16 +69,16 @@ if [ -z "$DEV" ]; then
 fi
 
 if [ "$1" = clear ]; then
-	sudo tc qdisc del dev $DEV root
+	sudo tc qdisc del dev "$DEV" root
 	exit
 fi
 
-sudo tc qdisc add dev $DEV root handle 1: cbq avpkt 1000 bandwidth 10mbit
+sudo tc qdisc add dev "$DEV" root handle 1: cbq avpkt 1000 bandwidth 10mbit
 
-sudo tc class add dev $DEV parent 1: classid 1:1 cbq rate $BANDWIDTH \
+sudo tc class add dev "$DEV" parent 1: classid 1:1 cbq rate "$BANDWIDTH" \
 	allot 1500 prio 5 bounded isolated
 
-sudo tc filter add dev $DEV parent 1: protocol ip prio 16 u32 \
-	match ip dst $IP flowid 1:1
+sudo tc filter add dev "$DEV" parent 1: protocol ip prio 16 u32 \
+	match ip dst "$IP" flowid 1:1
 
-sudo tc qdisc add dev $DEV parent 1:1 sfq perturb 10
+sudo tc qdisc add dev "$DEV" parent 1:1 sfq perturb 10

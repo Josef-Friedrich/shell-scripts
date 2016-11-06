@@ -39,7 +39,7 @@ done
 
 echo -n "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|n)? "
 
-read YES
+read -r YES
 
 if [ "$YES" != "y" ]; then
 	echo "User abortion."
@@ -50,6 +50,4 @@ SEARCH=${SEARCH:0:${#SEARCH}-4}
 
 COMMAND="find . \\( $SEARCH \\) -exec rm -ifv {} \\;"
 
-eval $COMMAND
-
-exit 0
+eval "$COMMAND"
