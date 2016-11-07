@@ -34,6 +34,7 @@ _usage() {
 
 OPTIONS:
 	-d <dev>: Network interface, e. g.: eth1, eno1
+	-h:       Show this message.
 
 or
 
@@ -41,10 +42,16 @@ $(basename "$0") [-d <network-interface> ] clear
 "
 }
 
-while getopts ":d:" OPT; do
+OPT=$1
+
+while getopts ":d:h" OPT; do
 	case $OPT in
-		-d)
+		d)
 			DEV=$OPTARG
+			;;
+		h)
+			_usage
+			exit 0
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -53,7 +60,6 @@ while getopts ":d:" OPT; do
 done
 
 shift $((OPTIND-1))
-
 
 if [ -z "$1" ]; then
 	_usage
