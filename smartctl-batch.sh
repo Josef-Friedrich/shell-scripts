@@ -32,8 +32,8 @@ Use this options:
 "
 }
 
-if [ "$@" != "" ]; then
-	OPTIONS="$@"
+if [ "$*" != "" ]; then
+	OPTIONS="$*"
 else
 	OPTIONS="-a"
 fi

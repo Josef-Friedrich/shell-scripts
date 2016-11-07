@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # MIT License
 #
@@ -37,7 +37,7 @@ for EXTENSION in $EXTENSIONS; do
 	PROMPT="$PROMPT \"$EXTENSION\""
 done
 
-echo -n "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|n)? "
+echo "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|n)? "
 
 read -r YES
 

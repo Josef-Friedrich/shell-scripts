@@ -24,7 +24,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "$(basename $0) [-hd] [ -H <height> ] <folder>
+	echo "$(basename "$0") [-hd] [ -H <height> ] <folder>
 
 	-d: Dry run
 	-h: Show this help
@@ -77,7 +77,7 @@ if [ -z "$MIN_HEIGHT" ]; then
 	MIN_HEIGHT=720
 fi
 
-find "$FOLDER" -iname "*" -type f -print0 | while read -d $'\0' FILE ; do
+find "$FOLDER" -iname "*" -type f -print0 | while read -r -d $'\0' FILE ; do
 
 	HEIGHT=$(mediainfo --Inform="Video;%Height%" "$FILE")
 	if [ "$?" -gt 0 ]; then
@@ -87,7 +87,7 @@ find "$FOLDER" -iname "*" -type f -print0 | while read -d $'\0' FILE ; do
 	if [ "$HEIGHT" -lt "$MIN_HEIGHT" ]; then
 		MESSAGE="Delete $FILE (height: ${HEIGHT}px)"
 		if [ -z "$DRY" ]; then
-			echo $MESSAGE
+			echo "$MESSAGE"
 			rm "$FILE"
 		else
 			echo "Dry run: $MESSAGE"
