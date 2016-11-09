@@ -37,10 +37,6 @@ for EXTENSION in $EXTENSIONS; do
 	PROMPT="$PROMPT \"$EXTENSION\""
 done
 
-echo "Delete files in the directory \"$(pwd)\" with the extensions$PROMPT (y|n)? "
-
-read -r YES
-
 if [ "$YES" != "y" ]; then
 	echo "User abortion."
 	exit 1
@@ -51,3 +47,4 @@ SEARCH=${SEARCH:0:${#SEARCH}-4}
 COMMAND="find . \\( $SEARCH \\) -exec rm -ifv {} \\;"
 
 eval "$COMMAND"
+echo $?
