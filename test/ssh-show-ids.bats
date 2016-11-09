@@ -2,6 +2,5 @@
 
 @test "execute: ssh-show-ids.sh" {
   run ./ssh-show-ids.sh
-  [ "$status" -eq 1 ]
-  [ "${lines[0]}" = "" ]
+  [ "$status" -eq 0 ]
 }
