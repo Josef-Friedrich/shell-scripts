@@ -11,7 +11,7 @@ T='./test/mscore-to-eps/'
 @test "execute: mscore-to-eps.sh -h" {
   run ./mscore-to-eps.sh -h
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = "Usage: mscore-to-eps.sh [-h] [<musescore-file>]" ]
+  [ "${lines[0]}" = "Usage: mscore-to-eps.sh [-h] [-n] [<path>]" ]
 }
 
 @test "execute: mscore-to-eps.sh ${T}single-page.mscx" {
@@ -26,6 +26,18 @@ T='./test/mscore-to-eps/'
   [ "$TRAVIS" != 'true' ] || skip
   run ./mscore-to-eps.sh "$T"multiple-pages.mscx
   [ "$status" -eq 0 ]
+  [ -f "$T"multiple-pages_1.eps ]
+  rm -f "$T"multiple-pages_1.eps
+  [ -f "$T"multiple-pages_2.eps ]
+  rm -f "$T"multiple-pages_2.eps
+}
+
+@test "execute: mscore-to-eps.sh ${T}" {
+  [ "$TRAVIS" != 'true' ] || skip
+  run ./mscore-to-eps.sh "$T"
+  [ "$status" -eq 0 ]
+  [ -f "$T"single-page.eps ]
+  rm -f "$T"single-page.eps
   [ -f "$T"multiple-pages_1.eps ]
   rm -f "$T"multiple-pages_1.eps
   [ -f "$T"multiple-pages_2.eps ]

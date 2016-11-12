@@ -28,15 +28,16 @@ EPS_TOOL=pdftops
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename "$0") [-h] [<musescore-file>]
+	echo "Usage: $(basename "$0") [-h] [-n] [<path>]
 
 Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
-'Inkscape'. If <musescore-file> is omitted all MuseScore files in the
-current working directory are converted.
+'Inkscape'. If <path> is omitted, all MuseScore files in the
+current working directory are converted. <path> can be either a
+directory or a MuseScore file.
 
 DEPENDENCIES
-	pdfcrop (included in TeXlive) and pdftops (Poppler toos) or
-	Inkscape
+	'pdfcrop' (included in TeXlive) and 'pdftops' (Poppler tools) or
+	'Inkscape'
 
 OPTIONS
 	-h, --help	Show this help message.
