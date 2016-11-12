@@ -27,7 +27,6 @@ EPS_TOOL=pdftops
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 _usage() {
 	echo "Usage: $(basename "$0") [-h] [<musescore-file>]
 
@@ -73,8 +72,12 @@ _pdf_pages() {
 }
 
 _pdftops() {
-	pdfcrop "$1".pdf "$1".pdf
-	pdftops -eps "$1".pdf
+	pdfcrop "$1" "$1"
+	if [ -n "$2" ]; then
+		pdftops -eps -f "$2" -l "$2" "$1" "$(echo "$1" | sed "s/\.pdf/_$2\.eps/g")"
+	else
+		pdftops -eps "$1"
+	fi
 }
 
 _clean() {
@@ -90,10 +93,11 @@ _do_file() {
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
+
 	if [ "$EPS_TOOL" = 'inkscape' ]; then
 		_inkscape "$BASENAME" > /dev/null 2>&1
 	else
-		_pdftops "$BASENAME" > /dev/null 2>&1
+		_pdftops "$BASENAME".pdf > /dev/null 2>&1
 	fi
 	_clean "$BASENAME"
 }
