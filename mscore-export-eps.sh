@@ -67,6 +67,10 @@ _inkscape() {
 		--export-eps="$1".eps "$1".$INTER_FORMAT
 }
 
+_pdf_pages() {
+	pdfinfo "$1" | grep 'Pages:' | awk '{print $2}'
+}
+
 _pdftops() {
 	pdfcrop "$1".pdf "$1".pdf
 	pdftops -eps "$1".pdf
