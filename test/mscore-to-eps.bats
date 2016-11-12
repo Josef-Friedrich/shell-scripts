@@ -22,6 +22,16 @@ T='./test/mscore-to-eps/'
   rm -f "$T"single-page.eps
 }
 
+@test "execute: mscore-to-eps.sh ${T}multiple-pages.mscx" {
+  [ "$TRAVIS" != 'true' ] || skip
+  run ./mscore-to-eps.sh "$T"multiple-pages.mscx
+  [ "$status" -eq 0 ]
+  [ -f "$T"multiple-pages_1.eps ]
+  rm -f "$T"multiple-pages_1.eps
+  [ -f "$T"multiple-pages_2.eps ]
+  rm -f "$T"multiple-pages_2.eps
+}
+
 @test "unittest: _pdf_pages" {
   [ "$TRAVIS" != 'true' ] || skip
   source ./mscore-to-eps.sh

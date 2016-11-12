@@ -73,10 +73,18 @@ _pdf_pages() {
 
 _pdftops() {
 	pdfcrop "$1" "$1"
-	if [ -n "$2" ]; then
+	if [ "$2" -gt 0 ]; then
 		pdftops -eps -f "$2" -l "$2" "$1" "$(echo "$1" | sed "s/\.pdf/_$2\.eps/g")"
 	else
 		pdftops -eps "$1"
+	fi
+}
+
+_to_eps() {
+	if [ "$EPS_TOOL" = 'inkscape' ]; then
+		_inkscape "$1" "$2" > /dev/null 2>&1
+	else
+		_pdftops "$1".pdf "$2" > /dev/null 2>&1
 	fi
 }
 
@@ -94,10 +102,16 @@ _do_file() {
 
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
 
-	if [ "$EPS_TOOL" = 'inkscape' ]; then
-		_inkscape "$BASENAME" > /dev/null 2>&1
+	PAGES=$(_pdf_pages "$BASENAME.$INTER_FORMAT")
+	if [ "$PAGES" -gt 1 ]; then
+		I=1
+		while [ "$I" -le "$PAGES" ]; do
+			echo "$I"
+			_to_eps "$BASENAME" "$I"
+		I=$(expr $I + 1)
+		done
 	else
-		_pdftops "$BASENAME".pdf > /dev/null 2>&1
+		_to_eps "$BASENAME"
 	fi
 	_clean "$BASENAME"
 }
@@ -117,7 +131,6 @@ if [ "$(basename "$0")" = "mscore-to-eps.sh" ]; then
 	FILE="$1"
 
 	if [ -f "$FILE" ]; then
-		echo do
 		_do_file "$FILE"
 		exit 0
 	fi
