@@ -13,7 +13,7 @@
 }
 
 @test "execute: mscore-to-eps.sh test/mscore-to-eps/single-page.mscx" {
-  if [ "$IS_TRAVIS" = 1 ]; then skip ; fi
+  if [ "$TRAVIS" = 'true' ]; then skip ; fi
   run ./mscore-to-eps.sh test/mscore-to-eps/single-page.mscx
   [ "$status" -eq 0 ]
 }
