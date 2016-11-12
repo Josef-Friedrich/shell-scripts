@@ -110,19 +110,23 @@ fi
 
 FILE="$1"
 
-if [ -z "$FILE" ]; then
-	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
-	if [ "$FILES" = '' ]; then
-		echo 'No files to convert found!'
-		_usage
-		exit 1
-	fi
-	for FILE in $FILES; do
-		_do_file "$FILE"
-	done
-elif [ -f "$FILE" ]; then
+if [ -f "$FILE" ]; then
 	_do_file "$FILE"
-else
+	exit 0
+fi
+
+if [ -d "$FILE" ]; then
+	FILES=$(find "$FILE" -iname '*.mscz' -or -iname '*.mscx')
+elif [ -z "$FILE" ]; then
+	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
+fi
+
+if [ "$FILES" = '' ]; then
+	echo 'No files to convert found!'
 	_usage
 	exit 1
 fi
+
+for FILE in $FILES; do
+	_do_file "$FILE"
+done
