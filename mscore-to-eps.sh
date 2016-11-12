@@ -51,6 +51,7 @@ _mscore() {
 		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
 			--export-to "$1".$INTER_FORMAT "$2"
 	else
+		echo "Export to $1"
 		mscore --export-to "$1".$INTER_FORMAT "$2"
 	fi
 }
@@ -84,11 +85,10 @@ _clean() {
 
 _do_file() {
 	INPUT="$1"
-	SCORE="$(pwd)$1"
+	SCORE="$(pwd)/$1"
 	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
-	echo "Convert $INPUT"
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
 	if [ "$EPS_TOOL" = 'inkscape' ]; then
 		_inkscape "$BASENAME" > /dev/null 2>&1
@@ -98,35 +98,40 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
-if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then
-	NO_CLEAN="1"
-	shift
+if [ "$(basename "$0")" = "mscore-to-eps.sh" ]; then
+
+	if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then
+		NO_CLEAN="1"
+		shift
+	fi
+
+	if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
+		_usage
+		exit 0
+	fi
+
+	FILE="$1"
+
+	if [ -f "$FILE" ]; then
+		echo do
+		_do_file "$FILE"
+		exit 0
+	fi
+
+	if [ -d "$FILE" ]; then
+		FILES=$(find "$FILE" -iname '*.mscz' -or -iname '*.mscx')
+	elif [ -z "$FILE" ]; then
+		FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
+	fi
+
+	if [ "$FILES" = '' ]; then
+		echo 'No files to convert found!'
+		_usage
+		exit 1
+	fi
+
+	for FILE in $FILES; do
+		_do_file "$FILE"
+	done
+
 fi
-
-if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
-	_usage
-	exit 0
-fi
-
-FILE="$1"
-
-if [ -f "$FILE" ]; then
-	_do_file "$FILE"
-	exit 0
-fi
-
-if [ -d "$FILE" ]; then
-	FILES=$(find "$FILE" -iname '*.mscz' -or -iname '*.mscx')
-elif [ -z "$FILE" ]; then
-	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
-fi
-
-if [ "$FILES" = '' ]; then
-	echo 'No files to convert found!'
-	_usage
-	exit 1
-fi
-
-for FILE in $FILES; do
-	_do_file "$FILE"
-done
