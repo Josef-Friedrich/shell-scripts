@@ -95,7 +95,6 @@ _clean() {
 }
 
 _do_file() {
-	INPUT="$1"
 	SCORE="$(pwd)/$1"
 	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
@@ -106,9 +105,8 @@ _do_file() {
 	if [ "$PAGES" -gt 1 ]; then
 		I=1
 		while [ "$I" -le "$PAGES" ]; do
-			echo "$I"
 			_to_eps "$BASENAME" "$I"
-		I=$(expr $I + 1)
+		I=$((I + 1))
 		done
 	else
 		_to_eps "$BASENAME"
