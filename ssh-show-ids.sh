@@ -30,8 +30,7 @@ show_id_pub() {
 	ID_PUB="$1"
 
 	if [ -f "$ID_PUB" ]; then
-		echo	"
-$ID_PUB:
+		echo	"$ID_PUB:
 "
 
 ssh-keygen -E sha256 -lf "$ID_PUB"

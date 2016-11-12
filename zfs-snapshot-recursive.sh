@@ -27,11 +27,29 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0") <snapshot-name>
+
+Create snapshots on all datasets of all zfs pools.
+
+Options:
+	-h, --help: Show this help message.
+"
+}
+
+if [ "$1" = '-h' ] ||  [ "$1" == '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 if [ -z "$1" ]; then
 	NAME=$(date +%Y%m%dT%H%M%S)
 else
 	NAME="$1"
 fi
+
+command -v zpool > /dev/null 2>&1 || echo "Command 'zpool' is not installed!"; exit 1
+command -v zpool > /dev/null 2>&1 || echo "Command 'zfs' is not installed!"; exit 1
 
 LOG="/tmp/maillog_$(basename "$0")"
 echo > "$LOG"
@@ -39,7 +57,7 @@ POOLS=$(zpool list -H | awk '{print $1}')
 
 for POOL in ${POOLS}; do
 	echo "Create snapshots named '$NAME' for all datasets in zpool '$POOL'." | tee -a "$LOG"
-	/sbin/zfs snapshot -r "${POOL}@${NAME}" 2>&1 | tee -a "$LOG"
+	zfs snapshot -r "${POOL}@${NAME}" 2>&1 | tee -a "$LOG"
 done
 
 maillog.sh "ZFS snapshots" "$LOG"

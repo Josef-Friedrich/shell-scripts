@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # MIT License
 #
@@ -23,68 +23,74 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# http://lartc.org/howto/lartc.ratelimit.single.html
-
 _usage() {
-	echo "Usage: $(basename "$0") <dest> <bandwidth>
+	echo "$(basename "$0") [-hd] [ -H <height> ] <folder>
 
-	<dest>: Destination ip address or url
-	<bandwith>: Bandwith rates like '1000kbps'. See tc documentation.
+	-d: Dry run
+	-h: Show this help
+	-H: Height of the min resolution (e. g. 720)
 
-
-OPTIONS:
-	-d <dev>: Network interface, e. g.: eth1, eno1
-	-h:       Show this message.
-
-or
-
-$(basename "$0") [-d <network-interface> ] clear
 "
+
 }
 
-OPT=$1
-
-while getopts ":d:h" OPT; do
+while getopts ":dhH:" OPT; do
 	case $OPT in
+
 		d)
-			DEV=$OPTARG
+			DRY=1
 			;;
+
 		h)
 			_usage
-			exit 0
+			exit 1
 			;;
+
+		H)
+			MIN_HEIGHT=$OPTARG
+			exit 1
+			;;
+
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
+			exit 1
 			;;
+
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			exit 1
+			;;
+
 	esac
 done
 
 shift $((OPTIND-1))
 
-if [ -z "$1" ]; then
+FOLDER="$1"
+
+if [ -z "$FOLDER" ]; then
 	_usage
 	exit 1
 fi
 
-IP=$1
-IP=$(dig +short "$IP")
-BANDWIDTH=$2
-
-if [ -z "$DEV" ]; then
-	DEV=$(ip route show | grep default | awk '{print $5}')
+if [ -z "$MIN_HEIGHT" ]; then
+	MIN_HEIGHT=720
 fi
 
-if [ "$1" = clear ]; then
-	sudo tc qdisc del dev "$DEV" root
-	exit
-fi
+find "$FOLDER" -iname "*" -type f -print0 | while read -r -d $'\0' FILE ; do
 
-sudo tc qdisc add dev "$DEV" root handle 1: cbq avpkt 1000 bandwidth 10mbit
+	HEIGHT=$(mediainfo --Inform="Video;%Height%" "$FILE")
+	if [ "$?" -gt 0 ]; then
+		echo "$FILE"
+	fi
 
-sudo tc class add dev "$DEV" parent 1: classid 1:1 cbq rate "$BANDWIDTH" \
-	allot 1500 prio 5 bounded isolated
-
-sudo tc filter add dev "$DEV" parent 1: protocol ip prio 16 u32 \
-	match ip dst "$IP" flowid 1:1
-
-sudo tc qdisc add dev "$DEV" parent 1:1 sfq perturb 10
+	if [ "$HEIGHT" -lt "$MIN_HEIGHT" ]; then
+		MESSAGE="Delete $FILE (height: ${HEIGHT}px)"
+		if [ -z "$DRY" ]; then
+			echo "$MESSAGE"
+			rm "$FILE"
+		else
+			echo "Dry run: $MESSAGE"
+		fi
+	fi
+done

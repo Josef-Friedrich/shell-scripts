@@ -24,10 +24,12 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 if [ -z "$1" ]; then
-	echo "Usage: rm-by-extension <extension>
+	echo "Usage: $(basename "$0") <extension>
 
-example: rm-by-extension txt (Deletes all txt files)"
+Delete files by extension recursively.
 
+Example:
+	$(basename "$0") txt"
 	exit 1
 fi
 

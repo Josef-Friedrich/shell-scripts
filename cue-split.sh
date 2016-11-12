@@ -29,10 +29,11 @@ FORMAT='%n %p - %t'
 SDIR=$(pwd)
 
 _usage() {
-	echo "Usage: $(basename "$0") [Path]
+	echo "Usage: $(basename "$0") [<path>]
 
-frontend for:	cuetools, shntool, mp3splt
-optional dependencies:	flac, mac, wavpack, ttaenc
+Supported formats: APE, FLAC, MP3, OGG, TTA, WV, WAV
+Frontend for:	cuetools, shntool, mp3splt
+Optional dependencies: flac, mac, wavpack, ttaenc
 
 The default path is the current directory.
 
@@ -40,9 +41,8 @@ The folder must contain only one *.cue file and one audio file.
 "
 }
 
-if [ "$1" = "" ]
-	then
-		DIR=$SDIR
+if [ "$1" = "" ]; then
+	DIR=$SDIR
 else
 	case $1 in
 		-h|--help)
@@ -53,9 +53,6 @@ else
 		DIR=$1
 	esac
 fi
-
-echo "Directory: $DIR
-"
 
 cd "$DIR" || exit 1
 TYPE=$(ls -t1)
@@ -113,8 +110,9 @@ case $TYPE in
 		exit
 		;;
 
-	* )
-		echo "Error: Found no files to split!"
-		echo "			 --> APE, FLAC, MP3, OGG, TTA, WV, WAV"
+	*)
+		echo 'Error: Found no files to split!'
+		_usage
+		exit 1
 
 esac

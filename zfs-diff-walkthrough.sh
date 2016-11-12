@@ -83,6 +83,8 @@ done
 
 shift $((OPTIND-1))
 
+command -v zfs > /dev/null 2>&1 || echo "Command 'zfs' is not installed!"; exit 1
+
 FIRST=$1
 SECOND=$2
 
