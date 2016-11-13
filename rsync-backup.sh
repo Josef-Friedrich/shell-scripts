@@ -85,9 +85,6 @@ _check_scp() {
 }
 
 _check_accessiblity() {
-	SOURCE_INACCESSIBILITY
-	DESTINATION_INACCESSIBILITY
-
 	_check_scp "$SOURCE" "Source"
 
 	if [ "$FOLDER_INACCESSIBILITY" = 1 ]; then
@@ -102,13 +99,13 @@ _check_accessiblity() {
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
 		echo "
-###		#		 #		#		######	#		 # ### #		 #	#####		 ###
-###		#	#	#	 # #	 #		 # ##		#	#	##		# #		 #		###
-###		#	#	#	#	 #	#		 # # #	 #	#	# #	 # #					###
- #		 #	#	# #		 # ######	#	#	#	#	#	#	# #	####		 #
-			 #	#	# ####### #	 #	 #	 # #	#	#	 # # #		 #
-###		#	#	# #		 # #		#	#		##	#	#		## #		 #		###
-###		 ## ##	#		 # #		 # #		 # ### #		 #	#####		 ###
+###                                             ###
+### #    #   ##   #####  #    # # #    #  ####  ###
+### #    #  #  #  #    # ##   # # ##   # #    # ###
+ #  #    # #    # #    # # #  # # # #  # #       #
+    # ## # ###### #####  #  # # # #  # # #  ###
+### ##  ## #    # #   #  #   ## # #   ## #    # ###
+### #    # #    # #    # #    # # #    #  ####  ###
 
 The folders are not accessible or no affirmation file exists. Create
 a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <folder>'.
