@@ -29,7 +29,6 @@
 
 LOG_FOLDER_HOST="$HOME/rsync-backup-logs"
 
-EMAIL="logs@josef-friedrich.de"
 # Prepare variables for backup dir. Backup dir should look like
 # ".backup/2013-04-04T20-11-23"
 
@@ -52,12 +51,11 @@ SEPARATOR='################################################'
 DEFAULT_EXCLUDES="--exclude .rsync_shadow --exclude .snapshots"
 
 if [ -f /etc/rsync-backup.conf ]; then
+	# shellcheck disable=SC1091
 	. /etc/rsync-backup.conf
 fi
 
 INFO_PATH="$TMP_FOLDER/info-"
-
-LOCK_FILE="$TMP_FOLDER/lock-$(basename $0)"
 
 if [ ! -d "$TMP_FOLDER" ]; then
 	mkdir "$TMP_FOLDER"
@@ -72,7 +70,6 @@ fi
 ##
 _check_scp() {
 	FOLDER="$1"
-	NAME="$2"
 
 	scp "$FOLDER/$RSYNC_FOLDER/$AFFIRMATION_FILE" "$TMP_FOLDER/" > /dev/null 2>&1
 
@@ -98,7 +95,9 @@ _check_accessiblity() {
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
-		echo "
+		echo "The folders are not accessible or no affirmation file exists!
+Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <folder>'.
+
 ###                                             ###
 ### #    #   ##   #####  #    # # #    #  ####  ###
 ### #    #  #  #  #    # ##   # # ##   # #    # ###
@@ -107,8 +106,6 @@ _check_accessiblity() {
 ### ##  ## #    # #   #  #   ## # #   ## #    # ###
 ### #    # #    # #    # #    # # #    #  ####  ###
 
-The folders are not accessible or no affirmation file exists. Create
-a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <folder>'.
 "
 	fi
 
@@ -121,7 +118,7 @@ a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <folder>'.
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
-		beepbox warning
+		beepbox.sh warning
 		exit 1
 	fi
 }
@@ -169,7 +166,7 @@ _process_options() {
 	EXCLUDES="--exclude $RSYNC_FOLDER/ $DEFAULT_EXCLUDES"
 	DESTINATION_EXCLUDE_FILE="${DESTINATION}/${RSYNC_FOLDER}/${EXCLUDE_FILE}"
 
-	DESTINATION_EXCLUDE_FILE=$(echo $DESTINATION_EXCLUDE_FILE | sed -e 's/\/\//\//g')
+	DESTINATION_EXCLUDE_FILE=$(echo "$DESTINATION_EXCLUDE_FILE" | sed -e 's/\/\//\//g')
 	scp "${DESTINATION_EXCLUDE_FILE}" "$TMP_FOLDER/excludes_$SYNC_ID"	> /dev/null 2>&1
 
 	if [ $? -eq 0 ]; then
@@ -212,8 +209,8 @@ _process_options() {
 _log_summary_show() {
 	SUMMARY="$LOG_FOLDER_HOST/summary.log"
 
-	if [ -f $SUMMARY ]; then
-		tail -f -n 1000 $SUMMARY
+	if [ -f "$SUMMARY" ]; then
+		tail -f -n 1000 "$SUMMARY"
 	fi
 }
 
@@ -223,13 +220,13 @@ _log_summary_show() {
 _log_execution_show() {
 	EXECUTION="$LOG_FOLDER_HOST/execution.log"
 
-	if [ -f $EXECUTION ]; then
-		tail -f -n 50 $EXECUTION
+	if [ -f "$EXECUTION" ]; then
+		tail -f -n 50 "$EXECUTION"
 	fi
 }
 
 _log_show_folder() {
-	ls -l $LOG_FOLDER_HOST
+	ls -l "$LOG_FOLDER_HOST"
 }
 
 _show_folder_logs() {
@@ -240,12 +237,12 @@ _show_folder_logs() {
 	for FILE in $FILES; do
 		echo "
 $SEPARATOR"
-		echo $(basename "$FILE") | sed -e 's/\.log$//' | awk 'BEGIN {FS="_"} {print $2 " " $3 ": " $4 " -> " $5}'
+		basename "$FILE" | sed -e 's/\.log$//' | awk 'BEGIN {FS="_"} {print $2 " " $3 ": " $4 " -> " $5}'
 		echo "$SEPARATOR"
 
 		# Delete first 7 lines
 		# Delete last 15 lines
-		cat "$FILE" | tail -n "+7" | sed -n -e :a -e '1,15!{P;N;D;};N;ba'
+		tail -n "+7" | sed -n -e :a -e '1,15!{P;N;D;};N;ba' < "$FILE"
 
 	done
 }
@@ -260,26 +257,26 @@ $SEPARATOR"
 _logfile_cleaner() {
 	STRING="$*"
 
-	STRING=$(echo $STRING | sed -e 's/@/#/g')
-	STRING=$(echo $STRING | sed -e 's/\//-/g')
-	STRING=$(echo $STRING | sed -e 's/:/#/g')
-	STRING=$(echo $STRING | sed -e 's/---/-/g')
-	STRING=$(echo $STRING | sed -e 's/--/-/g')
-	STRING=$(echo $STRING | sed -e 's/-\./\./g')
-	STRING=$(echo $STRING | sed -e 's/-_-/_/g')
+	STRING="$(echo "$STRING" | sed -e 's/@/#/g')"
+	STRING="$(echo "$STRING" | sed -e 's/\//-/g')"
+	STRING="$(echo "$STRING" | sed -e 's/:/#/g')"
+	STRING="$(echo "$STRING" | sed -e 's/---/-/g')"
+	STRING="$(echo "$STRING" | sed -e 's/--/-/g')"
+	STRING="$(echo "$STRING" | sed -e 's/-\./\./g')"
+	STRING="$(echo "$STRING" | sed -e 's/-_-/_/g')"
 
-	echo $STRING
+	echo "$STRING"
 }
 
 ##
 # Create the log file and add meta informations to the head of the log file.
 ##
 _log_init() {
-	if [ ! -d $LOG_FOLDER_HOST ]; then
-		mkdir $LOG_FOLDER_HOST
+	if [ ! -d "$LOG_FOLDER_HOST" ]; then
+		mkdir "$LOG_FOLDER_HOST"
 	fi
 
-	LOG_FILE_HOST="$LOG_FOLDER_HOST/log_$(_logfile_cleaner ${DATE}_${HOSTNAME}_${SOURCE}_${DESTINATION}.log)"
+	LOG_FILE_HOST="$LOG_FOLDER_HOST/log_$(_logfile_cleaner "${DATE}_${HOSTNAME}_${SOURCE}_${DESTINATION}.log")"
 	touch "$LOG_FILE_HOST"
 	> "$LOG_FILE_HOST"
 
@@ -287,7 +284,7 @@ _log_init() {
 }
 
 _log_delete() {
-	find $LOG_FOLDER_HOST -type f -exec rm -rf {} \;
+	find "$LOG_FOLDER_HOST" -type f -exec rm -rf {} \;
 }
 
 ##
@@ -295,7 +292,7 @@ _log_delete() {
 # certain is executed.
 ##
 _log_execution() {
-	echo "$(_date) [$SOURCE] -> [$DESTINATION]" >> $LOG_FOLDER_HOST/execution.log
+	echo "$(_date) [$SOURCE] -> [$DESTINATION]" >> "$LOG_FOLDER_HOST"/execution.log
 }
 
 ##
@@ -337,7 +334,7 @@ _log_mail() {
 	MAIL_COMMAND=$(command -v mail)
 	if [ -n "$MAIL_COMMAND" ]; then
 
-		LINES=$(cat $LOG_FILE_HOST | wc -l)
+		LINES=$(wc -l < "$LOG_FILE_HOST")
 		STATUS=""
 		VALUE="25"
 
