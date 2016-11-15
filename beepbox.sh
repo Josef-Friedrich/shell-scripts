@@ -23,20 +23,30 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 HOUR=$(date +%k)
 
-if [ "$HOUR" -lt 7 ] || [ "$HOUR" -gt 19 ]; then
-	echo "It's to late or to early to beep."
-	exit 0
-fi
+_usage() {
+	echo "Usage: $(basename "$0") [error|success|sync-start|sync-end|warning]"
+	exit "${1:-0}"
+}
+
+_beep() {
+	if [ "$HOUR" -lt 7 ] || [ "$HOUR" -gt 19 ]; then
+		echo "It's to late or to early to beep."
+		exit 0
+	fi
+	command -v beep > /dev/null 2>&1 || { echo >&2 "Please install 'beep'!"; exit 1; }
+	beep $@
+}
 
 _default() {
-	beep -f1234 -l10 -d20 -r20
+	_beep -f1234 -l10 -d20 -r20
 }
 
 _warning() {
 	for i in {5000..4000..100}; do
-		beep -f $i -l 50
+		_beep -f $i -l 50
 	done
 }
 
@@ -44,28 +54,29 @@ _error() {
 	# shellcheck disable=SC2034
 	for n in 1 2 3 4 5 6 7 8 9 0; do
 		for f in 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 1600; do
-			beep -f$f -l20
+			_beep -f$f -l20
 		done
 	done
 }
 
 _success() {
 	for i in {4000..5000..100}; do
-		beep -f $i -l 50
+		_beep -f $i -l 50
 	done
 }
 
 _sync_start() {
-	beep -f1396.91 -l500 -D500 -n -f1864.66 -l1000
+	_beep -f1396.91 -l500 -D500 -n -f1864.66 -l1000
 }
 
 _sync_end() {
-	beep -f1864.66 -l500 -D500 -n -f1396.91 -l500 -D500 -r3 -n -f1396.91 -l1000
+	_beep -f1864.66 -l500 -D500 -n -f1396.91 -l500 -D500 -r3 -n -f1396.91 -l1000
 }
 
 OPTION="$1"
 
 case "$OPTION" in
+	-h|--help) _usage ;;
 	error) _error ;;
 	success) _success ;;
 	sync-start) _sync_start ;;

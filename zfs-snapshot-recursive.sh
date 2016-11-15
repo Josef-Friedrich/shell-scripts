@@ -48,8 +48,8 @@ else
 	NAME="$1"
 fi
 
-command -v zpool > /dev/null 2>&1 || echo "Command 'zpool' is not installed!"; exit 1
-command -v zpool > /dev/null 2>&1 || echo "Command 'zfs' is not installed!"; exit 1
+command -v zpool > /dev/null 2>&1 || { echo >&2 "Command 'zpool' is not installed!"; exit 1; }
+command -v zfs > /dev/null 2>&1 || { echo >&2 "Command 'zfs' is not installed!"; exit 1; }
 
 LOG="/tmp/maillog_$(basename "$0")"
 echo > "$LOG"
