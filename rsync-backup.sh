@@ -32,18 +32,18 @@ LOG_FOLDER_HOST="$HOME/rsync-backup-logs"
 # Prepare variables for backup dir. Backup dir should look like
 # ".backup/2013-04-04T20-11-23"
 
-RSYNC_FOLDER=".rsync-backup"
+RSYNC_FOLDER='.rsync-backup'
 
 BACKUP_FOLDER="$RSYNC_FOLDER/backups"
-DATE=$(date "+%Y-%m-%dT%H-%M-%S")
+DATE="$(date "+%Y-%m-%dT%H-%M-%S")"
 
 HOSTNAME=$(hostname -s)
 USER=$(whoami)
 
-TMP_FOLDER="/tmp/.rsync-backup"
+TMP_FOLDER='/tmp/.rsync-backup'
 
-AFFIRMATION_FILE="please-sync"
-EXCLUDE_FILE="excludes"
+AFFIRMATION_FILE='please-sync'
+EXCLUDE_FILE='excludes'
 
 SEPARATOR='################################################'
 
@@ -515,112 +515,114 @@ DEPENDENCIES
 # Process
 ########################################################################
 
-while getopts ":a:bdef:hi:lLnNz" OPT; do
-	case $OPT in
+if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
+	while getopts ":a:bdef:hi:lLnNz" OPT; do
+		case $OPT in
 
-		a)
-			_create_affirmation_file "$OPTARG"
-			exit 0
-			;;
+			a)
+				_create_affirmation_file "$OPTARG"
+				exit 0
+				;;
 
-		b)
-			BEEP=1
-			;;
+			b)
+				BEEP=1
+				;;
 
-		d)
-			_log_delete
-			exit 0
-			;;
+			d)
+				_log_delete
+				exit 0
+				;;
 
-		e)
-			_log_execution_show
-			exit 0
-			;;
+			e)
+				_log_execution_show
+				exit 0
+				;;
 
-		f)
-			_show_folder_logs "$OPTARG"
-			exit 0
-			;;
+			f)
+				_show_folder_logs "$OPTARG"
+				exit 0
+				;;
 
-		h)
-			_help_show
-			exit 0
-			;;
+			h)
+				_help_show
+				exit 0
+				;;
 
-		i)
-			IDENTIFIER="$OPTARG"
-			;;
+			i)
+				IDENTIFIER="$OPTARG"
+				;;
 
-		l)
-			_log_summary_show
-			exit 0
-			;;
+			l)
+				_log_summary_show
+				exit 0
+				;;
 
-		L)
-			_log_show_folder
-			exit 0
-			;;
+			L)
+				_log_show_folder
+				exit 0
+				;;
 
-		n)
-			NO_BACKUP=1
-			;;
+			n)
+				NO_BACKUP=1
+				;;
 
-		N)
-			NSCA=1
-			;;
+			N)
+				NSCA=1
+				;;
 
-		z)
-			ZFS_SNAPSHOT=1
-			;;
+			z)
+				ZFS_SNAPSHOT=1
+				;;
 
-		\?)
-			echo "Invalid option: -$OPTARG" >&2
-			exit 1
-			;;
+			\?)
+				echo "Invalid option: -$OPTARG" >&2
+				exit 1
+				;;
 
-		:)
-			echo "Option -$OPTARG requires an argument." >&2
-			exit 1
-			;;
+			:)
+				echo "Option -$OPTARG requires an argument." >&2
+				exit 1
+				;;
 
-	esac
-done
+		esac
+	done
 
-shift $((OPTIND-1))
+	shift $((OPTIND-1))
 
-SOURCE="${1%/}"
-DESTINATION="${2%/}"
+	SOURCE="${1%/}"
+	DESTINATION="${2%/}"
 
-if [ -z "$IDENTIFIER" ]; then
-	IDENTIFIER=$(_generate_identifier)
-fi
+	if [ -z "$IDENTIFIER" ]; then
+		IDENTIFIER=$(_generate_identifier)
+	fi
 
-_check_accessiblity
+	_check_accessiblity
 
-_log_init
+	_log_init
 
-_log_header "YES"
+	_log_header "YES"
 
-# shellcheck disable=SC2046
-rsync $(_process_options) $(_process_source_destination) | _log_process
+	# shellcheck disable=SC2046
+	rsync $(_process_options) $(_process_source_destination) | _log_process
 
-FILE_TRANSFERRED=$(_get_info)
+	FILE_TRANSFERRED=$(_get_info)
 
-if [ -n "$ZFS_SNAPSHOT" ]; then
-	_zfs_snapshot
-fi
+	if [ -n "$ZFS_SNAPSHOT" ]; then
+		_zfs_snapshot
+	fi
 
-_log_mail
+	_log_mail
 
-_log_execution
+	_log_execution
 
-_log_file_copy "$SOURCE"
-_log_file_copy "$DESTINATION"
+	_log_file_copy "$SOURCE"
+	_log_file_copy "$DESTINATION"
 
-if [ -n "$NSCA" ]; then
-	_nsca_process
-fi
+	if [ -n "$NSCA" ]; then
+		_nsca_process
+	fi
 
-if [ -n "$BEEP" ]; then
-	beepbox.sh success
+	if [ -n "$BEEP" ]; then
+		beepbox.sh success
+	fi
 fi
