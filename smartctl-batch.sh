@@ -28,6 +28,9 @@
 _usage() {
 	echo "Usage: $0 <options>
 
+OPTIONS:
+	-h, --help: Show this help message.
+
 Use this options:
 "
 }
@@ -43,6 +46,8 @@ if [ "$OPTIONS" = "-h" ] || [ "$OPTIONS" = "--help" ]; then
 	smartctl -h
 	exit 0
 fi
+
+command -v smartctl > /dev/null 2>&1 || { echo >&2 "Please install 'smartctl'!"; exit 1; }
 
 for DISK in $(smartctl --scan | awk '{print $1}'); do
 	echo "
