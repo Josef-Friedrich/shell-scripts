@@ -66,6 +66,8 @@ done
 
 shift $((OPTIND-1))
 
+command -v mediainfo > /dev/null 2>&1 || { echo >&2 "Please install 'mediainfo'!"; exit 1; }
+
 FOLDER="$1"
 
 if [ -z "$FOLDER" ]; then
