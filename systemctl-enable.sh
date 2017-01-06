@@ -1,3 +1,11 @@
 #! /bin/sh
 
-systemctl enable "$(pwd)/$1"
+UNIT="$1"
+
+if [ -z "$UNIT" ]; then
+	for UNIT in $(ls); do
+		systemctl enable "$(pwd)/$UNIT"
+	done
+else
+	systemctl enable "$(pwd)/$UNIT" 
+fi
