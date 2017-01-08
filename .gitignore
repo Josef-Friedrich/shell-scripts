@@ -3,3 +3,4 @@
 # mscore-to-eps.sh
 *.mscx,
 *.eps
+*.pdf

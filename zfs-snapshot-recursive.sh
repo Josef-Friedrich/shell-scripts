@@ -37,7 +37,7 @@ Options:
 "
 }
 
-if [ "$1" = '-h' ] ||  [ "$1" == '--help' ] ; then
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
 	_usage
 	exit 0
 fi
