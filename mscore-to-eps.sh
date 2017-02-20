@@ -96,8 +96,7 @@ _clean() {
 }
 
 _do_file() {
-	SCORE="$(pwd)/$1"
-	SCORE=$(echo "$SCORE" | sed 's+\./+/+g')
+	SCORE="$(readlink -f "$1")"
 	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
 
 	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
