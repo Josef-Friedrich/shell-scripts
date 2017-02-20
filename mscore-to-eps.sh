@@ -46,6 +46,17 @@ OPTIONS
 "
 }
 
+if [ $(uname) = 'Darwin' ]; then
+	if command -v greadlink > /dev/null ; then
+		unalias readlink > /dev/null 2>&1
+		alias readlink=greadlink
+	else
+		echo "ERROR: GNU utils required for Mac. You may use 
+homebrew to install them: brew install coreutils gnu-sed"
+		exit 1
+	fi
+fi
+
 _mscore() {
 	if [ "$(uname)" = "Darwin" ]; then
 		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
