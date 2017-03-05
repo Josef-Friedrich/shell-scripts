@@ -150,4 +150,6 @@ if [ -z "$SERVICE" ]; then
 	exit 1
 fi
 
+echo
+echo "$SERVICE"
 _send_nsca "$SERVICE" "$CHECK_COMMAND"
