@@ -52,6 +52,7 @@ Options:
 	-c NSCA_CONFIG:    NSCA config file (default: /etc/send_nsca.cfg)
 	-h:                Show this help.
 	-H NSCA_SERVER:    IP address of the Nagios server.
+	-n HOST_SERVICE:   Host of the service.
 	-p NAGIOS_PLUGINS: Folder containing the check commands.
 	                   (default: /usr/lib/nagios/plugins)
 	-o OUTPUT:         Output of the check commands.
@@ -115,6 +116,12 @@ _send_nsca() {
 		HOSTNAME=$(hostname)
 	fi
 
+	if [ -z "$OVERRIDE_HOSTNAME" ]; then
+		HOST_SERVICE="$HOSTNAME"
+	else
+		HOST_SERVICE="$OVERRIDE_HOSTNAME"
+	fi
+
 	if [ -z "$CHECK_COMMAND" ] && [ -z "$OUTPUT" ]; then
 		_send_nsca_raw "$HOSTNAME" "$SERVICE" 0 "$SERVICE"
 		echo "$SERVICE"
@@ -128,7 +135,7 @@ _send_nsca() {
 			OUTPUT=$(eval "${CHECK_COMMAND}")
 		fi
 		local RETURN="$?"
-		_send_nsca_raw "$HOSTNAME" "$SERVICE" "$RETURN" "$OUTPUT"
+		_send_nsca_raw "$HOST_SERVICE" "$SERVICE" "$RETURN" "$OUTPUT"
 		_status_color "$RETURN"
 		echo "$OUTPUT"
 	fi
@@ -139,28 +146,36 @@ while getopts ":c:hH:p:o:r:" OPT; do
 		c)
 			NSCA_CONFIG="$OPTARG"
 			;;
+
 		h)
 			_usage
 			exit 0
 			;;
+
 		H)
 			NSCA_SERVER="$OPTARG"
 			;;
 
-		p)
-			NAGIOS_PLUGINS="$OPTARG"
+		n)
+			OVERRIDE_HOSTNAME="$OPTARG"
 			;;
 
 		o)
 			OUTPUT="$OPTARG"
 			;;
 
+		p)
+			NAGIOS_PLUGINS="$OPTARG"
+			;;
+
 		r)
 			RETURN="$RETURN"
 			;;
+
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
 			;;
+
 	esac
 done
 
