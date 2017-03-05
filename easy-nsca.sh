@@ -125,10 +125,12 @@ while getopts ":c:hH:p:o:r:" OPT; do
 			NSCA_SERVER="$OPTARG"
 			;;
 
-		p)	NAGIOS_PLUGINS="$OPTARG"
+		p)
+			NAGIOS_PLUGINS="$OPTARG"
 			;;
 
-		o)	OUTPUT="$OPTARG"
+		o)
+			OUTPUT="$OPTARG"
 			;;
 
 		r)
