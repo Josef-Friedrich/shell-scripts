@@ -87,6 +87,26 @@ _send_nsca_raw() {
 	_nsca_return "$1" "$2" "$3" "$4" | _nsca -H $NSCA_SERVER -c $NSCA_CONFIG
 }
 
+_status_color() {
+	case "$1" in
+		0)
+			echo -e "\e[32mOK\e[0m"
+			;;
+
+		1)
+			echo -e "\e[33mWARNING\e[0m"
+			;;
+
+		2)
+			echo -e " \e[31mCRITICAL\e[0m"
+			;;
+
+		3)
+			echo -e "\e[38;5;208mUNKOWN\e[0m"
+			;;
+	esac
+}
+
 _send_nsca() {
 	local SERVICE="$1"
 	local CHECK_COMMAND="$2"
@@ -107,7 +127,9 @@ _send_nsca() {
 		else
 			OUTPUT=$(eval "${CHECK_COMMAND}")
 		fi
-		_send_nsca_raw "$HOSTNAME" "$SERVICE" $? "$OUTPUT"
+		local RETURN="$?"
+		_send_nsca_raw "$HOSTNAME" "$SERVICE" "$RETURN" "$OUTPUT"
+		_status_color "$RETURN"
 		echo "$OUTPUT"
 	fi
 }
