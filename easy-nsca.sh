@@ -141,7 +141,7 @@ _send_nsca() {
 	fi
 }
 
-while getopts ":c:hH:p:o:r:" OPT; do
+while getopts ":c:hH:n:p:o:r:" OPT; do
 	case $OPT in
 		c)
 			NSCA_CONFIG="$OPTARG"
