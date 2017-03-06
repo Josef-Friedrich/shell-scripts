@@ -31,7 +31,6 @@ _icns() {
 	inkscape \
 		--export-png=icon.iconset/icon_"$2".png \
 		--export-area=0:0:"$3":"$3" \
-		--export-dpi=72 \
 		"$1"
 }
 
