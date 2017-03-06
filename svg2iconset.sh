@@ -30,7 +30,8 @@ _usage() {
 _icns() {
 	inkscape \
 		--export-png=icon.iconset/icon_"$2".png \
-		--export-area=0:0:"$3":"$3" \
+		--export-width="$3" \
+		--export-height="$3" \
 		"$1"
 }
 
