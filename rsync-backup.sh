@@ -98,23 +98,24 @@ _check_accessiblity() {
 		echo "The folders are not accessible or no affirmation file exists!
 Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <folder>'.
 
-###                                             ###
-### #    #   ##   #####  #    # # #    #  ####  ###
-### #    #  #  #  #    # ##   # # ##   # #    # ###
- #  #    # #    # #    # # #  # # # #  # #       #
-    # ## # ###### #####  #  # # # #  # # #  ###
-### ##  ## #    # #   #  #   ## # #   ## #    # ###
-### #    # #    # #    # #    # # #    #  ####  ###
+###    #     #    #    ######  #     # ### #     #  #####     ###
+###    #  #  #   # #   #     # ##    #  #  ##    # #     #    ###
+###    #  #  #  #   #  #     # # #   #  #  # #   # #          ###
+ #     #  #  # #     # ######  #  #  #  #  #  #  # #  ####     #
+       #  #  # ####### #   #   #   # #  #  #   # # #     #
+###    #  #  # #     # #    #  #    ##  #  #    ## #     #    ###
+###     ## ##  #     # #     # #     # ### #     #  #####     ###
+
 
 "
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ]; then
-		echo "rsync-backup -a $SOURCE"
+		echo "rsync-backup.sh -a $SOURCE"
 	fi
 
 	if [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
-		echo "rsync-backup -a $DESTINATION"
+		echo "rsync-backup.sh -a $DESTINATION"
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
@@ -303,14 +304,13 @@ _log_header() {
 	DECORATION="$1"
 
 	if [ "$DECORATION" = 'YES' ]; then
-
 		echo "$SEPARATOR
 
-												#					 #
-###	## # # ##	###		 ###	## ### # # # # ###
-#		#	### # # #	 ### # # # # #	 ##	# # # #
-#	 ##		# # # ###		 ### ### ### # # ### ###
-				###																 #
+                        #           #
+###  ## # # ##  ###     ###  ## ### # # # # ###
+#    #  ### # # #   ### # # # # #   ##  # # # #
+#   ##    # # # ###     ### ### ### # # ### ###
+        ###                                 #
 "
 	fi
 
