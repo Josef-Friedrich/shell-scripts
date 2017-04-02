@@ -60,3 +60,7 @@ fi
 
 mail -s "$SUBJECT" $MAILLOG_EMAIL < "$FILE"
 ```
+
+# Test
+
+Run test with this command: `bats test`

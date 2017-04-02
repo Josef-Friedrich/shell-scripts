@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 
 @test "execute: beepbox.sh" {
+	skip
 	run ./beepbox.sh
 	if ! command -v beep > /dev/null 2>&1; then
 		[ "$status" -eq 1 ]
