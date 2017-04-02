@@ -1,12 +1,8 @@
-#! /bin/bash -l
-
-# Usage: ./zfs-snapshot-recursive.sh <snapshot-name>
-# Description: Create snapshots recursively for all datasets in all
-# zpools.
+#! /bin/sh
 
 # MIT License
 #
-# Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
+# Copyright (c) 2017 Josef Friedrich <josef@friedrich.rocks>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -28,37 +24,31 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename "$0") <snapshot-name>
-
-Create snapshots on all datasets of all zfs pools.
-
-Options:
-	-h, --help: Show this help message.
-"
+	echo "Usage: $(basename "$0") <svg-file>"
 }
 
-if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
-	_usage
-	exit 0
-fi
+_icns() {
+	inkscape \
+		--export-png=icon.iconset/icon_"$2".png \
+		--export-width="$3" \
+		--export-height="$3" \
+		"$1"
+}
 
 if [ -z "$1" ]; then
-	NAME=$(date +%Y%m%dT%H%M%S)
-else
-	NAME="$1"
+	_usage
+	exit 1
 fi
 
-command -v zpool > /dev/null 2>&1 || { echo >&2 "Command 'zpool' is not installed!"; exit 1; }
-command -v zfs > /dev/null 2>&1 || { echo >&2 "Command 'zfs' is not installed!"; exit 1; }
+mkdir icon.iconset
 
-LOG="/tmp/maillog_$(basename "$0")"
-echo > "$LOG"
-POOLS=$(zpool list -H | awk '{print $1}')
-
-for POOL in ${POOLS}; do
-	echo "Create snapshots named '$NAME' for all datasets in zpool '$POOL'." | tee -a "$LOG"
-	zfs snapshot -r "${POOL}@${NAME}" 2>&1 | tee -a "$LOG"
-done
-
-maillog.sh "ZFS snapshots" "$LOG"
-easy-nsca.sh "ZFS snapshot exec"
+_icns "$1" 16x16 12
+_icns "$1" 16x16@2x 32
+_icns "$1" 32x32 32
+_icns "$1" 32x32@2x 64
+_icns "$1" 128x128 128
+_icns "$1" 128x128@2x 256
+_icns "$1" 256x256 256
+_icns "$1" 256x256@2x 512
+_icns "$1" 512x512 512
+_icns "$1" 512x512@2x 2015
