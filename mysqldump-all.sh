@@ -24,14 +24,18 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) -u <username> -p <password>"
+	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>]"
 }
 
 while getopts ":u:p:" opt; do
 	case $opt in
+		d)
+			DIR="$OPTARG"
+			;;
+
 		p)
-		 PASSWORD="$OPTARG"
-		 ;;
+			PASSWORD="$OPTARG"
+			;;
 
 		u)
 			USER="$OPTARG"
@@ -55,12 +59,17 @@ if [ -z "$USER" ] || [ -z "$PASSWORD" ]; then
 	exit 1
 fi
 
+if [ -z "$DIR" ]; then
+	DIR="$(pwd)"
+fi
+
 DATABASES=$(mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
 
 for DB in $DATABASES; do
 	if [ "$DB" != "information_schema" ] && [ "$DB" != "performance_schema" ] && [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
 		echo "Dumping database: $DB"
-		#mysqldump -u "$USER" -p$PASSWORD "$DB" > $(date +%Y%m%d)."$DB".sql
-	 # gzip $OUTPUT/`date +%Y%m%d`.$db.sql
-		fi
+		DUMP="$DIR/$(date +%Y%m%d).$DB.sql"
+		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
+	  gzip "$DUMP"
+	fi
 done
