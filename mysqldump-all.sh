@@ -27,7 +27,7 @@ _usage() {
 	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>]"
 }
 
-while getopts ":u:p:" opt; do
+while getopts ":d:u:p:" opt; do
 	case $opt in
 		d)
 			DIR="$OPTARG"
