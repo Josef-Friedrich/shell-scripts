@@ -68,7 +68,7 @@ DATABASES=$(mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep 
 for DB in $DATABASES; do
 	if [ "$DB" != "information_schema" ] && [ "$DB" != "performance_schema" ] && [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
 		echo "Dumping database: $DB"
-		DUMP="$DIR/$(date +%Y%m%d).$DB.sql"
+		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
 		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 	  gzip "$DUMP"
 	fi
