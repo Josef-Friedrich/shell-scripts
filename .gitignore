@@ -4,3 +4,5 @@
 *.mscx,
 *.eps
 *.pdf
+
+test/mscore-to-eps/PDF_two-pages.pdf
