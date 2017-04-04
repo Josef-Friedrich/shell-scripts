@@ -24,13 +24,25 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>]"
+	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>] [-o <days>]
+
+	-d: Backup directory
+	-o: Delete backup files older than (in days)
+	-p: MySQL password
+	-u: MySQL username
+
+"
 }
 
-while getopts ":d:u:p:" opt; do
+while getopts ":d:o:p:u:" opt; do
 	case $opt in
+
 		d)
 			DIR="$OPTARG"
+			;;
+
+		o)
+			OLDER="$OPTARG"
 			;;
 
 		p)
@@ -44,12 +56,12 @@ while getopts ":d:u:p:" opt; do
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
 			exit 1
-		;;
+			;;
 
 		:)
 			echo "Option -$OPTARG requires an argument." >&2
 			exit 1
-		;;
+			;;
 
 	esac
 done
@@ -70,6 +82,10 @@ for DB in $DATABASES; do
 		echo "Dumping database: $DB"
 		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
 		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
-	  gzip "$DUMP"
+		gzip "$DUMP"
 	fi
 done
+
+if [ -n "$OLDER" ]; then
+	find "$DIR" -mtime +"$OLDER" -exec rm -f {} \;
+fi
