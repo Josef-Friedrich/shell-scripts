@@ -29,12 +29,14 @@ _usage() {
 	-d: Backup directory
 	-o: Delete backup files older than (in days)
 	-p: MySQL password
+	-P: Prefix for the mysql and mysqldump binaries e. g. '/usr/bin' or
+	    'docker exec -t mysql mysql '
 	-u: MySQL username
 
 "
 }
 
-while getopts ":d:o:p:u:" opt; do
+while getopts ":d:o:p:P:u:" opt; do
 	case $opt in
 
 		d)
@@ -47,6 +49,10 @@ while getopts ":d:o:p:u:" opt; do
 
 		p)
 			PASSWORD="$OPTARG"
+			;;
+
+		P)
+			PREFIX="$OPTARG"
 			;;
 
 		u)
@@ -77,7 +83,7 @@ fi
 
 LOG=$(mktemp)
 
-DATABASES=$(mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
+DATABASES=$("${PREFIX}"mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
 
 echo "Found this databases: $DATABASES"  >> "$LOG" 2>&1
 
@@ -86,7 +92,7 @@ for DB in $DATABASES; do
 		echo "Dumping database: $DB" >> "$LOG" 2>&1
 		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
-		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
+		"${PREFIX}"mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 		gzip -f "$DUMP"
 	fi
 done
@@ -95,7 +101,7 @@ if [ -n "$OLDER" ]; then
 	find "$DIR" -mtime +"$OLDER" -exec rm -vf {} \; >> "$LOG" 2>&1
 fi
 
-echo "$LOG"
+cat "$LOG"
 
 if command -v maillog.sh > /dev/null 2>&1 ;  then
 	maillog.sh "MySQLdump all" "$LOG"
