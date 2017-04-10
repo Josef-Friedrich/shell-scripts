@@ -75,17 +75,32 @@ if [ -z "$DIR" ]; then
 	DIR="$(pwd)"
 fi
 
+LOG=$(mktemp)
+
 DATABASES=$(mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
+
+echo "Found this databases: $DATABASES"  >> "$LOG" 2>&1
 
 for DB in $DATABASES; do
 	if [ "$DB" != "information_schema" ] && [ "$DB" != "performance_schema" ] && [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
-		echo "Dumping database: $DB"
+		echo "Dumping database: $DB" >> "$LOG" 2>&1
 		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
+		echo "Dump file: $DUMP" >> "$LOG" 2>&1
 		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 		gzip "$DUMP"
 	fi
 done
 
 if [ -n "$OLDER" ]; then
-	find "$DIR" -mtime +"$OLDER" -exec rm -f {} \;
+	find "$DIR" -mtime +"$OLDER" -exec rm -vf {} \; >> "$LOG" 2>&1
+fi
+
+echo "$LOG"
+
+if command -v maillog.sh > /dev/null 2>&1 ;  then
+	maillog mysqldump-all "$LOG"
+fi
+
+if command -v easy-nsca.sh > /dev/null 2>&1 ;  then
+	easy-nsca.sh mysqldump-all "$LOG"
 fi
