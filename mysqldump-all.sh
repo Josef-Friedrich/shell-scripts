@@ -83,7 +83,7 @@ fi
 
 LOG=$(mktemp)
 
-DATABASES=$("${PREFIX}"mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
+DATABASES=$(${PREFIX}mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
 
 echo "Found this databases: $DATABASES"  >> "$LOG" 2>&1
 
@@ -92,7 +92,7 @@ for DB in $DATABASES; do
 		echo "Dumping database: $DB" >> "$LOG" 2>&1
 		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
-		"${PREFIX}"mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
+		${PREFIX}mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 		gzip -f "$DUMP"
 	fi
 done
