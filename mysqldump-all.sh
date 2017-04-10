@@ -87,7 +87,7 @@ for DB in $DATABASES; do
 		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
 		mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
-		gzip "$DUMP"
+		gzip -f "$DUMP"
 	fi
 done
 
@@ -98,9 +98,9 @@ fi
 echo "$LOG"
 
 if command -v maillog.sh > /dev/null 2>&1 ;  then
-	maillog mysqldump-all "$LOG"
+	maillog.sh "MySQLdump all" "$LOG"
 fi
 
 if command -v easy-nsca.sh > /dev/null 2>&1 ;  then
-	easy-nsca.sh mysqldump-all "$LOG"
+	easy-nsca.sh MySQLdump all
 fi
