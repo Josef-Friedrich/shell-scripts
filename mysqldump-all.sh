@@ -108,5 +108,5 @@ if command -v maillog.sh > /dev/null 2>&1 ;  then
 fi
 
 if command -v easy-nsca.sh > /dev/null 2>&1 ;  then
-	easy-nsca.sh MySQLdump all
+	easy-nsca.sh "MySQLdump all"
 fi
