@@ -24,7 +24,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>] [-o <days>]
+	echo "Usage: $(basename $0) -u <username> -p <password>
 
 	-d: Backup directory
 	-n: Name to distinguish backup runs
