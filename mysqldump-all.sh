@@ -27,16 +27,18 @@ _usage() {
 	echo "Usage: $(basename $0) -u <username> -p <password> [-d <backup-directory>] [-o <days>]
 
 	-d: Backup directory
+	-n: Name to distinguish backup runs
 	-o: Delete backup files older than (in days)
 	-p: MySQL password
 	-P: Prefix for the mysql and mysqldump binaries e. g. '/usr/bin' or
-	    'docker exec -t mysql mysql '
+	    'docker exec mysql '
+
 	-u: MySQL username
 
 "
 }
 
-while getopts ":d:o:p:P:u:" opt; do
+while getopts ":d:n:o:p:P:u:" opt; do
 	case $opt in
 
 		d)
@@ -45,6 +47,10 @@ while getopts ":d:o:p:P:u:" opt; do
 
 		o)
 			OLDER="$OPTARG"
+			;;
+
+		n)
+			NAME="$OPTARG"
 			;;
 
 		p)
@@ -104,9 +110,9 @@ fi
 cat "$LOG"
 
 if command -v maillog.sh > /dev/null 2>&1 ;  then
-	maillog.sh "MySQLdump all" "$LOG"
+	maillog.sh "MySQLdump all $NAME" "$LOG"
 fi
 
 if command -v easy-nsca.sh > /dev/null 2>&1 ;  then
-	easy-nsca.sh "MySQLdump all"
+	easy-nsca.sh "MySQLdump all $NAME"
 fi
