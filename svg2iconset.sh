@@ -24,7 +24,10 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename "$0") <svg-file>"
+	echo "Usage: $(basename "$0") <svg-file>
+
+Options:
+	-h, --help: Show this help message."
 }
 
 _icns() {
@@ -34,6 +37,12 @@ _icns() {
 		--export-height="$3" \
 		"$1"
 }
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 
 if [ -z "$1" ]; then
 	_usage

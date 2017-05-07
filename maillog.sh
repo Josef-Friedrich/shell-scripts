@@ -77,8 +77,7 @@ in order to get the 'MAILLOG_EMAIL' variable.
 Options:
 	-b BODY:  Text for the body of the mail.
 	-h:       Show this help text.
-	-t:       Send a test mail (no further arguments needed).
-"
+	-t:       Send a test mail (no further arguments needed)."
 }
 
 while getopts ":b:ht" OPT; do

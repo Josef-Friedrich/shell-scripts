@@ -63,10 +63,15 @@ SEE ALSO
 font="big"
 style="cstyle"
 
-while getopts ":f:s:" opt; do
+while getopts ":f:hs:" opt; do
 	case $opt in
 		f)
 			font=$OPTARG
+		;;
+
+		h)
+			_usage
+			exit 0
 		;;
 
 		s)

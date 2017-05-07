@@ -30,8 +30,7 @@ Enable systemd unit files without specifying an absolute path. If <unit-file>
 is omitted all unit files in the working directory are enabled.
 
 Options:
-	-h, --help: Show this help message.
-"
+	-h, --help: Show this help message."
 	exit 0
 fi
 

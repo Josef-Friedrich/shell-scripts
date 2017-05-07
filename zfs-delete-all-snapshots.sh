@@ -23,10 +23,23 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0") <dataset>
+
+Options:
+	-h, --help: Show this help message."
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 if [ -z "$1" ]; then
-	echo "Usage: $0 <dataset>"
+	_usage
 	exit 1
 fi
+
 
 for SNAPSHOT in $(zfs list -r -H -t snapshot "$1" | cut -f 1); do
 	echo "$SNAPSHOT"

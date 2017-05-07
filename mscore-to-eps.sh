@@ -42,8 +42,7 @@ DEPENDENCIES
 OPTIONS
 	-h, --help	Show this help message.
 	-n, --no-clean 	Do not remove / clean intermediate
-	                *.$INTER_FORMAT files
-"
+	                *.$INTER_FORMAT files"
 }
 
 if [ $(uname) = 'Darwin' ]; then
@@ -51,7 +50,7 @@ if [ $(uname) = 'Darwin' ]; then
 		unalias readlink > /dev/null 2>&1
 		alias readlink=greadlink
 	else
-		echo "ERROR: GNU utils required for Mac. You may use 
+		echo "ERROR: GNU utils required for Mac. You may use
 homebrew to install them: brew install coreutils gnu-sed"
 		exit 1
 	fi

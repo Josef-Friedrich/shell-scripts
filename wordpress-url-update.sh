@@ -85,9 +85,7 @@ Options:
 	-n New URL
 	-h Show usage
 
-
-
-'wordpress-update-url.sh' is a small shell script to update the url of
+'$(basename "$0")' is a small shell script to update the url of
 wordpress sites.
 
 This script uses the mysql shell command. To use this script you must have
@@ -101,11 +99,11 @@ over the shell command.
 
 # Command line usage:
 
-	./wordpress-update-url -u <user> -p <password> -d <database> -n <new-url>
+	$(basename "$0") -u <user> -p <password> -d <database> -n <new-url>
 
 ## Example:
 
-	./wordpress-update-url -u root -p 5dtaJ -d wp_db -n http://new-url.com
+	$(basename "$0") -u root -p 5dtaJ -d wp_db -n http://new-url.com
 
 If you use the shell script frequently on the same site, it is recommended
 to edit the script file and put there your mysql connection and url
@@ -125,9 +123,7 @@ informations:
 
 Then you can update your wordpress site executing this short command:
 
-	./wordpress-update-url
-
-"
+	$(basename "$0")"
 }
 
 while getopts ":u:p:d:o:n:h" OPT; do

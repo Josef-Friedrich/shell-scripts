@@ -38,8 +38,7 @@ OPTIONS:
 
 or
 
-$(basename "$0") [-d <network-interface> ] clear
-"
+$(basename "$0") [-d <network-interface> ] clear"
 }
 
 OPT=$1

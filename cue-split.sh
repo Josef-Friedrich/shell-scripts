@@ -37,8 +37,7 @@ Optional dependencies: flac, mac, wavpack, ttaenc
 
 The default path is the current directory.
 
-The folder must contain only one *.cue file and one audio file.
-"
+The folder must contain only one *.cue file and one audio file."
 }
 
 if [ "$1" = "" ]; then

@@ -27,8 +27,7 @@ _usage() {
 	echo "Usage: $(basename "$0")
 
 Options:
-	-h, --help: Show this help message.
-"
+	-h, --help: Show this help message."
 }
 
 if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then

@@ -33,8 +33,7 @@ _usage() {
 Create snapshots on all datasets of all zfs pools.
 
 Options:
-	-h, --help: Show this help message.
-"
+	-h, --help: Show this help message."
 }
 
 if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then

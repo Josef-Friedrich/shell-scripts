@@ -1,3 +1,15 @@
 #! /bin/sh
 
-find . -iname "*.sh" -exec {} -h \;
+READ=README.md
+
+cat ./README-base.md > "$READ"
+
+for COMMAND in $(find . -iname "*.sh" | sort); do
+	echo "$COMMAND"
+	echo >> "$READ"
+	echo "## $COMMAND" >> "$READ"
+	echo >> "$READ"
+	echo "\`\`\`" >> "$READ"
+	$COMMAND -h  >> "$READ"
+	echo "\`\`\`" >> "$READ"
+done

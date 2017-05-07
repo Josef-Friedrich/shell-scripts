@@ -27,9 +27,8 @@ _usage() {
 	echo "$(basename "$0") [-hd] [ -H <height> ] <folder>
 
 	-d: Dry run
-	-h: Show this help
+	-h: Show this help message
 	-H: Height of the min resolution (e. g. 720)
-
 "
 
 }

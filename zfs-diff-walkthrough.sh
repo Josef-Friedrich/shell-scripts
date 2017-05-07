@@ -48,9 +48,7 @@ echo "Usage: zfs-diff-walkthrough [-p] <nr> [<nr>]
 Options:
   -d   Dataset or directory.
   -h   Show this help message.
-  -p   Compare with previous snapshot instead of later snapshot.
-
-"
+  -p   Compare with previous snapshot instead of later snapshot."
 }
 
 while getopts ":d:hp" OPT; do

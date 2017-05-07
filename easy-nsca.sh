@@ -62,8 +62,7 @@ Options:
 Examples:
 
 $(basename "$0") \"APT\" \"check_apt -t 100\"
-$(basename "$0") \"Disk space\" \"check_disk -w 10% -c 5% /dev/sda1\"
-"
+$(basename "$0") \"Disk space\" \"check_disk -w 10% -c 5% /dev/sda1\""
 }
 
 _nsca() {

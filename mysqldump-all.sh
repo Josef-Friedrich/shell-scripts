@@ -27,22 +27,26 @@ _usage() {
 	echo "Usage: $(basename $0) -u <username> -p <password>
 
 	-d: Backup directory
+	-h: Show this help message
 	-n: Name to distinguish backup runs
 	-o: Delete backup files older than (in days)
 	-p: MySQL password
 	-P: Prefix for the mysql and mysqldump binaries e. g. '/usr/bin' or
 	    'docker exec mysql '
 
-	-u: MySQL username
-
-"
+	-u: MySQL username"
 }
 
-while getopts ":d:n:o:p:P:u:" opt; do
+while getopts ":d:hn:o:p:P:u:" opt; do
 	case $opt in
 
 		d)
 			DIR="$OPTARG"
+			;;
+
+		h)
+			_usage
+			exit 0
 			;;
 
 		o)
