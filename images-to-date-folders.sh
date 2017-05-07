@@ -43,6 +43,19 @@
 # Public Domain by Jarno Elonen <elonen@iki.fi> in June 2003.
 # Feel free to do whatever you like with it.
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Options:
+	-h, --help: Show this help message.
+"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 _mv_image() {
 	INPUT="$1"
 	DATE=$(exiftool -quiet -tab -dateformat "%Y:%m:%d" -json -DateTimeOriginal "${INPUT}" | jq --raw-output '.[].DateTimeOriginal')

@@ -27,4 +27,17 @@
 # .DS_Store
 # ._ Mac files
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Options:
+	-h, --help: Show this help message.
+"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 find . -type f \( -iname ".DS_Store" -o -iname "Thumbs.db" -o -iname "._*" \) -exec rm -rfv  "{}" \;

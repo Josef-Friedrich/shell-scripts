@@ -69,7 +69,7 @@ while getopts ":f:s:" opt; do
 			font=$OPTARG
 		;;
 
-		 s)
+		s)
 			style=$OPTARG
 		;;
 

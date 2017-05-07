@@ -1,0 +1,3 @@
+#! /bin/sh
+
+find . -iname "*.sh" -exec {} -h \;

@@ -22,6 +22,19 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Options:
+	-h, --help: Show this help message.
+"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 SEARCH="Font directory: "
 
 FONT_DIRECTORY=$(figlist | grep "$SEARCH" | sed "s/$SEARCH//")
