@@ -9,7 +9,7 @@ if [ -z "$NSCA_CONFIG" ]; then
 fi
 
 if [ -d "/usr/lib/nagios/plugins" ]; then
-	NAGIOS_PLUGINS="/usr/lib/nagios/plugins"
+	PATH_CHECK="/usr/lib/nagios/plugins"
 fi
 
 # MIT License
@@ -42,18 +42,18 @@ Environment variables: (to place in your *rc files of your shell)
 
 	- NSCA_SERVER
 	- NSCA_CONFIG
-	- NAGIOS_PLUGINS
+	- PATH_CHECK
 
 export NSCA_SERVER=\"123.123.123.123\"
 export NSCA_CONFIG=\"/etc/send_nsca.cfg\"
-export NAGIOS_PLUGINS=\"/usr/lib/nagios/plugins\"
+export PATH_CHECK=\"/usr/lib/nagios/plugins\"
 
 Options:
 	-c NSCA_CONFIG:    NSCA config file (default: /etc/send_nsca.cfg)
 	-h:                Show this help.
 	-H NSCA_SERVER:    IP address of the Nagios server.
 	-n HOST_SERVICE:   Host of the service.
-	-p NAGIOS_PLUGINS: Folder containing the check commands.
+	-p PATH_CHECK: Folder containing the check commands.
 	                   (default: /usr/lib/nagios/plugins)
 	-o OUTPUT:         Output of the check commands.
 	-r RETURN:         Plugin return codes: 0 Ok, 1 Warning,
@@ -128,8 +128,8 @@ _send_nsca() {
 		_send_nsca_raw "$HOSTNAME" "$SERVICE" "${RETURN:-0}" "$OUTPUT"
 		echo "$OUTPUT"
 	else
-		if [ -d ${NAGIOS_PLUGINS} ]; then
-			OUTPUT=$(eval "${NAGIOS_PLUGINS}/${CHECK_COMMAND}")
+		if [ -d ${PATH_CHECK} ]; then
+			OUTPUT=$(eval "${PATH_CHECK}/${CHECK_COMMAND}")
 		else
 			OUTPUT=$(eval "${CHECK_COMMAND}")
 		fi
@@ -164,7 +164,7 @@ while getopts ":c:hH:n:p:o:r:" OPT; do
 			;;
 
 		p)
-			NAGIOS_PLUGINS="$OPTARG"
+			PATH_CHECK="$OPTARG"
 			;;
 
 		r)
