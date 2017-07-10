@@ -60,4 +60,4 @@ for POOL in ${POOLS}; do
 done
 
 maillog.sh "ZFS snapshots" "$LOG"
-easy-nsca.sh "ZFS snapshot exec"
+easy-nsca.sh "zfs_snapshot_exec"
