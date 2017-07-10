@@ -410,7 +410,7 @@ _log_process() {
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILE_TRANSFERRED; Activity: $STATUS" "RSYNC ${SOURCE} ${DESTINATION}"
+	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILE_TRANSFERRED; Activity: $STATUS" "rsync_${SOURCE}_${DESTINATION}"
 	echo "Send NSCA: RSYNC ${SOURCE} ${DESTINATION}"
 	echo "Message: RSYNC OK: Files transfered: $FILE_TRANSFERRED; Activity: $STATUS"
 }
