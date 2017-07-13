@@ -119,7 +119,7 @@ Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <fo
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
-		beepbox.sh warning
+		beep -f 65.4064 -l 100 > /dev/null 2>&1
 		exit 1
 	fi
 }
@@ -623,6 +623,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	fi
 
 	if [ -n "$BEEP" ]; then
-		beepbox.sh success
+		beep -f 4186.01 -l 40 > /dev/null 2>&1
 	fi
 fi
