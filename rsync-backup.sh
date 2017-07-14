@@ -350,7 +350,7 @@ _log_mail() {
 		# $HOSTNAME
 		# DATE_SHORT=$(date "+%d-%b %H:%M")
 		# $DATE_SHORT
-		maillog.sh "#rb [$SOURCE] -> [$DESTINATION] $STATUS ($FILE_TRANSFERRED transferred files)" "$LOG_FILE_HOST"
+		maillog.sh "#rb [$SOURCE] -> [$DESTINATION] $STATUS ($FILES_TRANSFERRED transferred files)" "$LOG_FILE_HOST"
 	fi
 }
 
@@ -370,7 +370,7 @@ _log_process() {
 	START_SUMMARY=''
 	STOP_SUMMARY=''
 	NOT_EMPTY_LINE=''
-	FILE_TRANSFERRED=''
+	FILES_TRANSFERRED=''
 
 	while read -r DATA; do
 		echo "$DATA" >> "$LOG_FILE_HOST"
@@ -395,12 +395,12 @@ _log_process() {
 
 		echo "$DATA" | awk 'NF'
 
-		FILE_TRANSFERRED=$(echo "$DATA" | grep 'files transferred:' | awk '{print $NF;}')
+		FILES_TRANSFERRED=$(echo "$DATA" | grep 'files transferred:' | awk '{print $NF;}')
 
 		# A piped while loop runs in its own subshell, so we need to make this
 		# over tmp info files.
-		if [ ! -z "$FILE_TRANSFERRED" ]; then
-			echo "$FILE_TRANSFERRED" > "$INFO_PATH$IDENTIFIER"
+		if [ ! -z "$FILES_TRANSFERRED" ]; then
+			echo "$FILES_TRANSFERRED" > "$INFO_PATH$IDENTIFIER"
 		fi
 
 	done
@@ -410,9 +410,9 @@ _log_process() {
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILE_TRANSFERRED; Activity: $STATUS" "rsync_${SOURCE}_${DESTINATION}"
+	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS | files_transferred=$FILES_TRANSFERRED, activity=$LINES" "rsync_${SOURCE}_${DESTINATION}"
 	echo "Send NSCA: RSYNC ${SOURCE} ${DESTINATION}"
-	echo "Message: RSYNC OK: Files transfered: $FILE_TRANSFERRED; Activity: $STATUS"
+	echo "Message: RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS"
 }
 
 ########################################################################
@@ -442,7 +442,7 @@ _zfs_snapshot() {
 	fi
 
 	ZFS_PATH=$(_make_zfs_path "$ZFS_PATH")
-	if [ "$FILE_TRANSFERRED" -ge 1 ]; then
+	if [ "$FILES_TRANSFERRED" -ge 1 ]; then
 		$SSH zfs snapshot "$ZFS_PATH@rb_$(_date)"
 		echo "Making snapshot."
 	fi
@@ -605,7 +605,7 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	# shellcheck disable=SC2046
 	rsync $(_process_options) $(_process_source_destination) | _log_process
 
-	FILE_TRANSFERRED=$(_get_info)
+	FILES_TRANSFERRED=$(_get_info)
 
 	if [ -n "$ZFS_SNAPSHOT" ]; then
 		_zfs_snapshot
