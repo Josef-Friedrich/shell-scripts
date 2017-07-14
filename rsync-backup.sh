@@ -410,7 +410,7 @@ _log_process() {
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS | files_transferred=$FILES_TRANSFERRED, activity=$LINES" "rsync_${SOURCE}_${DESTINATION}"
+	easy-nsca.sh -o "RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS | files_transferred=$FILES_TRANSFERRED, activity=$LINES" "rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}"
 	echo "Send NSCA: RSYNC ${SOURCE} ${DESTINATION}"
 	echo "Message: RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS"
 }
@@ -588,9 +588,10 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	done
 
 	shift $((OPTIND-1))
-
+	SOURCE_INPUT="$1"
 	SOURCE="${1%/}"
 	DESTINATION="${2%/}"
+	DESTINATION_INPUT="$2"
 
 	if [ -z "$IDENTIFIER" ]; then
 		IDENTIFIER=$(_generate_identifier)
