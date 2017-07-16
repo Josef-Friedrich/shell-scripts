@@ -131,9 +131,11 @@ Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <fo
 _create_affirmation_file() {
 	FOLDER="$1"
 
-	date +%s > "$TMP_FOLDER/$AFFIRMATION_FILE"
+	MKTEMP=$(mktemp)
 
-	rsync "$TMP_FOLDER/$AFFIRMATION_FILE" "$FOLDER/$RSYNC_FOLDER/" > /dev/null 2>&1
+	date +%s > "$MKTEMP"
+
+	rsync "$MKTEMP" "$FOLDER/$RSYNC_FOLDER/" > /dev/null 2>&1
 
 	if [ $? -eq 0 ]; then
 		echo "The '$AFFIRMATION_FILE' file was successfully created."
