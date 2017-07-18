@@ -119,7 +119,9 @@ Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <fo
 	fi
 
 	if [ "$SOURCE_INACCESSIBILITY" = 1 ] || [ "$DESTINATION_INACCESSIBILITY" = 1 ]; then
-		beep -f 65.4064 -l 100 > /dev/null 2>&1
+		if [ "$BEEP" = 1 ]; then
+			beep -f 65.4064 -l 100 > /dev/null 2>&1
+		fi
 		exit 1
 	fi
 }
@@ -625,7 +627,7 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 		_nsca_process
 	fi
 
-	if [ -n "$BEEP" ]; then
+	if [ "$BEEP" = 1 ]; then
 		beep -f 4186.01 -l 40 > /dev/null 2>&1
 	fi
 fi
