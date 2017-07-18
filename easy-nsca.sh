@@ -8,7 +8,7 @@ if [ -z "$NSCA_CONFIG" ]; then
 	NSCA_CONFIG="/etc/send_nsca.cfg"
 fi
 
-if [ -d "/usr/lib/nagios/plugins" ]; then
+if [ -z "$NSCA_CONFIG" ] && [ -d "/usr/lib/nagios/plugins" ]; then
 	PATH_CHECK="/usr/lib/nagios/plugins"
 fi
 
