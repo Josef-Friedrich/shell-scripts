@@ -137,7 +137,7 @@ _create_affirmation_file() {
 
 	date +%s > "$MKTEMP"
 
-	rsync "$MKTEMP" "$FOLDER/$RSYNC_FOLDER/" > /dev/null 2>&1
+	rsync "$MKTEMP" "$FOLDER/$RSYNC_FOLDER/$AFFIRMATION_FILE" > /dev/null 2>&1
 
 	if [ $? -eq 0 ]; then
 		echo "The '$AFFIRMATION_FILE' file was successfully created."
