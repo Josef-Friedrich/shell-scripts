@@ -12,6 +12,20 @@
 	[ "${lines[0]}" = 'Usage: rsync-backup [-adefhlLmnNz] <source> <destination>' ]
 }
 
+@test "rsync-backup.sh: Basic sync" {
+  TMP1=$(mktemp -d)
+  TMP2=$(mktemp -d)
+	./rsync-backup.sh -a "$TMP1"
+	[ -f "$TMP1/.rsync-backup/please-sync" ]
+	./rsync-backup.sh -a "$TMP2"
+	[ -f "$TMP2/.rsync-backup/please-sync" ]
+	echo lol > $TMP1/lol1
+	echo lol > $TMP1/lol2
+	./rsync-backup.sh $TMP1 $TMP2
+	[ -f "$TMP2/lol1" ]
+	[ -f "$TMP2/lol2" ]
+}
+
 @test "unittest: variables" {
 	source ./rsync-backup.sh
 	[ "$LOG_FOLDER_HOST" = "$HOME/rsync-backup-logs" ]

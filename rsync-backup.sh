@@ -133,11 +133,13 @@ Create a '$RSYNC_FOLDER/$AFFIRMATION_FILE' file or use the command 'rsync -a <fo
 _create_affirmation_file() {
 	FOLDER="$1"
 
-	MKTEMP=$(mktemp)
+	local TMP_FILE=$(mktemp)
+	local TMP_FOLDER=$(mktemp -d)
 
-	date +%s > "$MKTEMP"
+	date +%s > "$TMP_FILE"
 
-	rsync "$MKTEMP" "$FOLDER/$RSYNC_FOLDER/$AFFIRMATION_FILE" > /dev/null 2>&1
+	rsync -av "$TMP_FOLDER" "$FOLDER/$RSYNC_FOLDER" > /dev/null 2>&1
+	rsync -av "$TMP_FILE" "$FOLDER/$RSYNC_FOLDER/$AFFIRMATION_FILE" > /dev/null 2>&1
 
 	if [ $? -eq 0 ]; then
 		echo "The '$AFFIRMATION_FILE' file was successfully created."
@@ -510,6 +512,7 @@ OPTIONS
 	subshells
 	-l: Show log summary.
 	-L: Show log folder.
+	-m: Send logs per mail.
 	-n: No backup.
 	-N: Send NSCA message to nagios.
 	-z: Create ZFS snapshot.
@@ -546,7 +549,7 @@ DEPENDENCIES
 ########################################################################
 
 if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
-	while getopts ":a:bdef:hi:lLnNz" OPT; do
+	while getopts ":a:bdef:hi:lLmnNz" OPT; do
 		case $OPT in
 
 			a)
@@ -590,6 +593,10 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 			L)
 				_log_show_folder
 				exit 0
+				;;
+
+			m)
+				OPTION_MAIL=1
 				;;
 
 			n)
@@ -642,7 +649,9 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 		_zfs_snapshot
 	fi
 
-	_log_mail
+	if [ "$OPTION_MAIL" = 1 ]; then
+		_log_mail
+	fi
 
 	_log_execution
 
