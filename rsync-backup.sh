@@ -204,6 +204,7 @@ _process_options() {
 }
 
 _parse_statistics() {
+	STAT_BLOCK="$(echo "$1" | grep -A 13 "Number of files")"
 	STAT_LOL="$(echo "$1" | grep "Literal data")"
 }
 
