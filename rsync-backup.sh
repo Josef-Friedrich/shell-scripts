@@ -203,11 +203,32 @@ _process_options() {
 	echo "$DEFAULT $EXCLUDES $EXCLUDES_BY_FILE $BACKUP"
 }
 
-_parse_statistics() {
-	STAT_BLOCK="$(echo "$1" | grep -A 13 "Number of files")"
-	STAT_LOL="$(echo "$1" | grep "Literal data")"
+_trim_value() {
+	echo $1
 }
 
+_extract_value() {
+	local VALUE=$(echo "$1" | head -n $2 | tail -1 | cut -d ':' -f 2)
+	_trim_value $VALUE
+}
+
+_parse_statistics() {
+	STAT_BLOCK="$(echo "$1" | grep -A 13 "Number of files")"
+
+	STAT_NUM_FILES="$(_extract_value "$STAT_BLOCK" 1)"
+	STAT_NUM_CREATED_FILES="$(_extract_value "$STAT_BLOCK" 2)"
+	STAT_NUM_DELETED_FILES="$(_extract_value "$STAT_BLOCK" 3)"
+	STAT_NUM_FILES_TRANSFERRED="$(_extract_value "$STAT_BLOCK" 4)"
+	STAT_TOTAL_SIZE="$(_extract_value "$STAT_BLOCK" 5)"
+	STAT_TRANSFERRED_SIZE="$(_extract_value "$STAT_BLOCK" 6)"
+	STAT_LITERAL_DATA="$(_extract_value "$STAT_BLOCK" 7)"
+	STAT_MATCHED_DATA="$(_extract_value "$STAT_BLOCK" 8)"
+	STAT_LIST_SIZE="$(_extract_value "$STAT_BLOCK" 9)"
+	STAT_LIST_GENERATION_TIME="$(_extract_value "$STAT_BLOCK" 10)"
+	STAT_LIST_TRANSFER_TIME="$(_extract_value "$STAT_BLOCK" 11)"
+	STAT_BYTES_SENT="$(_extract_value "$STAT_BLOCK" 12)"
+	STAT_BYTES_RECEIVED="$(_extract_value "$STAT_BLOCK" 13)"
+}
 
 ########################################################################
 # log showing

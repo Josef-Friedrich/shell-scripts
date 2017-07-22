@@ -25,27 +25,61 @@
 	[ "$DEFAULT_EXCLUDES" = '--exclude .rsync_shadow --exclude .snapshots' ]
 }
 
+@test "unittest: function _trim_value" {
+	source ./rsync-backup.sh
+	VALUE=" 1 2 3 4 "
+  run _trim_value $VALUE
+	[ "$output" = "1" ]
+  run _trim_value lol troll
+	[ "$output" = "lol" ]
+}
+
+@test "unittest: function _extract_value" {
+	source ./rsync-backup.sh
+	VALUE="line 1: 1
+line 2: 2
+line 3: 3
+line 4: 4
+"
+
+	[ "$(_extract_value "$VALUE" 1)" = "1" ]
+	[ "$(_extract_value "$VALUE" 2)" = "2" ]
+	[ "$(_extract_value "$VALUE" 3)" = "3" ]
+}
+
 @test "unittest: function _parse_statistics" {
 	source ./rsync-backup.sh
   INPUT="sending incremental file list
 
 Number of files: 1 (dir: 1)
-Number of created files: 0
-Number of deleted files: 0
-Number of regular files transferred: 0
-Total file size: 0 bytes
-Total transferred file size: 0 bytes
-Literal data: 0 bytes
-Matched data: 0 bytes
-File list size: 0
-File list generation time: 0.001 seconds
-File list transfer time: 0.000 seconds
-Total bytes sent: 65
-Total bytes received: 17
+Number of created files: 2
+Number of deleted files: 3
+Number of regular files transferred: 4
+Total file size: 5 bytes
+Total transferred file size: 6 bytes
+Literal data: 7 bytes
+Matched data: 8 bytes
+File list size: 9
+File list generation time: 10.001 seconds
+File list transfer time: 11.000 seconds
+Total bytes sent: 12
+Total bytes received: 13
 
 sent 65 bytes  received 17 bytes  164.00 bytes/sec
 total size is 0  speedup is 0.00"
 
 	_parse_statistics "$INPUT"
-	[ "$STAT_LOL" = "Literal data: 0 bytes" ]
+	[ "$STAT_NUM_FILES" = "1" ]
+	[ "$STAT_NUM_CREATED_FILES" = "2" ]
+	[ "$STAT_NUM_DELETED_FILES" = "3" ]
+	[ "$STAT_NUM_FILES_TRANSFERRED" = "4" ]
+	[ "$STAT_TOTAL_SIZE" = "5" ]
+	[ "$STAT_TRANSFERRED_SIZE" = "6" ]
+	[ "$STAT_LITERAL_DATA" = "7" ]
+	[ "$STAT_MATCHED_DATA" = "8" ]
+	[ "$STAT_LIST_SIZE" = "9" ]
+	[ "$STAT_LIST_GENERATION_TIME" = "10.001" ]
+	[ "$STAT_LIST_TRANSFER_TIME" = "11.000" ]
+	[ "$STAT_BYTES_SENT" = "12" ]
+	[ "$STAT_BYTES_RECEIVED" = "13" ]
 }
