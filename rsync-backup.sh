@@ -455,31 +455,6 @@ _date() {
 	date +%Y-%m-%dT%H-%M-%S
 }
 
-_split_colon() {
-	echo "$1" | cut -d ':' -f "$2"
-}
-
-_make_zfs_path() {
-	echo "${1%/}" | sed -e 's/\/mnt\///g'
-}
-
-_zfs_snapshot() {
-	# e. g.: wnas:/mnt/zpool/shares/ or /mnt/zpool/shares/
-	if [ "$DESTINATION" != "${DESTINATION%:*}" ]; then
-		REMOTE_HOST=$(_split_colon "$DESTINATION" 1)
-		ZFS_PATH=$(_split_colon "$DESTINATION" 2)
-		SSH="ssh $REMOTE_HOST"
-	else
-		ZFS_PATH="$DESTINATION"
-	fi
-
-	ZFS_PATH=$(_make_zfs_path "$ZFS_PATH")
-	if [ "$FILES_TRANSFERRED" -ge 1 ]; then
-		$SSH zfs snapshot "$ZFS_PATH@rb_$(_date)"
-		echo "Making snapshot."
-	fi
-}
-
 _get_info() {
 	cat "$INFO_PATH$IDENTIFIER"
 }
@@ -493,7 +468,7 @@ _generate_identifier() {
 # Show a short help text.
 ##
 _help_show() {
-	echo "Usage: rsync-backup [-adefhlLmnNz] <source> <destination>
+	echo "Usage: rsync-backup [-adefhlLmnN] <source> <destination>
 
 DESCRIPTION
 	A wrapper command for rsync with the main features:
@@ -515,7 +490,6 @@ OPTIONS
 	-m: Send logs per mail.
 	-n: No backup.
 	-N: Send NSCA message to nagios.
-	-z: Create ZFS snapshot.
 
 LOG FILES
 	GENERAL LOG FILE
@@ -607,10 +581,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 				NSCA=1
 				;;
 
-			z)
-				ZFS_SNAPSHOT=1
-				;;
-
 			\?)
 				echo "Invalid option: -$OPTARG" >&2
 				exit 1
@@ -644,10 +614,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	rsync $(_process_options) $(_process_source_destination) | _log_process
 
 	FILES_TRANSFERRED=$(_get_info)
-
-	if [ -n "$ZFS_SNAPSHOT" ]; then
-		_zfs_snapshot
-	fi
 
 	if [ "$OPTION_MAIL" = 1 ]; then
 		_log_mail
