@@ -203,6 +203,10 @@ _process_options() {
 	echo "$DEFAULT $EXCLUDES $EXCLUDES_BY_FILE $BACKUP"
 }
 
+_parse_statistics() {
+	STAT_LOL="$(echo "$1" | grep "Literal data")"
+}
+
 
 ########################################################################
 # log showing
