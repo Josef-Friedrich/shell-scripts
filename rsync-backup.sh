@@ -197,7 +197,7 @@ _process_options() {
 		--partial \
 		--stats"
 
-	if [ -z "$NO_BACKUP" ]; then
+	if [ "$OPTION_BACKUP" = 1 ]; then
 		BACKUP="--backup --backup-dir=$BACKUP_FOLDER/$DATE"
 	fi
 
@@ -458,7 +458,7 @@ _date() {
 # Show a short help text.
 ##
 _help_show() {
-	echo "Usage: rsync-backup [-adefhlLmnN] <source> <destination>
+	echo "Usage: rsync-backup [-abBdefhlLmN] <source> <destination>
 
 DESCRIPTION
 	A wrapper command for rsync with the main features:
@@ -511,7 +511,7 @@ DEPENDENCIES
 ########################################################################
 
 if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
-	while getopts ":a:bdef:hlLmnNz" OPT; do
+	while getopts ":a:bBdef:hlLmN" OPT; do
 		case $OPT in
 
 			a)
@@ -520,7 +520,11 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 				;;
 
 			b)
-				BEEP=1
+				OPTION_BEEP=1
+				;;
+
+			B)
+				OPTION_BACKUP=1
 				;;
 
 			d)
@@ -557,12 +561,8 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 				OPTION_MAIL=1
 				;;
 
-			n)
-				NO_BACKUP=1
-				;;
-
 			N)
-				NSCA=1
+				OPTION_NSCA=1
 				;;
 
 			\?)
@@ -602,11 +602,11 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	_log_file_copy "$SOURCE"
 	_log_file_copy "$DESTINATION"
 
-	if [ -n "$NSCA" ]; then
+	if [ -n "$OPTION_NSCA" ]; then
 		_nsca_process
 	fi
 
-	if [ "$BEEP" = 1 ]; then
+	if [ "$OPTION_BEEP" = 1 ]; then
 		beep -f 4186.01 -l 40 > /dev/null 2>&1
 	fi
 fi

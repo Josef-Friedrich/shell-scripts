@@ -9,7 +9,7 @@
 @test "execute: rsync-backup.sh -h" {
 	run ./rsync-backup.sh -h
 	[ "$status" -eq 0 ]
-	[ "${lines[0]}" = 'Usage: rsync-backup [-adefhlLmnN] <source> <destination>' ]
+	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdefhlLmN] <source> <destination>' ]
 }
 
 @test "rsync-backup.sh: Basic sync" {
