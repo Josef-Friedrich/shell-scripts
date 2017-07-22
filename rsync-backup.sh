@@ -510,7 +510,7 @@ DEPENDENCIES
 # Process
 ########################################################################
 
-if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
+_execute() {
 	while getopts ":a:bBdef:hlLmN" OPT; do
 		case $OPT in
 
@@ -609,4 +609,8 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	if [ "$OPTION_BEEP" = 1 ]; then
 		beep -f 4186.01 -l 40 > /dev/null 2>&1
 	fi
+}
+
+if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
+	_execute $@
 fi
