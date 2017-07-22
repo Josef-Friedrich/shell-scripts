@@ -469,6 +469,7 @@ DESCRIPTION
 OPTIONS
 	-a <path>: Creates a $RSYNC_FOLDER/$AFFIRMATION_FILE affirmation file for the given folder.
 	-b: Beep.
+	-B: Backup.
 	-d: Delete all log file in the log folder.
 	-e: Show execution log.
 	-f: Show folder log files.
@@ -476,7 +477,6 @@ OPTIONS
 	-l: Show log summary.
 	-L: Show log folder.
 	-m: Send logs per mail.
-	-n: No backup.
 	-N: Send NSCA message to nagios.
 
 LOG FILES
