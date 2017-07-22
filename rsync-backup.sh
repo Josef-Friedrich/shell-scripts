@@ -75,7 +75,6 @@ _check_scp() {
 
 	if [ $? -eq 0 ]; then
 		FOLDER_INACCESSIBILITY=0
-
 	else
 		FOLDER_INACCESSIBILITY=1
 	fi
@@ -455,15 +454,6 @@ _date() {
 	date +%Y-%m-%dT%H-%M-%S
 }
 
-_get_info() {
-	cat "$INFO_PATH$IDENTIFIER"
-}
-
-_generate_identifier() {
-	# Unix timestamp, $$ is pid.
-	echo "$(date +%s)-$$"
-}
-
 ##
 # Show a short help text.
 ##
@@ -483,8 +473,6 @@ OPTIONS
 	-e: Show execution log.
 	-f: Show folder log files.
 	-h: Show help.
-	-i <identifier>: Provide a identifier, to get informations across multiple
-	subshells
 	-l: Show log summary.
 	-L: Show log folder.
 	-m: Send logs per mail.
@@ -523,7 +511,7 @@ DEPENDENCIES
 ########################################################################
 
 if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
-	while getopts ":a:bdef:hi:lLmnNz" OPT; do
+	while getopts ":a:bdef:hlLmnNz" OPT; do
 		case $OPT in
 
 			a)
@@ -553,10 +541,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 			h)
 				_help_show
 				exit 0
-				;;
-
-			i)
-				IDENTIFIER="$OPTARG"
 				;;
 
 			l)
@@ -600,10 +584,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	DESTINATION="${2%/}"
 	DESTINATION_INPUT="$2"
 
-	if [ -z "$IDENTIFIER" ]; then
-		IDENTIFIER=$(_generate_identifier)
-	fi
-
 	_check_accessiblity
 
 	_log_init
@@ -612,8 +592,6 @@ if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 
 	# shellcheck disable=SC2046
 	rsync $(_process_options) $(_process_source_destination) | _log_process
-
-	FILES_TRANSFERRED=$(_get_info)
 
 	if [ "$OPTION_MAIL" = 1 ]; then
 		_log_mail
