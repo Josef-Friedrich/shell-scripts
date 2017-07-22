@@ -26,6 +26,19 @@
 	[ -f "$TMP2/lol2" ]
 }
 
+@test "rsync-backup.sh: Basic sync via _execute" {
+  TMP1=$(mktemp -d)
+  TMP2=$(mktemp -d)
+	source ./rsync-backup.sh
+	run _execute -h
+	[ "$status" -eq 0 ]
+	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdefhlLmN] <source> <destination>' ]
+	run _execute -a "$TMP1"
+	[ -f "$TMP1/.rsync-backup/please-sync" ]
+	run _execute -a "$TMP2"
+	[ -f "$TMP2/.rsync-backup/please-sync" ]
+}
+
 @test "unittest: variables" {
 	source ./rsync-backup.sh
 	[ "$LOG_FOLDER_HOST" = "$HOME/rsync-backup-logs" ]
