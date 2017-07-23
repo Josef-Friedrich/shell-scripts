@@ -9,8 +9,8 @@ test_help() {
 }
 
 test_execute() {
-  TMP1=$(mktemp -d)
-  TMP2=$(mktemp -d)
+  local TMP1=$(mktemp -d)
+  local TMP2=$(mktemp -d)
 	source ../rsync-backup.sh
 
 	assert "_execute -a $TMP1"
@@ -30,7 +30,27 @@ test_execute() {
 
 	assert "test -f '$TMP1/.rsync-backup/$LOG_FILE_HOST_NAME'"
 	assert "test -f '$TMP2/.rsync-backup/$LOG_FILE_HOST_NAME'"
+}
 
+
+test_execute_no_affirmation_both() {
+	local TMP1=$(mktemp -d)
+	local TMP2=$(mktemp -d)
+	assert_status_code 1 "../rsync-backup.sh $TMP1 $TMP2"
+}
+
+test_execute_no_affirmation_source() {
+	local TMP1=$(mktemp -d)
+	local TMP2=$(mktemp -d)
+	../rsync-backup.sh -a $TMP1 > /dev/null
+	assert_status_code 1 "../rsync-backup.sh $TMP1 $TMP2"
+}
+
+test_execute_no_affirmation_destination() {
+	local TMP1=$(mktemp -d)
+	local TMP2=$(mktemp -d)
+	../rsync-backup.sh -a $TMP2 > /dev/null
+	assert_status_code 1 "../rsync-backup.sh $TMP1 $TMP2"
 }
 
 test_default_variables() {
