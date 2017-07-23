@@ -397,10 +397,10 @@ _log_file_copy() {
 # Write out from rsync to log files.
 ##
 _log_process() {
-	WRITE_TO_SUMMARY=0
-	START_SUMMARY=''
-	STOP_SUMMARY=''
-	NOT_EMPTY_LINE=''
+	local WRITE_TO_SUMMARY=0
+	local START_SUMMARY=''
+	local STOP_SUMMARY=''
+	local NOT_EMPTY_LINE=''
 	FILES_TRANSFERRED=''
 
 	while read -r DATA; do
