@@ -428,12 +428,6 @@ _log_process() {
 
 		FILES_TRANSFERRED=$(echo "$DATA" | grep 'files transferred:' | awk '{print $NF;}')
 
-		# A piped while loop runs in its own subshell, so we need to make this
-		# over tmp info files.
-		if [ ! -z "$FILES_TRANSFERRED" ]; then
-			echo "$FILES_TRANSFERRED" > "$INFO_PATH$IDENTIFIER"
-		fi
-
 	done
 }
 
