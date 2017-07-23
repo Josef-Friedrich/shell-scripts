@@ -261,24 +261,6 @@ _log_show_folder() {
 	ls -l "$LOG_FOLDER_HOST"
 }
 
-_show_folder_logs() {
-	FOLDER="${1%/}/$RSYNC_FOLDER"
-
-	FILES=$(find "$FOLDER" -name "log_*" | tail -n 5)
-
-	for FILE in $FILES; do
-		echo "
-$SEPARATOR"
-		basename "$FILE" | sed -e 's/\.log$//' | awk 'BEGIN {FS="_"} {print $2 " " $3 ": " $4 " -> " $5}'
-		echo "$SEPARATOR"
-
-		# Delete first 7 lines
-		# Delete last 15 lines
-		tail -n "+7" | sed -n -e :a -e '1,15!{P;N;D;};N;ba' < "$FILE"
-
-	done
-}
-
 ########################################################################
 # log processing
 ########################################################################
@@ -452,7 +434,7 @@ _date() {
 # Show a short help text.
 ##
 _help_show() {
-	echo "Usage: rsync-backup [-abBdefhlLmN] <source> <destination>
+	echo "Usage: rsync-backup [-abBdehlLmN] <source> <destination>
 
 DESCRIPTION
 	A wrapper command for rsync with the main features:
@@ -466,7 +448,6 @@ OPTIONS
 	-B: Backup.
 	-d: Delete all log file in the log folder.
 	-e: Show execution log.
-	-f: Show folder log files.
 	-h: Show help.
 	-l: Show log summary.
 	-L: Show log folder.
@@ -505,7 +486,7 @@ DEPENDENCIES
 ########################################################################
 
 _execute() {
-	while getopts ":a:bBdef:hlLmN" OPT; do
+	while getopts ":a:bBdehlLmN" OPT; do
 		case $OPT in
 
 			a)
@@ -528,11 +509,6 @@ _execute() {
 
 			e)
 				_log_execution_show
-				exit 0
-				;;
-
-			f)
-				_show_folder_logs "$OPTARG"
 				exit 0
 				;;
 
