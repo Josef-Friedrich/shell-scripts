@@ -587,6 +587,8 @@ _execute() {
 	# shellcheck disable=SC2046
 	rsync $(_process_options) $(_process_source_destination) | _log_process
 
+	_parse_statistics "$(cat "$LOG_FILE_HOST")"
+
 	if [ "$OPTION_MAIL" = 1 ]; then
 		_log_mail
 	fi
