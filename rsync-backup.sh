@@ -414,20 +414,20 @@ _log_process() {
 }
 
 _nsca_output() {
-	echo "RSYNC OK\
-|\
-num_files=${STAT_NUM_FILES},\
-num_created_files=${STAT_NUM_CREATED_FILES},\
-num_deleted_files=${STAT_NUM_DELETED_FILES},\
-num_files_transferred=${STAT_NUM_FILES_TRANSFERRED},\
-total_size=${STAT_TOTAL_SIZE},\
-transferred_size=${STAT_TRANSFERRED_SIZE},\
-literal_data=${STAT_LITERAL_DATA},\
-matched_data=${STAT_MATCHED_DATA},\
-list_size=${STAT_LIST_SIZE},\
-list_generation_time=${STAT_LIST_GENERATION_TIME},\
-list_transfer_time=${STAT_LIST_TRANSFER_TIME},\
-bytes_sent=${STAT_BYTES_SENT},\
+	echo "RSYNC OK \
+| \
+num_files=${STAT_NUM_FILES} \
+num_created_files=${STAT_NUM_CREATED_FILES} \
+num_deleted_files=${STAT_NUM_DELETED_FILES} \
+num_files_transferred=${STAT_NUM_FILES_TRANSFERRED} \
+total_size=${STAT_TOTAL_SIZE} \
+transferred_size=${STAT_TRANSFERRED_SIZE} \
+literal_data=${STAT_LITERAL_DATA} \
+matched_data=${STAT_MATCHED_DATA} \
+list_size=${STAT_LIST_SIZE} \
+list_generation_time=${STAT_LIST_GENERATION_TIME} \
+list_transfer_time=${STAT_LIST_TRANSFER_TIME} \
+bytes_sent=${STAT_BYTES_SENT} \
 bytes_received=${STAT_BYTES_RECEIVED}"
 }
 
