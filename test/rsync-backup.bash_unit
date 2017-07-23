@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 test_without_parameters() {
 	assert_fail "../rsync-backup.sh"
 }
@@ -21,7 +20,7 @@ test_execute() {
 	echo lol > $TMP1/lol1
 	echo lol > $TMP1/lol2
 
-  _execute $TMP1 $TMP2 > /dev/null
+	_execute $TMP1 $TMP2 > /dev/null
 
 	assert_equals "$SOURCE" "$TMP1"
 	assert_equals "$DESTINATION" "$TMP2"
@@ -44,4 +43,18 @@ test_default_variables() {
 	assert_equals "$EXCLUDE_FILE" "excludes"
 	assert_equals "$SEPARATOR" '################################################'
 	assert_equals "$DEFAULT_EXCLUDES" '--exclude .rsync_shadow --exclude .snapshots'
+}
+
+test_function_process_source_destination() {
+	source ../rsync-backup.sh
+	SOURCE=$(mktemp -d)
+	DESTINATION=$(mktemp -d)
+
+	assert_equals "$(_process_source_destination)" "$SOURCE/ $DESTINATION/"
+}
+
+test_function_process_options() {
+	source ../rsync-backup.sh
+
+	assert_equals "$(_process_options)" "--recursive --links --perms --times --group --owner --verbose --delete --size-only --keep-dirlinks --partial --stats --exclude .rsync-backup/ --exclude .rsync_shadow --exclude .snapshots  "
 }

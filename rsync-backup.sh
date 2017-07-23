@@ -185,17 +185,17 @@ _process_options() {
 	# -a -> -rlptgoD
 	# --recursive --links --perms , --times	--group	 --owner --devices
 	DEFAULT="--recursive \
-		--links \
-		--perms \
-		--times \
-		--group \
-		--owner \
-		--verbose \
-		--delete \
-		--size-only \
-		--keep-dirlinks \
-		--partial \
-		--stats"
+--links \
+--perms \
+--times \
+--group \
+--owner \
+--verbose \
+--delete \
+--size-only \
+--keep-dirlinks \
+--partial \
+--stats"
 
 	if [ "$OPTION_BACKUP" = 1 ]; then
 		BACKUP="--backup --backup-dir=$BACKUP_FOLDER/$DATE"
