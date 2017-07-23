@@ -54,7 +54,9 @@ test_execute_no_affirmation_destination() {
 
 test_default_variables() {
 	source ../rsync-backup.sh
-	assert_equals "$LOG_FOLDER_HOST" "$HOME/rsync-backup-logs"
+	local OLD_LOG_FOLDER_HOST="$LOG_FOLDER_HOST"
+	. /etc/rsync-backup.conf > /dev/null 2>&1
+	assert_equals "$OLD_LOG_FOLDER_HOST" "$LOG_FOLDER_HOST"
 	assert_equals "$RSYNC_FOLDER" ".rsync-backup"
 	assert_equals "$BACKUP_FOLDER" ".rsync-backup/backups"
 	assert_equals "$TMP_FOLDER" "/tmp/.rsync-backup"

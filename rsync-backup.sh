@@ -209,7 +209,8 @@ _trim_value() {
 }
 
 _extract_value() {
-	local VALUE=$(echo "$1" | head -n $2 | tail -1 | cut -d ':' -f 2)
+	local VALUE
+	VALUE=$(echo "$1" | head -n "$2" | tail -1 | cut -d ':' -f 2)
 	_trim_value $VALUE
 }
 
@@ -313,7 +314,6 @@ _log_execution() {
 # Print out background informations about the sync.
 ##
 _log_header() {
-
 	local DECORATION="$1"
 
 	if [ "$DECORATION" = 'YES' ]; then
