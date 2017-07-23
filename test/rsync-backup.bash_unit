@@ -32,7 +32,6 @@ test_execute() {
 	assert "test -f '$TMP2/.rsync-backup/$LOG_FILE_HOST_NAME'"
 }
 
-
 test_execute_no_affirmation_both() {
 	local TMP1=$(mktemp -d)
 	local TMP2=$(mktemp -d)
