@@ -58,3 +58,10 @@ test_function_process_options() {
 
 	assert_equals "$(_process_options)" "--recursive --links --perms --times --group --owner --verbose --delete --size-only --keep-dirlinks --partial --stats --exclude .rsync-backup/ --exclude .rsync_shadow --exclude .snapshots  "
 }
+
+test_function_trim_value() {
+	source ../rsync-backup.sh
+
+	assert_equals "$(_trim_value 1 2 3 4)" 1
+	assert_equals "$(_trim_value 1,2,3,4)" 1234
+}
