@@ -332,7 +332,7 @@ _log_execution() {
 ##
 _log_header() {
 
-	DECORATION="$1"
+	local DECORATION="$1"
 
 	if [ "$DECORATION" = 'YES' ]; then
 		echo "$SEPARATOR
