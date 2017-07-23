@@ -1,0 +1,23 @@
+SOURCE: /home/jf/.recoll
+DESTINATION: nnasi:/data/backup/host/fractal/recoll
+DATE: 2017-07-23T10-09-28
+HOST: fractal
+USER: root
+sending incremental file list
+
+Number of files: 51 (reg: 48, dir: 3)
+Number of created files: 0
+Number of deleted files: 0
+Number of regular files transferred: 0
+Total file size: 3,878,624,218 bytes
+Total transferred file size: 0 bytes
+Literal data: 0 bytes
+Matched data: 0 bytes
+File list size: 0
+File list generation time: 0.001 seconds
+File list transfer time: 0.000 seconds
+Total bytes sent: 1,875
+Total bytes received: 21
+
+sent 1,875 bytes  received 21 bytes  1,264.00 bytes/sec
+total size is 3,878,624,218  speedup is 2,045,687.88

@@ -85,3 +85,10 @@ test_function_trim_value() {
 	assert_equals "$(_trim_value 1 2 3 4)" 1
 	assert_equals "$(_trim_value 1,2,3,4)" 1234
 }
+
+test_function_nsca_output() {
+	source ../rsync-backup.sh
+	_parse_statistics "$(cat rsync-backup.log)"
+	assert_equals "$STAT_NUM_FILES" 51
+	assert_equals "$(_nsca_output)" 'RSYNC OK|num_files=51,num_created_files=0,num_deleted_files=0,num_files_transferred=0,total_size=3878624218,transferred_size=0,literal_data=0,matched_data=0,list_size=0,list_generation_time=0.001,list_transfer_time=0.000,bytes_sent=1875,bytes_received=21'
+}

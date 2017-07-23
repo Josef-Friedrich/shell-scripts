@@ -205,7 +205,7 @@ _process_options() {
 }
 
 _trim_value() {
-	echo $1 | tr -d , 
+	echo $1 | tr -d ,
 }
 
 _extract_value() {
@@ -214,7 +214,7 @@ _extract_value() {
 }
 
 _parse_statistics() {
-	STAT_BLOCK="$(echo "$1" | grep -A 13 "Number of files")"
+	local STAT_BLOCK="$(echo "$1" | grep -A 13 "Number of files")"
 
 	STAT_NUM_FILES="$(_extract_value "$STAT_BLOCK" 1)"
 	STAT_NUM_CREATED_FILES="$(_extract_value "$STAT_BLOCK" 2)"
@@ -413,12 +413,8 @@ _log_process() {
 	done
 }
 
-##
-# Process send_nsca to nagios.
-##
-_nsca_process() {
-	local OUTPUT="RSYNC OK: \
-Files transfered: $FILES_TRANSFERRED; Activity: $STATUS \
+_nsca_output() {
+	echo "RSYNC OK\
 |\
 num_files=${STAT_NUM_FILES},\
 num_created_files=${STAT_NUM_CREATED_FILES},\
@@ -433,8 +429,13 @@ list_generation_time=${STAT_LIST_GENERATION_TIME},\
 list_transfer_time=${STAT_LIST_TRANSFER_TIME},\
 bytes_sent=${STAT_BYTES_SENT},\
 bytes_received=${STAT_BYTES_RECEIVED}"
+}
 
-	easy-nsca.sh -o "$OUTPUT" "rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}"
+##
+# Process send_nsca to nagios.
+##
+_nsca_process() {
+	easy-nsca.sh -o "$(_nsca_output)" "rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}"
 	echo "Send NSCA: RSYNC ${SOURCE} ${DESTINATION}"
 	echo "Message: RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS"
 }
