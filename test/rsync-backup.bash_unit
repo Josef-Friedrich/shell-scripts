@@ -39,9 +39,7 @@ test_execute() {
   TMP1=$(mktemp -d)
   TMP2=$(mktemp -d)
 	source ../rsync-backup.sh
-	assert "_execute -h"
-	#[ "$status" -eq 0 ]
-	#[ "${lines[0]}" = 'Usage: rsync-backup [-abBdefhlLmN] <source> <destination>' ]
+
 	assert "_execute -a $TMP1"
 	assert "test -f $TMP1/.rsync-backup/please-sync"
 	assert "_execute -a $TMP2"
@@ -51,24 +49,23 @@ test_execute() {
 
   _execute $TMP1 $TMP2 > /dev/null
 
-	assert_equals $SOURCE $TMP1
-	assert_equals $DESTINATION $TMP2
-	assert_equals $STAT_NUM_FILES 3
+	assert_equals "$SOURCE" "$TMP1"
+	assert_equals "$DESTINATION" "$TMP2"
+	assert_equals "$STAT_NUM_FILES" 3
 
 }
-#
-# @test "unittest: variables" {
-# 	source ./rsync-backup.sh
-# 	[ "$LOG_FOLDER_HOST" = "$HOME/rsync-backup-logs" ]
-# 	[ "$RSYNC_FOLDER" = ".rsync-backup" ]
-# 	[ "$BACKUP_FOLDER" = ".rsync-backup/backups" ]
-# 	[ -n "$DATE" ]
-# 	[ "$TMP_FOLDER" = "/tmp/.rsync-backup" ]
-# 	[ "$AFFIRMATION_FILE" = "please-sync" ]
-# 	[ "$EXCLUDE_FILE" = "excludes" ]
-# 	[ "$SEPARATOR" = '################################################' ]
-# 	[ "$DEFAULT_EXCLUDES" = '--exclude .rsync_shadow --exclude .snapshots' ]
-# }
+
+test_default_variables() {
+	source ../rsync-backup.sh
+	assert_equals "$LOG_FOLDER_HOST" "$HOME/rsync-backup-logs"
+	assert_equals "$RSYNC_FOLDER" ".rsync-backup"
+	assert_equals "$BACKUP_FOLDER" ".rsync-backup/backups"
+	assert_equals "$TMP_FOLDER" "/tmp/.rsync-backup"
+	assert_equals "$AFFIRMATION_FILE" "please-sync"
+	assert_equals "$EXCLUDE_FILE" "excludes"
+	assert_equals "$SEPARATOR" '################################################'
+	assert_equals "$DEFAULT_EXCLUDES" '--exclude .rsync_shadow --exclude .snapshots'
+}
 #
 # @test "unittest: function _trim_value" {
 # 	source ./rsync-backup.sh
