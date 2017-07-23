@@ -239,7 +239,7 @@ _parse_statistics() {
 # Show the tail of the summary log.
 ##
 _log_summary_show() {
-	SUMMARY="$LOG_FOLDER_HOST/summary.log"
+	local SUMMARY="$LOG_FOLDER_HOST/summary.log"
 
 	if [ -f "$SUMMARY" ]; then
 		tail -f -n 1000 "$SUMMARY"
@@ -362,12 +362,12 @@ $SEPARATOR
 # Send the generated log file to a email address.
 ##
 _log_mail() {
-	MAIL_COMMAND=$(command -v mail)
+	local MAIL_COMMAND=$(command -v mail)
 	if [ -n "$MAIL_COMMAND" ]; then
 
 		LINES=$(wc -l < "$LOG_FILE_HOST")
 		STATUS=""
-		VALUE="25"
+		local VALUE="25"
 
 		# shellcheck disable=SC2034
 		for i in 1 2 3 4 5 6 7 ; do
