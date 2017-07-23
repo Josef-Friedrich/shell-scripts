@@ -436,8 +436,9 @@ bytes_received=${STAT_BYTES_RECEIVED}"
 ##
 _nsca_process() {
 	easy-nsca.sh -o "$(_nsca_output)" "rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}"
-	echo "Send NSCA: RSYNC ${SOURCE} ${DESTINATION}"
-	echo "Message: RSYNC OK: Files transfered: $FILES_TRANSFERRED; Activity: $STATUS"
+
+	echo "NSCA output: $(_nsca_output)" >> "$LOG_FILE_HOST"
+	echo "NSCA service: rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}" >> "$LOG_FILE_HOST"
 }
 
 ########################################################################
@@ -583,6 +584,10 @@ _execute() {
 
 	_parse_statistics "$(cat "$LOG_FILE_HOST")"
 
+	if [ -n "$OPTION_NSCA" ]; then
+		_nsca_process
+	fi
+
 	if [ "$OPTION_MAIL" = 1 ]; then
 		_log_mail
 	fi
@@ -591,10 +596,6 @@ _execute() {
 
 	_log_file_copy "$SOURCE"
 	_log_file_copy "$DESTINATION"
-
-	if [ -n "$OPTION_NSCA" ]; then
-		_nsca_process
-	fi
 
 	if [ "$OPTION_BEEP" = 1 ]; then
 		beep -f 4186.01 -l 40 > /dev/null 2>&1
