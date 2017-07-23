@@ -9,7 +9,7 @@
 @test "execute: rsync-backup.sh -h" {
 	run ./rsync-backup.sh -h
 	[ "$status" -eq 0 ]
-	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdehlLmN] <source> <destination>' ]
+	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdehlLmn] <source> <destination>' ]
 }
 
 @test "rsync-backup.sh: Basic sync" {
@@ -32,7 +32,7 @@
 	source ./rsync-backup.sh
 	run _execute -h
 	[ "$status" -eq 0 ]
-	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdehlLmN] <source> <destination>' ]
+	[ "${lines[0]}" = 'Usage: rsync-backup [-abBdehlLmn] <source> <destination>' ]
 	run _execute -a "$TMP1"
 	[ -f "$TMP1/.rsync-backup/please-sync" ]
 	run _execute -a "$TMP2"

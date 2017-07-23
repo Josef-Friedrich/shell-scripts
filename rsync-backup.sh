@@ -452,7 +452,7 @@ _date() {
 # Show a short help text.
 ##
 _help_show() {
-	echo "Usage: rsync-backup [-abBdehlLmN] <source> <destination>
+	echo "Usage: rsync-backup [-abBdehlLmn] <source> <destination>
 
 DESCRIPTION
 	A wrapper command for rsync with the main features:
@@ -470,7 +470,7 @@ OPTIONS
 	-l: Show log summary.
 	-L: Show log folder.
 	-m: Send logs per mail.
-	-N: Send NSCA message to nagios.
+	-n: Send NSCA message to nagios.
 
 LOG FILES
 	GENERAL LOG FILE
@@ -504,7 +504,7 @@ DEPENDENCIES
 ########################################################################
 
 _execute() {
-	while getopts ":a:bBdehlLmN" OPT; do
+	while getopts ":a:bBdehlLmn" OPT; do
 		case $OPT in
 
 			a)
@@ -549,7 +549,7 @@ _execute() {
 				OPTION_MAIL=1
 				;;
 
-			N)
+			n)
 				OPTION_NSCA=1
 				;;
 
