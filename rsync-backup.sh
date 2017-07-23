@@ -307,8 +307,8 @@ _log_init() {
 	if [ ! -d "$LOG_FOLDER_HOST" ]; then
 		mkdir "$LOG_FOLDER_HOST"
 	fi
-
-	LOG_FILE_HOST="$LOG_FOLDER_HOST/log_$(_logfile_cleaner "${DATE}_${HOSTNAME}_${SOURCE}_${DESTINATION}.log")"
+	LOG_FILE_HOST_NAME="log_$(_logfile_cleaner "${DATE}_${HOSTNAME}_${SOURCE}_${DESTINATION}.log")"
+	LOG_FILE_HOST="$LOG_FOLDER_HOST/$LOG_FILE_HOST_NAME"
 	touch "$LOG_FILE_HOST"
 	> "$LOG_FILE_HOST"
 

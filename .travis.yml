@@ -9,4 +9,4 @@ before_install:
 
 script:
   - bats test
-  - ./bash_unit test/rsync-backup.bash_unit
+  - ./bash_unit test/*.bash_unit
