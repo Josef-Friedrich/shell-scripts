@@ -2,11 +2,6 @@ language: bash
 dist: trusty
 sudo: required
 
-before_install:
-  - sudo add-apt-repository ppa:duggan/bats -y
-  - sudo apt-get -qq update
-  - sudo apt-get install -y bats
-
 script:
-  - bats test/tests
+  - ./test/bats/bin/bats test/tests
   - ./test/bash_unit test/tests/*.bash_unit
