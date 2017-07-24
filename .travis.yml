@@ -8,5 +8,5 @@ before_install:
   - sudo apt-get install -y bats
 
 script:
-  - bats test
-  - ./bash_unit test/*.bash_unit
+  - bats test/tests
+  - ./test/bash_unit test/tests/*.bash_unit

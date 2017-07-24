@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-T='./test/mscore-to-eps/'
+T='./test/tests/mscore-to-eps/'
 
 @test "execute: mscore-to-eps.sh ${T}no-mscore" {
 	run ./mscore-to-eps.sh "$T"no-mscore
