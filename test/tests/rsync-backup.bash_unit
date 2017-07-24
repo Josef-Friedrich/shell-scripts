@@ -95,3 +95,12 @@ test_function_nsca_output() {
 	assert_equals "$STAT_NUM_FILES" 51
 	assert_equals "$(_nsca_output)" 'RSYNC OK | num_files=51 num_created_files=0 num_deleted_files=0 num_files_transferred=0 total_size=3878624218 transferred_size=0 literal_data=0 matched_data=0 list_size=0 list_generation_time=0.001 list_transfer_time=0.000 bytes_sent=1875 bytes_received=21'
 }
+
+test_function_logfile_cleaner() {
+	source ${P}rsync-backup.sh
+	local FILE_NAME='2017-07-24T18-29-52_nnasi_/data/shares/jf/movie_wnas:/data/shares/jf/movie.log'
+	assert_equals "$(_logfile_cleaner ---)" -
+	assert_equals "$(_logfile_cleaner -.)" .
+	assert_equals "$(_logfile_cleaner -_-)" _
+	assert_equals "$(_logfile_cleaner "$FILE_NAME")" '2017-07-24T18-29-52_nnasi_data-shares-jf-movie_wnas#data-shares-jf-movie.log'
+}

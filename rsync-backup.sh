@@ -270,17 +270,14 @@ _log_show_folder() {
 # Replace '@', '/' and ':' to '-'.
 ##
 _logfile_cleaner() {
-	STRING="$*"
-
-	STRING="$(echo "$STRING" | sed -e 's/@/#/g')"
-	STRING="$(echo "$STRING" | sed -e 's/\//-/g')"
-	STRING="$(echo "$STRING" | sed -e 's/:/#/g')"
-	STRING="$(echo "$STRING" | sed -e 's/---/-/g')"
-	STRING="$(echo "$STRING" | sed -e 's/--/-/g')"
-	STRING="$(echo "$STRING" | sed -e 's/-\./\./g')"
-	STRING="$(echo "$STRING" | sed -e 's/-_-/_/g')"
-
-	echo "$STRING"
+	echo "$*" | sed \
+		-e 's/@/#/g' \
+		-e 's#/#-#g' \
+		-e 's/:/#/g' \
+		-e 's/-\{2,\}/-/g' \
+		-e 's/-\./\./g' \
+		-e 's/-*_-*/_/g' \
+		-e 's/-*#-*/#/g'
 }
 
 ##
