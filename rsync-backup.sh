@@ -367,7 +367,6 @@ _log_process() {
 	local START_SUMMARY=''
 	local STOP_SUMMARY=''
 	local NOT_EMPTY_LINE=''
-	FILES_TRANSFERRED=''
 
 	while read -r DATA; do
 		echo "$DATA" >> "$LOG_FILE_HOST"
@@ -391,9 +390,6 @@ _log_process() {
 		fi
 
 		echo "$DATA" | awk 'NF'
-
-		FILES_TRANSFERRED=$(echo "$DATA" | grep 'files transferred:' | awk '{print $NF;}')
-
 	done
 }
 
