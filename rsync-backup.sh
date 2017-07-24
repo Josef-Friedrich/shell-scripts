@@ -343,24 +343,11 @@ $SEPARATOR
 _log_mail() {
 	local MAIL_COMMAND=$(command -v mail)
 	if [ -n "$MAIL_COMMAND" ]; then
+		local SUBJECT="#rb [$SOURCE] -> [$DESTINATION] \
+created: $STAT_NUM_CREATED_FILES \
+deleted: $STAT_NUM_DELETED_FILES"
 
-		LINES=$(wc -l < "$LOG_FILE_HOST")
-		STATUS=""
-		local VALUE="25"
-
-		# shellcheck disable=SC2034
-		for i in 1 2 3 4 5 6 7 ; do
-			if [ "$LINES" -gt "$VALUE" ]; then
-				STATUS="$STATUS#"
-			fi
-
-			VALUE=$((VALUE + 10))
-		done
-
-		# $HOSTNAME
-		# DATE_SHORT=$(date "+%d-%b %H:%M")
-		# $DATE_SHORT
-		maillog.sh "#rb [$SOURCE] -> [$DESTINATION] $STATUS ($FILES_TRANSFERRED transferred files)" "$LOG_FILE_HOST"
+		maillog.sh "$SUBJECT" "$LOG_FILE_HOST"
 	fi
 }
 
