@@ -1,12 +1,15 @@
 #!/usr/bin/env bats
 
 @test "execute: smartctl-batch.sh" {
-	run ./smartctl-batch.sh
-	if command -v smartctl > /dev/null 2>&1; then
-		[ "$status" -eq 64 ]
+	if [ "$(whoami)" = root ]; then
+		if command -v smartctl > /dev/null 2>&1; then
+			[ "$status" -eq 64 ]
+		else
+			[ "$status" -eq 1 ]
+			[ "${lines[0]}" = "Please install 'smartctl'!" ]
+		fi
 	else
-		[ "$status" -eq 1 ]
-		[ "${lines[0]}" = "Please install 'smartctl'!" ]
+		skip
 	fi
 }
 
