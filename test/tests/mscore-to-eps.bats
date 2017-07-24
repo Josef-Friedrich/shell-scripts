@@ -54,8 +54,12 @@ T='./test/tests/mscore-to-eps/'
 
 @test "unittest: _pdftops" {
 	[ "$TRAVIS" != 'true' ] || skip
-	source ./mscore-to-eps.sh
-	_pdftops "$T"PDF_two-pages.pdf 2
-	[ -f "$T"PDF_two-pages_2.eps ]
-	rm -f "$T"PDF_two-pages_2.eps
+	if command -v pdfcrop > /dev/null 2>&1; then
+		source ./mscore-to-eps.sh
+		_pdftops "$T"PDF_two-pages.pdf 2
+		[ -f "$T"PDF_two-pages_2.eps ]
+		rm -f "$T"PDF_two-pages_2.eps
+	else
+		skip
+	fi
 }
