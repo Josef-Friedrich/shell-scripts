@@ -428,7 +428,7 @@ _nsca_process() {
 	easy-nsca.sh -o "$(_nsca_output)" "$NSCA_SERVICE"
 
 	echo "NSCA output: $(_nsca_output)" >> "$LOG_FILE_HOST"
-	echo "NSCA service: "$NSCA_SERVICE" >> "$LOG_FILE_HOST"
+	echo "NSCA service: $NSCA_SERVICE" >> "$LOG_FILE_HOST"
 }
 
 ########################################################################
