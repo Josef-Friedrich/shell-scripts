@@ -284,7 +284,9 @@ _sync_job_name() {
 	echo "$*" | sed \
 		-e 's#[/@:]#-#g' \
 		-e 's#-*\([_\.]\)-*#\1#g' \
-		-e 's/-\{2,\}/-/g'
+		-e 's/-\{2,\}/-/g' \
+		-e 's/-$//g' \
+		-e 's/^-//g'
 }
 
 ##
@@ -422,7 +424,7 @@ bytes_received=${STAT_BYTES_RECEIVED}"
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	easy-nsca.sh -o "$(_nsca_output)" "rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}"
+	easy-nsca.sh -o "$(_nsca_output)" "rsync_$(_sync_job_name "rsync_${HOSTNAME}_${SOURCE}_${DESTINATION}")"
 
 	echo "NSCA output: $(_nsca_output)" >> "$LOG_FILE_HOST"
 	echo "NSCA service: rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}" >> "$LOG_FILE_HOST"

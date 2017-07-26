@@ -107,7 +107,7 @@ test_function_logfile_cleaner() {
 
 test_function_sync_job_name() {
 	source ${P}rsync-backup.sh
-	assert_equals "$(_sync_job_name '/@:')" -
+	assert_equals "$(_sync_job_name '/@:')" ""
 	assert_equals "$(_sync_job_name '-_-')" _
 	assert_equals "$(_sync_job_name '---_---')" _
 	assert_equals "$(_sync_job_name '-.-')" .
