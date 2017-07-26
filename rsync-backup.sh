@@ -424,10 +424,11 @@ bytes_received=${STAT_BYTES_RECEIVED}"
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	easy-nsca.sh -o "$(_nsca_output)" "rsync_$(_sync_job_name "rsync_${HOSTNAME}_${SOURCE}_${DESTINATION}")"
+	local NSCA_SERVICE="rsync_$(_sync_job_name "${HOSTNAME}_${SOURCE}_${DESTINATION}")"
+	easy-nsca.sh -o "$(_nsca_output)" "$NSCA_SERVICE"
 
 	echo "NSCA output: $(_nsca_output)" >> "$LOG_FILE_HOST"
-	echo "NSCA service: rsync_${SOURCE_INPUT}_${DESTINATION_INPUT}" >> "$LOG_FILE_HOST"
+	echo "NSCA service: "$NSCA_SERVICE" >> "$LOG_FILE_HOST"
 }
 
 ########################################################################
