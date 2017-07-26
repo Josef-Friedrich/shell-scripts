@@ -104,3 +104,12 @@ test_function_logfile_cleaner() {
 	assert_equals "$(_logfile_cleaner -_-)" _
 	assert_equals "$(_logfile_cleaner "$FILE_NAME")" '2017-07-24T18-29-52_nnasi_data-shares-jf-movie_wnas#data-shares-jf-movie.log'
 }
+
+test_function_sync_job_name() {
+	source ${P}rsync-backup.sh
+	assert_equals "$(_sync_job_name '/@:')" -
+	assert_equals "$(_sync_job_name '-_-')" _
+	assert_equals "$(_sync_job_name '---_---')" _
+	assert_equals "$(_sync_job_name '-.-')" .
+	assert_equals "$(_sync_job_name '---.---')" .
+}

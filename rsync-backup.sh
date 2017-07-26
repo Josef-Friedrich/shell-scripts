@@ -280,6 +280,13 @@ _logfile_cleaner() {
 		-e 's/-*#-*/#/g'
 }
 
+_sync_job_name() {
+	echo "$*" | sed \
+		-e 's#[/@:]#-#g' \
+		-e 's#-*\([_\.]\)-*#\1#g' \
+		-e 's/-\{2,\}/-/g'
+}
+
 ##
 # Create the log file and add meta informations to the head of the log file.
 ##
