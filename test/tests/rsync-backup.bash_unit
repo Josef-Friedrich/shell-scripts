@@ -21,17 +21,18 @@ test_execute() {
 	assert "test -f $TMP2/.rsync-backup/please-sync"
 	echo lol > $TMP1/lol1
 	echo lol > $TMP1/lol2
-
-	_execute $TMP1 $TMP2 > /dev/null
-
-	assert_equals "$SOURCE" "$TMP1"
-	assert_equals "$DESTINATION" "$TMP2"
-	assert_equals "$STAT_NUM_FILES" 3
-
-	assert "test -f '$LOG_FILE_HOST'"
-
-	assert "test -f '$TMP1/.rsync-backup/$LOG_FILE_HOST_NAME'"
-	assert "test -f '$TMP2/.rsync-backup/$LOG_FILE_HOST_NAME'"
+	#
+	#_execute $TMP1 $TMP2
+	#
+	# assert_equals "$SOURCE" "$TMP1"
+	# assert_equals "$DESTINATION" "$TMP2"
+	# assert_equals "$SYNC_JOB_NAME" "dfdf"
+	# assert_equals "$STAT_NUM_FILES" 3
+	#
+	# assert "test -f '$LOG_FILE_HOST'"
+	#
+	# assert "test -f '$TMP1/.rsync-backup/$LOG_FILE_HOST_NAME'"
+	# assert "test -f '$TMP2/.rsync-backup/$LOG_FILE_HOST_NAME'"
 }
 
 test_execute_no_affirmation_both() {
@@ -96,20 +97,12 @@ test_function_nsca_output() {
 	assert_equals "$(_nsca_output)" 'RSYNC OK | num_files=51 num_created_files=0 num_deleted_files=0 num_files_transferred=0 total_size=3878624218 transferred_size=0 literal_data=0 matched_data=0 list_size=0 list_generation_time=0.001 list_transfer_time=0.000 bytes_sent=1875 bytes_received=21'
 }
 
-test_function_logfile_cleaner() {
-	source ${P}rsync-backup.sh
-	local FILE_NAME='2017-07-24T18-29-52_nnasi_/data/shares/jf/movie_wnas:/data/shares/jf/movie.log'
-	assert_equals "$(_logfile_cleaner ---)" -
-	assert_equals "$(_logfile_cleaner -.)" .
-	assert_equals "$(_logfile_cleaner -_-)" _
-	assert_equals "$(_logfile_cleaner "$FILE_NAME")" '2017-07-24T18-29-52_nnasi_data-shares-jf-movie_wnas#data-shares-jf-movie.log'
-}
-
 test_function_sync_job_name() {
 	source ${P}rsync-backup.sh
-	assert_equals "$(_sync_job_name '/@:')" ""
+	local FILE_NAME='2017-07-24T18-29-52_nnasi_/data/shares/jf/movie_wnas:/data/shares/jf/movie'
+	assert_equals "$(_sync_job_name '/@:.')" ""
 	assert_equals "$(_sync_job_name '-_-')" _
 	assert_equals "$(_sync_job_name '---_---')" _
-	assert_equals "$(_sync_job_name '-.-')" .
-	assert_equals "$(_sync_job_name '---.---')" .
+	assert_equals "$(_sync_job_name "$FILE_NAME")" '2017-07-24T18-29-52_nnasi_data-shares-jf-movie_wnas-data-shares-jf-movie'
+
 }

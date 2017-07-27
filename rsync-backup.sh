@@ -55,8 +55,6 @@ if [ -f /etc/rsync-backup.conf ]; then
 	. /etc/rsync-backup.conf
 fi
 
-INFO_PATH="$TMP_FOLDER/info-"
-
 if [ ! -d "$TMP_FOLDER" ]; then
 	mkdir "$TMP_FOLDER"
 fi
@@ -266,24 +264,10 @@ _log_show_folder() {
 # log processing
 ########################################################################
 
-##
-# Replace '@', '/' and ':' to '-'.
-##
-_logfile_cleaner() {
-	echo "$*" | sed \
-		-e 's/@/#/g' \
-		-e 's#/#-#g' \
-		-e 's/:/#/g' \
-		-e 's/-\{2,\}/-/g' \
-		-e 's/-\./\./g' \
-		-e 's/-*_-*/_/g' \
-		-e 's/-*#-*/#/g'
-}
-
 _sync_job_name() {
 	echo "$*" | sed \
-		-e 's#[/@:]#-#g' \
-		-e 's#-*\([_\.]\)-*#\1#g' \
+		-e 's#[/@:\.]#-#g' \
+		-e 's#-*\([_]\)-*#\1#g' \
 		-e 's/-\{2,\}/-/g' \
 		-e 's/-$//g' \
 		-e 's/^-//g'
@@ -296,7 +280,7 @@ _log_init() {
 	if [ ! -d "$LOG_FOLDER_HOST" ]; then
 		mkdir "$LOG_FOLDER_HOST"
 	fi
-	LOG_FILE_HOST_NAME="log_$(_logfile_cleaner "${DATE}_${HOSTNAME}_${SOURCE}_${DESTINATION}.log")"
+	LOG_FILE_HOST_NAME="log_${DATE}_${SYNC_JOB_NAME}.log"
 	LOG_FILE_HOST="$LOG_FOLDER_HOST/$LOG_FILE_HOST_NAME"
 	touch "$LOG_FILE_HOST"
 	> "$LOG_FILE_HOST"
@@ -424,11 +408,10 @@ bytes_received=${STAT_BYTES_RECEIVED}"
 # Process send_nsca to nagios.
 ##
 _nsca_process() {
-	local NSCA_SERVICE="rsync_$(_sync_job_name "${HOSTNAME}_${SOURCE}_${DESTINATION}")"
-	easy-nsca.sh -o "$(_nsca_output)" "$NSCA_SERVICE"
+	easy-nsca.sh -o "$(_nsca_output)" "rsync_${SYNC_JOB_NAME}"
 
 	echo "NSCA output: $(_nsca_output)" >> "$LOG_FILE_HOST"
-	echo "NSCA service: $NSCA_SERVICE" >> "$LOG_FILE_HOST"
+	echo "NSCA service: rsync_${SYNC_JOB_NAME}" >> "$LOG_FILE_HOST"
 }
 
 ########################################################################
@@ -558,10 +541,9 @@ _execute() {
 	done
 
 	shift $((OPTIND-1))
-	SOURCE_INPUT="$1"
 	SOURCE="${1%/}"
 	DESTINATION="${2%/}"
-	DESTINATION_INPUT="$2"
+	SYNC_JOB_NAME="$(_sync_job_name "${HOSTNAME}_${SOURCE}_${DESTINATION}")"
 
 	_check_accessiblity
 
