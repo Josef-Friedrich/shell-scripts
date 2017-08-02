@@ -33,7 +33,6 @@ _usage() {
 	-p: MySQL password
 	-P: Prefix for the mysql and mysqldump binaries e. g. '/usr/bin' or
 	    'docker exec mysql '
-
 	-u: MySQL username"
 }
 
@@ -91,16 +90,22 @@ if [ -z "$DIR" ]; then
 	DIR="$(pwd)"
 fi
 
+if [ -n "$NAME" ]; then
+	NAME="_$NAME"
+fi
+
 LOG=$(mktemp)
 
 DATABASES=$(${PREFIX}mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database)
 
-echo "Found this databases: $DATABASES"  >> "$LOG" 2>&1
+echo "Found this databases: $DATABASES" >> "$LOG" 2>&1
 
 for DB in $DATABASES; do
-	if [ "$DB" != "information_schema" ] && [ "$DB" != "performance_schema" ] && [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
+	if [ "$DB" != "information_schema" ] && \
+		 [ "$DB" != "performance_schema" ] && \
+		 [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
 		echo "Dumping database: $DB" >> "$LOG" 2>&1
-		DUMP="$DIR/$DB.$(date +%Y%m%d).sql"
+		DUMP="$DIR/$DB.$(date +%Y%m%dT%H%M%S).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
 		${PREFIX}mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 		gzip -f "$DUMP"
@@ -114,9 +119,9 @@ fi
 cat "$LOG"
 
 if command -v maillog.sh > /dev/null 2>&1 ;  then
-	maillog.sh "MySQLdump all $NAME" "$LOG"
+	maillog.sh "mysqldump-all$NAME" "$LOG"
 fi
 
 if command -v easy-nsca.sh > /dev/null 2>&1 ;  then
-	easy-nsca.sh "MySQLdump all $NAME"
+	easy-nsca.sh "mysqldump-all$NAME"
 fi
