@@ -105,7 +105,7 @@ for DB in $DATABASES; do
 		 [ "$DB" != "performance_schema" ] && \
 		 [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
 		echo "Dumping database: $DB" >> "$LOG" 2>&1
-		DUMP="$DIR/$DB.$(date +%Y%m%dT%H%M%S).sql"
+		DUMP="$DIR/${DB}${NAME}_$(date +%Y%m%dT%H%M%S).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
 		${PREFIX}mysqldump -u "$USER" -p$PASSWORD "$DB" > "$DUMP"
 		gzip -f "$DUMP"
