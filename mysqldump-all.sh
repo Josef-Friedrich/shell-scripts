@@ -100,10 +100,10 @@ DATABASES=$(${PREFIX}mysql -u $USER -p$PASSWORD -e "SHOW DATABASES;" | tr -d "| 
 
 echo "Found this databases: $DATABASES" >> "$LOG" 2>&1
 
+# Exclude databases
+# [ "$DB" != "information_schema" ] && [ "$DB" != "performance_schema" ] && [ "$DB" != "mysql" ] &&
 for DB in $DATABASES; do
-	if [ "$DB" != "information_schema" ] && \
-		 [ "$DB" != "performance_schema" ] && \
-		 [ "$DB" != "mysql" ] && [ "$DB" != _* ] ; then
+	if [ "$DB" != _* ] ; then
 		echo "Dumping database: $DB" >> "$LOG" 2>&1
 		DUMP="$DIR/${DB}${NAME}_$(date +%Y%m%dT%H%M%S).sql"
 		echo "Dump file: $DUMP" >> "$LOG" 2>&1
