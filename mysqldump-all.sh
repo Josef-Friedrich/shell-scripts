@@ -90,6 +90,10 @@ if [ -z "$DIR" ]; then
 	DIR="$(pwd)"
 fi
 
+if [ ! -d "$DIR" ]; then
+	mkdir "$DIR"
+fi
+
 if [ -n "$NAME" ]; then
 	NAME="_$NAME"
 fi
