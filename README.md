@@ -189,15 +189,10 @@ Options:
 ## ./git-submodule-rm.sh
 
 ```
-Verwendung: git rm [<Optionen>] [--] <Datei>...
+Usage: git-submodule-rm.sh <path>
 
-    -n, --dry-run         Probelauf
-    -q, --quiet           listet keine gelöschten Dateien auf
-    --cached              entfernt nur aus der Staging-Area
-    -f, --force           überschreibt die "up-to-date" Prüfung
-    -r                    erlaubt rekursive Entfernung
-    --ignore-unmatch      beendet mit Rückgabewert 0, wenn keine Übereinstimmung gefunden wurde
-
+Options:
+	-h Show this help message.
 ```
 
 ## ./imagemagick-deskew.sh
@@ -412,11 +407,11 @@ OPTIONS
 
 LOG FILES
 	GENERAL LOG FILE
-		/var/log/rsync-backup/summary.log
-		/var/log/rsync-backup/execution.log
+		/home/jf/rsync-backup-logs/summary.log
+		/home/jf/rsync-backup-logs/execution.log
 
 	LOG FILE PER DATE, SOURCE AND DESTINATION
-		Directory: /var/log/rsync-backup
+		Directory: /home/jf/rsync-backup-logs
 		Naming convention: log_$DATE_$HOSTNAME_$SOURCE_$DESTINATION.log
 
 EXCLUDES
@@ -447,7 +442,7 @@ OPTIONS:
 
 Use this options:
 
-smartctl 6.6 2016-05-31 r4324 [x86_64-linux-4.10.0-30-generic] (local build)
+smartctl 6.5 2016-05-07 r4318 [x86_64-linux-4.12.4-1-ARCH] (local build)
 Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
 
 Usage: smartctl [options] device
@@ -553,7 +548,7 @@ Usage: smartctl [options] device
   -B [+]FILE, --drivedb=[+]FILE                                       (ATA)
         Read and replace [add] drive database from FILE
         [default is +/etc/smart_drivedb.h
-         and then    /var/lib/smartmontools/drivedb/drivedb.h]
+         and then    /usr/share/smartmontools/drivedb.h]
 
 ============================================ DEVICE SELF-TEST OPTIONS =====
 
@@ -638,11 +633,6 @@ Usage: terminal-colors-256.sh
 
 Options:
 	-h, --help: Show this help message.
-```
-
-## ./test/bats/install.sh
-
-```
 ```
 
 ## ./wordpress-url-update.sh
