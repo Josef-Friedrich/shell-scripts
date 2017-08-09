@@ -2,8 +2,6 @@
 
 P=../../
 
-csplit --prefix=imagemagick-imslp. "${P}imagemagick-imslp.sh" '/### This SEPARATOR is needed for the tests. do not remove it! ##########/'  > /dev/null 2>&1
-
 test_parameters() {
 	assert_fail "${P}imagemagick-imslp.sh" > /dev/null 2>&1
 }
@@ -13,6 +11,6 @@ test_help() {
 }
 
 test_source() {
-	. imagemagick-imslp.00
+	. ${P}imagemagick-imslp.sh.00
 	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bfht] <filename-or-glob-pattern>"
 }
