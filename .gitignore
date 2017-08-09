@@ -5,4 +5,7 @@
 *.eps
 *.pdf
 
+*.00
+*.01
+
 test/mscore-to-eps/PDF_two-pages.pdf

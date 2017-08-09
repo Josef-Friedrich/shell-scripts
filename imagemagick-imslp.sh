@@ -32,6 +32,7 @@ suitable for imslp.org (International Music Score Library Project)
 http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
 
 OPTIONS:
+	-c: Use CCITT Group 4 compress. This options generates a PDF file
 	-b: backup original images (add .bak to filename)
 	-f: force
 	-h: Show this help message
@@ -67,6 +68,8 @@ _convert() {
 		echo "The image has already 2 channels ($CHANNELS). Use -f option to force conversion."
 	fi
 }
+
+### SEPARATOR # is needed for the tests ################################
 
 while getopts ":bfht:" OPT; do
 	case $OPT in
