@@ -14,3 +14,9 @@ test_source() {
 	. ${P}imagemagick-imslp.sh.00
 	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bfht] <filename-or-glob-pattern>"
 }
+
+test_remove_extension() {
+	. ${P}imagemagick-imslp.sh.00
+	assert_equals "$(_remove_extension filename.png)" "filename"
+	assert_equals "$(_remove_extension filename.png.png)" "filename.png"
+}

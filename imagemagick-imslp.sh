@@ -24,7 +24,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) [-bfht] <filename-or-glob-pattern>
+	echo "Usage: $(basename "$0") [-bfht] <filename-or-glob-pattern>
 
 This is a wrapper script around imagemagick to process image files
 suitable for imslp.org (International Music Score Library Project)
@@ -50,9 +50,13 @@ OPTIONS:
 # 	-compress Group4 -monochrome \
 # 	output.pdf
 
+_remove_extension() {
+	echo "$1" | sed 's/\.[[:alnum:]]*$//'
+}
+
 _convert() {
 	CHANNELS=$(identify "$1" | cut -d " " -f 7)
-	NEW=$(echo $1 | sed 's/\.[[:alnum:]]*$//').png
+	NEW=$(_remove_extension "$1").png
 	if [ "$CHANNELS" != 2c ] || [ "$FORCE" = 1 ]; then
 		echo "Convert $1 to $NEW"
 		if [ "$BACKUP" = 1 ]; then
