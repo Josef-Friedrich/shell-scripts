@@ -116,18 +116,18 @@ Environment variables: (to place in your *rc files of your shell)
 
 	- NSCA_SERVER
 	- NSCA_CONFIG
-	- NAGIOS_PLUGINS
+	- PATH_CHECK
 
 export NSCA_SERVER="123.123.123.123"
 export NSCA_CONFIG="/etc/send_nsca.cfg"
-export NAGIOS_PLUGINS="/usr/lib/nagios/plugins"
+export PATH_CHECK="/usr/lib/nagios/plugins"
 
 Options:
 	-c NSCA_CONFIG:    NSCA config file (default: /etc/send_nsca.cfg)
 	-h:                Show this help.
 	-H NSCA_SERVER:    IP address of the Nagios server.
 	-n HOST_SERVICE:   Host of the service.
-	-p NAGIOS_PLUGINS: Folder containing the check commands.
+	-p PATH_CHECK: Folder containing the check commands.
 	                   (default: /usr/lib/nagios/plugins)
 	-o OUTPUT:         Output of the check commands.
 	-r RETURN:         Plugin return codes: 0 Ok, 1 Warning,
@@ -186,6 +186,20 @@ Options:
 	-h, --help: Show this help message.
 ```
 
+## ./git-submodule-rm.sh
+
+```
+Verwendung: git rm [<Optionen>] [--] <Datei>...
+
+    -n, --dry-run         Probelauf
+    -q, --quiet           listet keine gelöschten Dateien auf
+    --cached              entfernt nur aus der Staging-Area
+    -f, --force           überschreibt die "up-to-date" Prüfung
+    -r                    erlaubt rekursive Entfernung
+    --ignore-unmatch      beendet mit Rückgabewert 0, wenn keine Übereinstimmung gefunden wurde
+
+```
+
 ## ./imagemagick-deskew.sh
 
 ```
@@ -193,6 +207,25 @@ Usage: imagemagick-deskew.sh
 
 Options:
 	-h, --help: Show this help message.
+```
+
+## ./imagemagick-imslp.sh
+
+```
+Usage: imagemagick-imslp.sh [-bfht] <filename-or-glob-pattern>
+
+This is a wrapper script around imagemagick to process image files
+suitable for imslp.org (International Music Score Library Project)
+
+http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
+
+OPTIONS:
+	-c: Use CCITT Group 4 compress. This options generates a PDF file
+	-b: backup original images (add .bak to filename)
+	-f: force
+	-h: Show this help message
+	-t: threshold, default 50%
+
 ```
 
 ## ./images-to-date-folders.sh
@@ -299,7 +332,6 @@ Usage: mysqldump-all.sh -u <username> -p <password>
 	-p: MySQL password
 	-P: Prefix for the mysql and mysqldump binaries e. g. '/usr/bin' or
 	    'docker exec mysql '
-
 	-u: MySQL username
 ```
 
@@ -358,7 +390,7 @@ rm-video-by-height.sh [-hd] [ -H <height> ] <folder>
 ## ./rsync-backup.sh
 
 ```
-Usage: rsync-backup [-adefhlLmnNz] <source> <destination>
+Usage: rsync-backup [-abBdehlLmn] <source> <destination>
 
 DESCRIPTION
 	A wrapper command for rsync with the main features:
@@ -369,25 +401,22 @@ DESCRIPTION
 OPTIONS
 	-a <path>: Creates a .rsync-backup/please-sync affirmation file for the given folder.
 	-b: Beep.
+	-B: Backup.
 	-d: Delete all log file in the log folder.
 	-e: Show execution log.
-	-f: Show folder log files.
 	-h: Show help.
-	-i <identifier>: Provide a identifier, to get informations across multiple
-	subshells
 	-l: Show log summary.
 	-L: Show log folder.
-	-n: No backup.
-	-N: Send NSCA message to nagios.
-	-z: Create ZFS snapshot.
+	-m: Send logs per mail.
+	-n: Send NSCA message to nagios.
 
 LOG FILES
 	GENERAL LOG FILE
-		/home/jf/rsync-backup-logs/summary.log
-		/home/jf/rsync-backup-logs/execution.log
+		/var/log/rsync-backup/summary.log
+		/var/log/rsync-backup/execution.log
 
 	LOG FILE PER DATE, SOURCE AND DESTINATION
-		Directory: /home/jf/rsync-backup-logs
+		Directory: /var/log/rsync-backup
 		Naming convention: log_$DATE_$HOSTNAME_$SOURCE_$DESTINATION.log
 
 EXCLUDES
@@ -418,7 +447,7 @@ OPTIONS:
 
 Use this options:
 
-smartctl 6.6 2016-05-31 r4324 [x86_64-linux-4.10.0-20-generic] (local build)
+smartctl 6.6 2016-05-31 r4324 [x86_64-linux-4.10.0-30-generic] (local build)
 Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
 
 Usage: smartctl [options] device
@@ -609,6 +638,11 @@ Usage: terminal-colors-256.sh
 
 Options:
 	-h, --help: Show this help message.
+```
+
+## ./test/bats/install.sh
+
+```
 ```
 
 ## ./wordpress-url-update.sh
