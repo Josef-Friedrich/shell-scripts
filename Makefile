@@ -24,11 +24,10 @@ readme:
 
 split:
 	for COMMAND in $$(find . -maxdepth 1 -iname "*.sh"); do \
-		echo $$COMMAND ; \
 		csplit \
 			--prefix=$$COMMAND. \
 			$$COMMAND \
-			'/### This SEPARATOR is needed for the tests. Do not remove it! ##########/' ; \
+			'/### This SEPARATOR is needed for the tests. Do not remove it! ##########/' > /dev/null 2>&1 ; \
 	done
 
 clean:

@@ -3,4 +3,4 @@ dist: trusty
 sudo: required
 
 script:
-  - make test
+  - make -s test
