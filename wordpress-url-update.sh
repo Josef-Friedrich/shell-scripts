@@ -126,6 +126,8 @@ Then you can update your wordpress site executing this short command:
 	$(basename "$0")"
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":u:p:d:o:n:h" OPT; do
 	case $OPT in
 

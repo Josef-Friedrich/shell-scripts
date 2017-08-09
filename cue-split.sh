@@ -40,6 +40,8 @@ The default path is the current directory.
 The folder must contain only one *.cue file and one audio file."
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 if [ "$1" = "" ]; then
 	DIR=$SDIR
 else

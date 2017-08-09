@@ -41,6 +41,8 @@ or
 $(basename "$0") [-d <network-interface> ] clear"
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 OPT=$1
 
 while getopts ":d:h" OPT; do

@@ -72,6 +72,8 @@ _sync_end() {
 	_beep -f1864.66 -l500 -D500 -n -f1396.91 -l500 -D500 -r3 -n -f1396.91 -l1000
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 OPTION="$1"
 
 case "$OPTION" in

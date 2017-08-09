@@ -59,6 +59,8 @@ SEE ALSO
 			 figlet(1), figlist(1)'
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 #font="banner"
 font="big"
 style="cstyle"

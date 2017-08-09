@@ -124,6 +124,8 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 if [ "$(basename "$0")" = "mscore-to-eps.sh" ]; then
 
 	if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then

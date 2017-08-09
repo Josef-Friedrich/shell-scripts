@@ -21,3 +21,9 @@ readme:
 		$$COMMAND -h >> README.md ; \
 		echo "\`\`\`" >> README.md ; \
 	done
+
+split:
+	for COMMAND in $$(find . -maxdepth 1 -iname "*.sh" | sort); do \
+		echo $$COMMAND ; \
+		csplit --prefix=$$COMMAND. $$COMMAND '/### This SEPARATOR is needed for the tests. Do not remove it! ##########/' ; \
+	done

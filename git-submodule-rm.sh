@@ -31,6 +31,8 @@ Options:
 	-h Show this help message."
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":h" opt; do
 	case $opt in
 

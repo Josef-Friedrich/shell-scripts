@@ -92,6 +92,8 @@ _mv_image() {
 	fi
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 # Defaults
 TOOLS=(exiftool jq) # Also change settings below if changing this, the output should be in the format YYYY:MM:DD
 DEFAULTDIR='/home/jf/Bilder'

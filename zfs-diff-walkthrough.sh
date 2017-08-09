@@ -51,6 +51,8 @@ Options:
   -p   Compare with previous snapshot instead of later snapshot."
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":d:hp" OPT; do
 	case $OPT in
 

@@ -140,6 +140,8 @@ _send_nsca() {
 	fi
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":c:hH:n:p:o:r:" OPT; do
 	case $OPT in
 		c)

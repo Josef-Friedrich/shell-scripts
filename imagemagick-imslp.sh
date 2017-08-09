@@ -69,7 +69,7 @@ _convert() {
 	fi
 }
 
-### This SEPARATOR is needed for the tests. do not remove it! ##########
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
 
 while getopts ":bfht:" OPT; do
 	case $OPT in

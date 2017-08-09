@@ -33,6 +33,8 @@ _usage() {
 
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":dhH:" OPT; do
 	case $OPT in
 

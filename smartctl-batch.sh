@@ -35,6 +35,8 @@ Use this options:
 "
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 if [ "$*" != "" ]; then
 	OPTIONS="$*"
 else

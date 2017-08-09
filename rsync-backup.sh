@@ -574,6 +574,8 @@ _execute() {
 	fi
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 if [ "$(basename "$0")" = 'rsync-backup.sh' ]; then
 	_execute $@
 fi

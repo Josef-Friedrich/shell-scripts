@@ -13,6 +13,8 @@ Options:
 	-h, --help: Show this help message."
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
 	_usage
 	exit 0

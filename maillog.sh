@@ -80,6 +80,8 @@ Options:
 	-t:       Send a test mail (no further arguments needed)."
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":b:ht" OPT; do
 	case $OPT in
 		b)

@@ -36,6 +36,8 @@ _usage() {
 	-u: MySQL username"
 }
 
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
 while getopts ":d:hn:o:p:P:u:" opt; do
 	case $opt in
 
