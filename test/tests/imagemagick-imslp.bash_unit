@@ -2,7 +2,7 @@
 
 P=../../
 
-csplit --prefix=imagemagick-imslp. "${P}imagemagick-imslp.sh" '/### SEPARATOR # is needed for the tests ################################/'  > /dev/null 2>&1
+csplit --prefix=imagemagick-imslp. "${P}imagemagick-imslp.sh" '/### This SEPARATOR is needed for the tests. do not remove it! ##########/'  > /dev/null 2>&1
 
 test_parameters() {
 	assert_fail "${P}imagemagick-imslp.sh" > /dev/null 2>&1
