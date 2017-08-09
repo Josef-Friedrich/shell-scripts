@@ -24,13 +24,18 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0)
+	echo "Usage: $(basename $0) [-bfht] <filename-or-glob-pattern>
+
+This is a wrapper script around imagemagick to process image files
+suitable for imslp.org (International Music Score Library Project)
+
+http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
 
 OPTIONS:
 	-b: backup original images (add .bak to filename)
 	-f: force
-	-t: threshold, default 50%
 	-h: Show this help message
+	-t: threshold, default 50%
 "
 }
 
@@ -73,6 +78,7 @@ while getopts ":bfht:" OPT; do
 			;;
 		h)
 			_usage
+			exit 0
 			;;
 		t)
 			THRESHOLD="$OPTARG"
@@ -87,6 +93,7 @@ shift $((OPTIND-1))
 
 if [ -z "$*" ]; then
 	_usage
+	exit 1
 fi
 
 if [ -z "$THRESHOLD" ]; then
