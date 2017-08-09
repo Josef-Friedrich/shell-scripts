@@ -3,5 +3,4 @@ dist: trusty
 sudo: required
 
 script:
-  - ./test/bats/bin/bats test/tests
-  - ./test/bash_unit test/tests/*.bash_unit
+  - make test
