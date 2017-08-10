@@ -76,7 +76,7 @@ test_unit_arguments_without() {
 	assert_equals "$OPT_THRESHOLD" ''
 }
 
-test_unit_arguments_without_file() {
+test_unit_arguments_only_file() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments pic.jpg
 	assert_equals "$OPT_BACKUP" ''
@@ -85,6 +85,12 @@ test_unit_arguments_without_file() {
 	assert_equals "$OPT_RESIZE" ''
 	assert_equals "$OPT_THRESHOLD" ''
 	assert_equals "$IMAGES" pic.jpg
+}
+
+test_unit_arguments_multiple_files() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments pic1.jpg pic2.jpg pic3.jpg
+	assert_equals "$IMAGES" 'pic1.jpg pic2.jpg pic3.jpg'
 }
 
 # backup
