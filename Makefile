@@ -2,7 +2,7 @@
 
 all: test
 
-test: split bash_unit bats clean
+test: bash_unit bats
 
 bash_unit:
 	./test/bash_unit test/tests/*.bash_unit
@@ -21,14 +21,3 @@ readme:
 		$$COMMAND -h >> README.md ; \
 		echo "\`\`\`" >> README.md ; \
 	done
-
-split:
-	for COMMAND in $$(find . -maxdepth 1 -iname "*.sh"); do \
-		csplit \
-			--prefix=$$COMMAND. \
-			$$COMMAND \
-			'/### This SEPARATOR is needed for the tests. Do not remove it! ##########/' > /dev/null 2>&1 ; \
-	done
-
-clean:
-	find .  -iname "*.0[01]" -exec rm -f {} \;

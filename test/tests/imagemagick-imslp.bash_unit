@@ -13,59 +13,57 @@ test_help() {
 }
 
 test_source() {
-	. ${P}imagemagick-imslp.sh.00
+	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bcfhrt] <filename-or-glob-pattern>"
 }
 
 test_remove_extension() {
-	. ${P}imagemagick-imslp.sh.00
+	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$(_remove_extension filename.png)" "filename"
 	assert_equals "$(_remove_extension filename.png.png)" "filename.png"
 }
 
 test_get_channels_input() {
-	. ${P}imagemagick-imslp.sh.00
+	_source_until_separator ${P}imagemagick-imslp.sh
 	local TMP=$(mktemp)
-  fake identify 'echo $FAKE_PARAMS > $TMP'
-  _get_channels filename.png
-  assert_equals filename.png "$(head -n1 $TMP)"
+	fake identify 'echo $FAKE_PARAMS > $TMP'
+	_get_channels filename.png
+	assert_equals filename.png "$(head -n1 $TMP)"
 	rm -f "$TMP"
 }
 
 test_get_channels_output() {
-	. ${P}imagemagick-imslp.sh.00
-
+	_source_until_separator ${P}imagemagick-imslp.sh
 	fake identify << EOF
 TFKBexample-2.png PNG 4868x2623 4868x2623+0+0 8-bit sRGB 2c 104KB 0.000u 0:00.000
 EOF
 
-  assert_equals "$(_get_channels filename.png)" 2c
+	assert_equals "$(_get_channels filename.png)" 2c
 }
 
 test_defaults() {
-	. ${P}imagemagick-imslp.sh.00
-  assert_equals "$OUT_EXT" png
+	_source_until_separator ${P}imagemagick-imslp.sh
+	assert_equals "$OUT_EXT" png
 	assert_equals "$OPT_THRESHOLD" 50%
 	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_RESIZE" ''
 }
 
 test_unit_options() {
-	. ${P}imagemagick-imslp.sh.00
-  assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage'
+	_source_until_separator ${P}imagemagick-imslp.sh
+	assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage'
 }
 
 test_unit_options_c_compression() {
-	. ${P}imagemagick-imslp.sh.00
+	_source_until_separator ${P}imagemagick-imslp.sh
 	OPT_COMPRESSION=' -compress Group4 -monochrome'
-	_options
-  assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome'
+	assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome'
 }
 
 test_unit_options_r_resize() {
-	. ${P}imagemagick-imslp.sh.00
+	_source_until_separator ${P}imagemagick-imslp.sh
 	OPT_RESIZE='-resize 200% '
-  assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage'
+	assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage'
 }
 
 test_without_options() {
