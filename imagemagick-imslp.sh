@@ -26,9 +26,10 @@
 OUT_EXT=png
 THRESHOLD=50%
 COMPRESSION=
+OPT_RESIZE=
 
 _usage() {
-	echo "Usage: $(basename "$0") [-bcfht] <filename-or-glob-pattern>
+	echo "Usage: $(basename "$0") [-bcfhrt] <filename-or-glob-pattern>
 
 This is a wrapper script around imagemagick to process image files
 suitable for imslp.org (International Music Score Library Project)
@@ -40,6 +41,7 @@ OPTIONS:
 	-b: backup original images (add .bak to filename)
 	-f: force
 	-h: Show this help message
+	-r: Resize 200%
 	-t: threshold, default 50%
 "
 }
@@ -66,7 +68,7 @@ _options() {
 	if [ "$OPT_CCITT" = 1 ]; then
 		COMPRESSION=' -compress Group4 -monochrome'
 	fi
-	echo "-resize 200% \
+	echo "$OPT_RESIZE\
 -deskew 40% \
 -threshold $THRESHOLD \
 -trim +repage$COMPRESSION"
@@ -91,7 +93,7 @@ _convert() {
 
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
 
-while getopts ":cbfht:" OPT; do
+while getopts ":cbfhrt:" OPT; do
 	case $OPT in
 		b)
 			BACKUP=1
@@ -103,6 +105,9 @@ while getopts ":cbfht:" OPT; do
 		h)
 			_usage
 			exit 0
+			;;
+		r)
+			OPT_RESIZE='-resize 200% '
 			;;
 		t)
 			THRESHOLD="$OPTARG"
