@@ -39,3 +39,10 @@ EOF
 
   assert_equals "$(_get_channels filename.png)" 2c
 }
+
+test_mocking() {
+	PATH="$(pwd)/../bin:$PATH"
+
+	assert_equals "$(${P}imagemagick-imslp.sh filename.jpg | sed -n 1p)" 'Convert filename.jpg to filename.png'
+	assert_equals "$(${P}imagemagick-imslp.sh filename.jpg | sed -n 2p)" 'filename.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage filename.png'
+}
