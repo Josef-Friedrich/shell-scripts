@@ -176,7 +176,7 @@ test_without_options() {
 	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage pic.png'
 }
 
-test_option_c_ccitt() {
+test_option_c_compression() {
 	_set_mocking_path imagemagick-imslp
 	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
 }
