@@ -43,16 +43,6 @@ OPTIONS:
 "
 }
 
-# convert "$INPUT" \
-# 	-border 100x100 -bordercolor "#FFFFFF" \
-# 	-deskew 40% \
-# 	-level 45,50% \
-# 	-colors 2 \
-# 	-fuzz 98% \
-# 	-trim +repage \
-# 	-compress Group4 -monochrome \
-# 	output.pdf
-
 _remove_extension() {
 	echo "$1" | sed 's/\.[[:alnum:]]*$//'
 }
@@ -62,15 +52,34 @@ _get_channels() {
 }
 
 _options_defaults() {
+	OPT_BORDER='-border 100x100 -bordercolor "#FFFFFF"'
 	[ "$OPT_COMPRESSION" ] && OPT_COMPRESSION=' -compress Group4 -monochrome'
 	[ "$OPT_RESIZE" ] && OPT_RESIZE='-resize 200% '
+	[ "$OPT_THRESHOLD" ] && OPT_THRESHOLD="-threshold $OPT_THRESHOLD"
+	OPT_FUZZ='-fuzz 98%'
+	OPT_DESKEW='-deskew 40%'
+	OPT_REPAGE='-trim +repage'
+}
+
+_options_order() {
+	echo "
+		$OPT_RESIZE
+		$OPT_DESKEW
+		$OPT_THRESHOLD
+		$OPT_REPAGE
+		$OPT_COMPRESSION
+	"
+}
+
+_options_normalize() {
+	echo $@
 }
 
 _options() {
 	_options_defaults
 	echo "$OPT_RESIZE\
 -deskew 40% \
--threshold $OPT_THRESHOLD \
+$OPT_THRESHOLD \
 -trim +repage$OPT_COMPRESSION"
 }
 
@@ -134,7 +143,7 @@ _arguments() {
 
 _arguments $@
 
-if [ -z "$*" ]; then
+if [ -z "$IMAGES" ]; then
 	_usage
 	exit 1
 fi
