@@ -23,8 +23,12 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+OUT_EXT=png
+THRESHOLD=50%
+COMPRESSION=
+
 _usage() {
-	echo "Usage: $(basename "$0") [-bfht] <filename-or-glob-pattern>
+	echo "Usage: $(basename "$0") [-bcfht] <filename-or-glob-pattern>
 
 This is a wrapper script around imagemagick to process image files
 suitable for imslp.org (International Music Score Library Project)
@@ -58,20 +62,28 @@ _get_channels() {
 	identify "$1" | cut -d " " -f 7
 }
 
+_options() {
+	if [ "$OPT_CCITT" = 1 ]; then
+		COMPRESSION=' -compress Group4 -monochrome'
+	fi
+	echo "-resize 200% \
+-deskew 40% \
+-threshold $THRESHOLD \
+-trim +repage$COMPRESSION"
+}
+
 _convert() {
+	if [ "$OPT_CCITT" = 1 ]; then
+		OUT_EXT=pdf
+	fi
 	CHANNELS=$(_get_channels "$1")
-	NEW=$(_remove_extension "$1").png
+	NEW=$(_remove_extension "$1").$OUT_EXT
 	if [ "$CHANNELS" != 2c ] || [ "$FORCE" = 1 ]; then
 		echo "Convert $1 to $NEW"
 		if [ "$BACKUP" = 1 ]; then
 			cp "$1" "$1.bak"
 		fi
-		convert "$1" \
-			-resize 200% \
-			-deskew 40% \
-			-threshold "$THRESHOLD" \
-			-trim +repage \
-			"$NEW"
+		convert "$1" $(_options) "$NEW"
 	else
 		echo "The image has already 2 channels ($CHANNELS). Use -f option to force conversion."
 	fi
@@ -79,11 +91,12 @@ _convert() {
 
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
 
-while getopts ":bfht:" OPT; do
+while getopts ":cbfht:" OPT; do
 	case $OPT in
 		b)
 			BACKUP=1
 			;;
+		c) OPT_CCITT=1;;
 		f)
 			FORCE=1
 			;;
@@ -105,10 +118,6 @@ shift $((OPTIND-1))
 if [ -z "$*" ]; then
 	_usage
 	exit 1
-fi
-
-if [ -z "$THRESHOLD" ]; then
-	THRESHOLD='50%'
 fi
 
 for IMAGE in $*; do
