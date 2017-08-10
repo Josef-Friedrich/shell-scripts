@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ../helper.lib
+
 P=../../
 
 test_parameters() {
@@ -41,7 +43,7 @@ EOF
 }
 
 test_mocking() {
-	PATH="$(pwd)/../bin:$PATH"
+	_set_mocking_path imagemagick-imslp
 
 	assert_equals "$(${P}imagemagick-imslp.sh filename.jpg | sed -n 1p)" 'Convert filename.jpg to filename.png'
 	assert_equals "$(${P}imagemagick-imslp.sh filename.jpg | sed -n 2p)" 'filename.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage filename.png'

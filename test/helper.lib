@@ -1,0 +1,4 @@
+
+_set_mocking_path() {
+  PATH="$(pwd)/../bin/$1:$PATH"
+}
