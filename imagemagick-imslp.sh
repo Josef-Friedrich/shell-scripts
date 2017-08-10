@@ -24,8 +24,8 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 OUT_EXT=png
-THRESHOLD=50%
-COMPRESSION=
+OPT_THRESHOLD=50%
+OPT_COMPRESSION=
 OPT_RESIZE=
 
 _usage() {
@@ -65,17 +65,14 @@ _get_channels() {
 }
 
 _options() {
-	if [ "$OPT_CCITT" = 1 ]; then
-		COMPRESSION=' -compress Group4 -monochrome'
-	fi
 	echo "$OPT_RESIZE\
 -deskew 40% \
--threshold $THRESHOLD \
--trim +repage$COMPRESSION"
+-threshold $OPT_THRESHOLD \
+-trim +repage$OPT_COMPRESSION"
 }
 
 _convert() {
-	if [ "$OPT_CCITT" = 1 ]; then
+	if [ -n "$OPT_COMPRESSION" ]; then
 		OUT_EXT=pdf
 	fi
 	CHANNELS=$(_get_channels "$1")
@@ -98,7 +95,7 @@ while getopts ":cbfhrt:" OPT; do
 		b)
 			BACKUP=1
 			;;
-		c) OPT_CCITT=1;;
+		c) OPT_COMPRESSION=' -compress Group4 -monochrome';;
 		f)
 			FORCE=1
 			;;
@@ -110,7 +107,7 @@ while getopts ":cbfhrt:" OPT; do
 			OPT_RESIZE='-resize 200% '
 			;;
 		t)
-			THRESHOLD="$OPTARG"
+			OPT_THRESHOLD="$OPTARG"
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2

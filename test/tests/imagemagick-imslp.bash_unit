@@ -45,8 +45,8 @@ EOF
 test_defaults() {
 	. ${P}imagemagick-imslp.sh.00
   assert_equals "$OUT_EXT" png
-	assert_equals "$THRESHOLD" 50%
-	assert_equals "$COMPRESSION" ''
+	assert_equals "$OPT_THRESHOLD" 50%
+	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_RESIZE" ''
 }
 
@@ -55,9 +55,10 @@ test_unit_options() {
   assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage'
 }
 
-test_unit_options_c_ccitt() {
+test_unit_options_c_compression() {
 	. ${P}imagemagick-imslp.sh.00
-	OPT_CCITT=1
+	OPT_COMPRESSION=' -compress Group4 -monochrome'
+	_options
   assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome'
 }
 
