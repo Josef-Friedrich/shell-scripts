@@ -14,7 +14,7 @@ test_help() {
 
 test_source() {
 	. ${P}imagemagick-imslp.sh.00
-	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bfht] <filename-or-glob-pattern>"
+	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bcfht] <filename-or-glob-pattern>"
 }
 
 test_remove_extension() {
@@ -42,8 +42,24 @@ EOF
   assert_equals "$(_get_channels filename.png)" 2c
 }
 
-test_mocking() {
+test_unit_options() {
+	. ${P}imagemagick-imslp.sh.00
+  assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage'
+}
+
+test_unit_options() {
+	. ${P}imagemagick-imslp.sh.00
+	OPT_CCITT=1
+  assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome'
+}
+
+test_without_options() {
 	_set_mocking_path imagemagick-imslp
 	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 1p)" 'Convert pic.jpg to pic.png'
 	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
+}
+
+test_option_c_ccitt() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
 }
