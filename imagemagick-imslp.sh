@@ -88,6 +88,43 @@ _convert() {
 	fi
 }
 
+_arguments() {
+	OPT_BACKUP=
+	OPT_COMPRESSION=
+	OPT_FORCE=
+	OPT_RESIZE=
+	OPT_THRESHOLD=
+
+	while getopts :cbfhrt:-: arg; do
+		case $arg in
+			b) OPT_BACKUP=1 ;;
+			c) OPT_COMPRESSION=1 ;;
+			f) OPT_FORCE=1 ;;
+			h) _usage ; exit 0 ;;
+			r) OPT_RESIZE=1 ;;
+			t) OPT_THRESHOLD="$OPTARG" ;;
+			-)
+			  LONG_OPTARG="${OPTARG#*=}"
+				case $OPTARG in
+					backup) OPT_BACKUP=1 ;;
+					compression) OPT_COMPRESSION=1 ;;
+					force) OPT_FORCE=1 ;;
+					help) _usage ; exit 0 ;;
+					resize) OPT_RESIZE=1 ;;
+					threshold) OPT_THRESHOLD="$OPTARG" ;;
+					'')
+						break ;;
+					*)
+						echo "Illegal option --$OPTARG" >&2; exit 2 ;;
+					esac ;;
+			\?)
+				exit 2
+				;;
+		esac
+	done
+	shift $((OPTIND - 1))
+}
+
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
 
 while getopts ":cbfhrt:" OPT; do
