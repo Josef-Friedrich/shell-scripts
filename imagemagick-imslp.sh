@@ -59,7 +59,7 @@ _get_channels() {
 }
 
 _convert() {
-	CHANNELS=$(identify "$1" | cut -d " " -f 7)
+	CHANNELS=$(_get_channels "$1")
 	NEW=$(_remove_extension "$1").png
 	if [ "$CHANNELS" != 2c ] || [ "$FORCE" = 1 ]; then
 		echo "Convert $1 to $NEW"

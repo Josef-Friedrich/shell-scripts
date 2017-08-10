@@ -21,11 +21,21 @@ test_remove_extension() {
 	assert_equals "$(_remove_extension filename.png.png)" "filename.png"
 }
 
-test_get_channels() {
+test_get_channels_input() {
 	. ${P}imagemagick-imslp.sh.00
 	local TMP=$(mktemp)
   fake identify 'echo $FAKE_PARAMS > $TMP'
   _get_channels filename.png
   assert_equals filename.png "$(head -n1 $TMP)"
 	rm -f "$TMP"
+}
+
+test_get_channels_output() {
+	. ${P}imagemagick-imslp.sh.00
+
+	fake identify << EOF
+TFKBexample-2.png PNG 4868x2623 4868x2623+0+0 8-bit sRGB 2c 104KB 0.000u 0:00.000
+EOF
+
+  assert_equals "$(_get_channels filename.png)" 2c
 }
