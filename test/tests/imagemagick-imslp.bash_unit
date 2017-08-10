@@ -40,25 +40,25 @@ EOF
 test_unit_defaults() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$OUT_EXT" png
-	assert_equals "$OPT_THRESHOLD" 50%
-	assert_equals "$OPT_COMPRESSION" ''
-	assert_equals "$OPT_RESIZE" ''
 }
 
 test_unit_options() {
 	_source_until_separator ${P}imagemagick-imslp.sh
+	OPT_THRESHOLD=50%
 	assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage'
 }
 
 test_unit_options_c_compression() {
 	_source_until_separator ${P}imagemagick-imslp.sh
-	OPT_COMPRESSION=' -compress Group4 -monochrome'
+	OPT_THRESHOLD=50%
+	OPT_COMPRESSION=1
 	assert_equals "$(_options)" '-deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome'
 }
 
 test_unit_options_r_resize() {
 	_source_until_separator ${P}imagemagick-imslp.sh
-	OPT_RESIZE='-resize 200% '
+	OPT_THRESHOLD=50%
+	OPT_RESIZE=1
 	assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage'
 }
 
@@ -73,7 +73,7 @@ test_unit_arguments_without() {
 	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_FORCE" ''
 	assert_equals "$OPT_RESIZE" ''
-	assert_equals "$OPT_THRESHOLD" ''
+	assert_equals "$OPT_THRESHOLD" 50%
 }
 
 test_unit_arguments_only_file() {
@@ -83,7 +83,7 @@ test_unit_arguments_only_file() {
 	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_FORCE" ''
 	assert_equals "$OPT_RESIZE" ''
-	assert_equals "$OPT_THRESHOLD" ''
+	assert_equals "$OPT_THRESHOLD" 50%
 	assert_equals "$IMAGES" pic.jpg
 }
 

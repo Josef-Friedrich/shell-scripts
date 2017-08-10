@@ -24,9 +24,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 OUT_EXT=png
-OPT_THRESHOLD=50%
-OPT_COMPRESSION=
-OPT_RESIZE=
 
 _usage() {
 	echo "Usage: $(basename "$0") [-bcfhrt] <filename-or-glob-pattern>
@@ -64,7 +61,13 @@ _get_channels() {
 	identify "$1" | cut -d " " -f 7
 }
 
+_options_defaults() {
+	[ "$OPT_COMPRESSION" ] && OPT_COMPRESSION=' -compress Group4 -monochrome'
+	[ "$OPT_RESIZE" ] && OPT_RESIZE='-resize 200% '
+}
+
 _options() {
+	_options_defaults
 	echo "$OPT_RESIZE\
 -deskew 40% \
 -threshold $OPT_THRESHOLD \
@@ -93,7 +96,7 @@ _arguments() {
 	OPT_COMPRESSION=
 	OPT_FORCE=
 	OPT_RESIZE=
-	OPT_THRESHOLD=
+	OPT_THRESHOLD=50%
 
 	while getopts :cbfhrt:-: arg; do
 		case $arg in
@@ -129,40 +132,13 @@ _arguments() {
 
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
 
-while getopts ":cbfhrt:" OPT; do
-	case $OPT in
-		b)
-			OPT_BACKUP=1
-			;;
-		c) OPT_COMPRESSION=1 ;;
-		f)
-			OPT_FORCE=1
-			;;
-		h)
-			_usage
-			exit 0
-			;;
-		r)
-			OPT_RESIZE=1 ;;
-		t)
-			OPT_THRESHOLD="$OPTARG"
-			;;
-		\?)
-			echo "Invalid option: -$OPTARG" >&2
-			;;
-	esac
-done
-
-[ "$OPT_COMPRESSION" ] && OPT_COMPRESSION=' -compress Group4 -monochrome'
-[ "$OPT_RESIZE" ] && OPT_RESIZE='-resize 200% '
-
-shift $((OPTIND-1))
+_arguments $@
 
 if [ -z "$*" ]; then
 	_usage
 	exit 1
 fi
 
-for IMAGE in $*; do
+for IMAGE in $IMAGES; do
 	_convert "$IMAGE"
 done
