@@ -77,9 +77,9 @@ _convert() {
 	fi
 	CHANNELS=$(_get_channels "$1")
 	NEW=$(_remove_extension "$1").$OUT_EXT
-	if [ "$CHANNELS" != 2c ] || [ "$FORCE" = 1 ]; then
+	if [ "$CHANNELS" != 2c ] || [ "$OPT_FORCE" = 1 ]; then
 		echo "Convert $1 to $NEW"
-		if [ "$BACKUP" = 1 ]; then
+		if [ "$OPT_BACKUP" = 1 ]; then
 			cp "$1" "$1.bak"
 		fi
 		convert "$1" $(_options) "$NEW"
@@ -132,11 +132,11 @@ _arguments() {
 while getopts ":cbfhrt:" OPT; do
 	case $OPT in
 		b)
-			BACKUP=1
+			OPT_BACKUP=1
 			;;
 		c) OPT_COMPRESSION=1 ;;
 		f)
-			FORCE=1
+			OPT_FORCE=1
 			;;
 		h)
 			_usage
