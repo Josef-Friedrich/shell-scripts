@@ -20,3 +20,12 @@ test_remove_extension() {
 	assert_equals "$(_remove_extension filename.png)" "filename"
 	assert_equals "$(_remove_extension filename.png.png)" "filename.png"
 }
+
+test_get_channels() {
+	. ${P}imagemagick-imslp.sh.00
+	local TMP=$(mktemp)
+  fake identify 'echo $FAKE_PARAMS > $TMP'
+  _get_channels filename.png
+  assert_equals filename.png "$(head -n1 $TMP)"
+	rm -f "$TMP"
+}

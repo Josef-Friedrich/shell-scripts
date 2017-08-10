@@ -54,6 +54,10 @@ _remove_extension() {
 	echo "$1" | sed 's/\.[[:alnum:]]*$//'
 }
 
+_get_channels() {
+	identify "$1" | cut -d " " -f 7
+}
+
 _convert() {
 	CHANNELS=$(identify "$1" | cut -d " " -f 7)
 	NEW=$(_remove_extension "$1").png
