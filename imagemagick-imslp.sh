@@ -134,7 +134,7 @@ while getopts ":cbfhrt:" OPT; do
 		b)
 			BACKUP=1
 			;;
-		c) OPT_COMPRESSION=' -compress Group4 -monochrome';;
+		c) OPT_COMPRESSION=1 ;;
 		f)
 			FORCE=1
 			;;
@@ -143,8 +143,7 @@ while getopts ":cbfhrt:" OPT; do
 			exit 0
 			;;
 		r)
-			OPT_RESIZE='-resize 200% '
-			;;
+			OPT_RESIZE=1 ;;
 		t)
 			OPT_THRESHOLD="$OPTARG"
 			;;
@@ -153,6 +152,9 @@ while getopts ":cbfhrt:" OPT; do
 			;;
 	esac
 done
+
+[ "$OPT_COMPRESSION" ] && OPT_COMPRESSION=' -compress Group4 -monochrome'
+[ "$OPT_RESIZE" ] && OPT_RESIZE='-resize 200% '
 
 shift $((OPTIND-1))
 
