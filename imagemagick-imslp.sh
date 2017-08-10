@@ -77,10 +77,7 @@ _options_normalize() {
 
 _options() {
 	_options_defaults
-	echo "$OPT_RESIZE\
--deskew 40% \
-$OPT_THRESHOLD \
--trim +repage$OPT_COMPRESSION"
+	_options_normalize $(_options_order)
 }
 
 _convert() {
