@@ -83,6 +83,10 @@ test_option_r_resize() {
 	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
 }
 
+##
+# Unit test
+##
+
 test_unit_arguments_without() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments
@@ -93,9 +97,26 @@ test_unit_arguments_without() {
 	assert_equals "$OPT_THRESHOLD" ''
 }
 
+test_unit_arguments_without_file() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments pic.jpg
+	assert_equals "$OPT_BACKUP" ''
+	assert_equals "$OPT_COMPRESSION" ''
+	assert_equals "$OPT_FORCE" ''
+	assert_equals "$OPT_RESIZE" ''
+	assert_equals "$OPT_THRESHOLD" ''
+	assert_equals "$IMAGES" pic.jpg
+}
+
 test_unit_arguments_b() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -b
+	assert_equals "$OPT_BACKUP" 1
+}
+
+test_unit_arguments_backup() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --backup
 	assert_equals "$OPT_BACKUP" 1
 }
 
@@ -105,9 +126,21 @@ test_unit_arguments_c() {
 	assert_equals "$OPT_COMPRESSION" 1
 }
 
+test_unit_arguments_compression() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --compression
+	assert_equals "$OPT_COMPRESSION" 1
+}
+
 test_unit_arguments_f() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -f
+	assert_equals "$OPT_FORCE" 1
+}
+
+test_unit_arguments_force() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --force
 	assert_equals "$OPT_FORCE" 1
 }
 

@@ -123,6 +123,7 @@ _arguments() {
 		esac
 	done
 	shift $((OPTIND - 1))
+	IMAGES=$@
 }
 
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
