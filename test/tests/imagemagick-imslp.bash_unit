@@ -4,26 +4,22 @@
 
 P=../../
 
-test_parameters() {
-	assert_fail "${P}imagemagick-imslp.sh" > /dev/null 2>&1
-}
+########################################################################
+# Unit test
+########################################################################
 
-test_help() {
-	assert "${P}imagemagick-imslp.sh -h"  > /dev/null 2>&1
-}
-
-test_source() {
+test_unit_help() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bcfhrt] <filename-or-glob-pattern>"
 }
 
-test_remove_extension() {
+test_unit_remove_extension() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$(_remove_extension filename.png)" "filename"
 	assert_equals "$(_remove_extension filename.png.png)" "filename.png"
 }
 
-test_get_channels_input() {
+test_unit_get_channels_input() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	local TMP=$(mktemp)
 	fake identify 'echo $FAKE_PARAMS > $TMP'
@@ -32,7 +28,7 @@ test_get_channels_input() {
 	rm -f "$TMP"
 }
 
-test_get_channels_output() {
+test_unit_get_channels_output() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	fake identify << EOF
 TFKBexample-2.png PNG 4868x2623 4868x2623+0+0 8-bit sRGB 2c 104KB 0.000u 0:00.000
@@ -41,7 +37,7 @@ EOF
 	assert_equals "$(_get_channels filename.png)" 2c
 }
 
-test_defaults() {
+test_unit_defaults() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	assert_equals "$OUT_EXT" png
 	assert_equals "$OPT_THRESHOLD" 50%
@@ -66,25 +62,8 @@ test_unit_options_r_resize() {
 	assert_equals "$(_options)" '-resize 200% -deskew 40% -threshold 50% -trim +repage'
 }
 
-test_without_options() {
-	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 1p)" 'Convert pic.jpg to pic.png'
-	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage pic.png'
-}
-
-test_option_c_ccitt() {
-	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
-}
-
-
-test_option_r_resize() {
-	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
-}
-
 ##
-# Unit test
+# function _arguments
 ##
 
 test_unit_arguments_without() {
@@ -108,6 +87,7 @@ test_unit_arguments_without_file() {
 	assert_equals "$IMAGES" pic.jpg
 }
 
+# backup
 test_unit_arguments_b() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -b
@@ -120,6 +100,7 @@ test_unit_arguments_backup() {
 	assert_equals "$OPT_BACKUP" 1
 }
 
+# compression
 test_unit_arguments_c() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -c
@@ -132,6 +113,7 @@ test_unit_arguments_compression() {
 	assert_equals "$OPT_COMPRESSION" 1
 }
 
+# force
 test_unit_arguments_f() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -f
@@ -144,14 +126,57 @@ test_unit_arguments_force() {
 	assert_equals "$OPT_FORCE" 1
 }
 
+# resize
 test_unit_arguments_r() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -r
 	assert_equals "$OPT_RESIZE" 1
 }
 
+test_unit_arguments_resize() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --resize
+	assert_equals "$OPT_RESIZE" 1
+}
+
+# threshold
 test_unit_arguments_t() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments -t 10%
 	assert_equals "$OPT_THRESHOLD" 10%
+}
+
+test_unit_arguments_threshold() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --threshold=11%
+	assert_equals "$OPT_THRESHOLD" 11%
+}
+
+########################################################################
+# Integration
+########################################################################
+
+test_parameters() {
+	assert_fail "${P}imagemagick-imslp.sh" > /dev/null 2>&1
+}
+
+test_help() {
+	assert "${P}imagemagick-imslp.sh -h"  > /dev/null 2>&1
+}
+
+test_without_options() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 1p)" 'Convert pic.jpg to pic.png'
+	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage pic.png'
+}
+
+test_option_c_ccitt() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
+}
+
+
+test_option_r_resize() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
 }

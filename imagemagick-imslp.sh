@@ -111,7 +111,8 @@ _arguments() {
 					force) OPT_FORCE=1 ;;
 					help) _usage ; exit 0 ;;
 					resize) OPT_RESIZE=1 ;;
-					threshold) OPT_THRESHOLD="$OPTARG" ;;
+					threshold=?*) OPT_THRESHOLD="$LONG_OPTARG" ;;
+					threshold*) echo "No arg for --$OPTARG option" >&2; exit 2 ;;
 					'')
 						break ;;
 					*)
