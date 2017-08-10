@@ -180,7 +180,7 @@ while getopts ":c:hH:n:p:o:r:" OPT; do
 	esac
 done
 
-shift $((OPTIND-1))
+shift $((OPTIND - 1))
 
 SERVICE="$1"
 CHECK_COMMAND="$2"
