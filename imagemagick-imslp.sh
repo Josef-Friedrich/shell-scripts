@@ -34,12 +34,13 @@ suitable for imslp.org (International Music Score Library Project)
 http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
 
 OPTIONS:
-	-c: Use CCITT Group 4 compress. This options generates a PDF file
-	-b: backup original images (add .bak to filename)
-	-f: force
-	-h: Show this help message
-	-r: Resize 200%
-	-t: threshold, default 50%
+	-c, --compression:  Use CCITT Group 4 compression. This options
+	                    generates a PDF file
+	-b, --backup:       backup original images (add .bak to filename)
+	-f, --force:        force
+	-h, --help:         Show this help message
+	-r, --resize:       Resize 200%
+	-t, --threshold:    threshold, default 50%
 "
 }
 
@@ -113,7 +114,7 @@ _arguments() {
 			r) OPT_RESIZE=1 ;;
 			t) OPT_THRESHOLD="$OPTARG" ;;
 			-)
-			  LONG_OPTARG="${OPTARG#*=}"
+				LONG_OPTARG="${OPTARG#*=}"
 				case $OPTARG in
 					backup) OPT_BACKUP=1 ;;
 					compression) OPT_COMPRESSION=1 ;;
