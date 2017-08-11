@@ -26,7 +26,7 @@
 OUT_EXT=png
 
 _usage() {
-	echo "Usage: $(basename "$0") [-bcfhrt] <filename-or-glob-pattern>
+	echo "Usage: $(basename "$0") [-bcfhjrt] <filename-or-glob-pattern>
 
 This is a wrapper script around imagemagick to process image files
 suitable for imslp.org (International Music Score Library Project)
@@ -39,6 +39,7 @@ OPTIONS:
 	-b, --backup:       backup original images (add .bak to filename)
 	-f, --force:        force
 	-h, --help:         Show this help message
+	-j, --join:         Join single paged PDF files to one PDF file
 	-r, --resize:       Resize 200%
 	-t, --threshold:    threshold, default 50%
 "
@@ -102,15 +103,17 @@ _arguments() {
 	OPT_BACKUP=
 	OPT_COMPRESSION=
 	OPT_FORCE=
+	OPT_JOIN=
 	OPT_RESIZE=
 	OPT_THRESHOLD=50%
 
-	while getopts :cbfhrt:-: arg; do
+	while getopts :cbfhjrt:-: arg; do
 		case $arg in
 			b) OPT_BACKUP=1 ;;
 			c) OPT_COMPRESSION=1 ;;
 			f) OPT_FORCE=1 ;;
 			h) _usage ; exit 0 ;;
+			j) OPT_JOIN=1 ;;
 			r) OPT_RESIZE=1 ;;
 			t) OPT_THRESHOLD="$OPTARG" ;;
 			-)
@@ -120,6 +123,7 @@ _arguments() {
 					compression) OPT_COMPRESSION=1 ;;
 					force) OPT_FORCE=1 ;;
 					help) _usage ; exit 0 ;;
+					join) OPT_JOIN=1 ;;
 					resize) OPT_RESIZE=1 ;;
 					threshold=?*) OPT_THRESHOLD="$LONG_OPTARG" ;;
 					threshold*) echo "No arg for --$OPTARG option" >&2; exit 2 ;;
@@ -131,6 +135,10 @@ _arguments() {
 	done
 	shift $((OPTIND - 1))
 	IMAGES=$@
+}
+
+_join() {
+	pdftk *.pdf cat output out.pdf
 }
 
 ### This SEPARATOR is needed for the tests. Do not remove it! ##########
@@ -145,3 +153,5 @@ fi
 for IMAGE in $IMAGES; do
 	_convert "$IMAGE"
 done
+
+[ "$OPT_JOIN" ] && _join

@@ -10,7 +10,7 @@ P=../../
 
 test_unit_help() {
 	_source_until_separator ${P}imagemagick-imslp.sh
-	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bcfhrt] <filename-or-glob-pattern>"
+	assert_equals "$(_usage | head -n 1)" "Usage: bash_unit [-bcfhjrt] <filename-or-glob-pattern>"
 }
 
 test_unit_remove_extension() {
@@ -72,6 +72,7 @@ test_unit_arguments_without() {
 	assert_equals "$OPT_BACKUP" ''
 	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_FORCE" ''
+	assert_equals "$OPT_JOIN" ''
 	assert_equals "$OPT_RESIZE" ''
 	assert_equals "$OPT_THRESHOLD" 50%
 }
@@ -82,6 +83,7 @@ test_unit_arguments_only_file() {
 	assert_equals "$OPT_BACKUP" ''
 	assert_equals "$OPT_COMPRESSION" ''
 	assert_equals "$OPT_FORCE" ''
+	assert_equals "$OPT_JOIN" ''
 	assert_equals "$OPT_RESIZE" ''
 	assert_equals "$OPT_THRESHOLD" 50%
 	assert_equals "$IMAGES" pic.jpg
@@ -130,6 +132,19 @@ test_unit_arguments_force() {
 	_source_until_separator ${P}imagemagick-imslp.sh
 	_arguments --force
 	assert_equals "$OPT_FORCE" 1
+}
+
+# join
+test_unit_arguments_j() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments -j
+	assert_equals "$OPT_JOIN" 1
+}
+
+test_unit_arguments_join() {
+	_source_until_separator ${P}imagemagick-imslp.sh
+	_arguments --join
+	assert_equals "$OPT_JOIN" 1
 }
 
 # resize
@@ -201,6 +216,19 @@ test_integ_option_h() {
 
 test_integ_option_help() {
 	assert "${P}imagemagick-imslp.sh --help" > /dev/null
+}
+
+# join
+test_integ_option_j() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh -j pic.jpg | grep 'Option --join:')" \
+		'Option --join: *.pdf cat output out.pdf'
+}
+
+test_integ_option_join() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh --join pic.jpg | grep 'Option --join:')" \
+		'Option --join: *.pdf cat output out.pdf'
 }
 
 # resize
