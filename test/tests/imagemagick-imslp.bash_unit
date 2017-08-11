@@ -187,8 +187,14 @@ test_option_r_resize() {
 	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
 }
 
-test_option_b_backup() {
+test_option_b() {
 	_set_mocking_path imagemagick-imslp
 	assert_equals "$(${P}imagemagick-imslp.sh -b pic.jpg | grep 'Option --backup')" \
+		'Option --backup: pic.jpg pic.jpg.bak'
+}
+
+test_option_backup() {
+	_set_mocking_path imagemagick-imslp
+	assert_equals "$(${P}imagemagick-imslp.sh --backup pic.jpg | grep 'Option --backup')" \
 		'Option --backup: pic.jpg pic.jpg.bak'
 }
