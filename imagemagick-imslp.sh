@@ -55,11 +55,11 @@ _get_channels() {
 _options_defaults() {
 	OPT_BORDER='-border 100x100 -bordercolor "#FFFFFF"'
 	[ "$OPT_COMPRESSION" ] && OPT_COMPRESSION=' -compress Group4 -monochrome'
+	OPT_DESKEW='-deskew 40%'
+	OPT_FUZZ='-fuzz 98%'
+	OPT_REPAGE='-trim +repage'
 	[ "$OPT_RESIZE" ] && OPT_RESIZE='-resize 200% '
 	[ "$OPT_THRESHOLD" ] && OPT_THRESHOLD="-threshold $OPT_THRESHOLD"
-	OPT_FUZZ='-fuzz 98%'
-	OPT_DESKEW='-deskew 40%'
-	OPT_REPAGE='-trim +repage'
 }
 
 _options_order() {
@@ -123,14 +123,10 @@ _arguments() {
 					resize) OPT_RESIZE=1 ;;
 					threshold=?*) OPT_THRESHOLD="$LONG_OPTARG" ;;
 					threshold*) echo "No arg for --$OPTARG option" >&2; exit 2 ;;
-					'')
-						break ;;
-					*)
-						echo "Illegal option --$OPTARG" >&2; exit 2 ;;
-					esac ;;
-			\?)
-				exit 2
-				;;
+					'') break ;;
+					*) echo "Illegal option --$OPTARG" >&2; exit 2 ;;
+				esac ;;
+			\?) exit 2 ;;
 		esac
 	done
 	shift $((OPTIND - 1))
