@@ -172,19 +172,23 @@ test_help() {
 
 test_without_options() {
 	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 1p)" 'Convert pic.jpg to pic.png'
-	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage pic.png'
+	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 1p)" \
+		'Convert pic.jpg to pic.png'
+	assert_equals "$(${P}imagemagick-imslp.sh pic.jpg | sed -n 2p)" \
+		'pic.jpg -deskew 40% -threshold 50% -trim +repage pic.png'
 }
 
 test_option_c_compression() {
 	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" 'pic.jpg -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
+	assert_equals "$(${P}imagemagick-imslp.sh -c pic.jpg | sed -n 2p)" \
+		'pic.jpg -deskew 40% -threshold 50% -trim +repage -compress Group4 -monochrome pic.pdf'
 }
 
 
 test_option_r_resize() {
 	_set_mocking_path imagemagick-imslp
-	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" 'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
+	assert_equals "$(${P}imagemagick-imslp.sh -r pic.jpg | sed -n 2p)" \
+		'pic.jpg -resize 200% -deskew 40% -threshold 50% -trim +repage pic.png'
 }
 
 test_option_b() {
