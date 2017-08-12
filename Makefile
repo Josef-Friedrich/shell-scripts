@@ -21,3 +21,8 @@ readme:
 		$$COMMAND -h >> README.md ; \
 		echo "\`\`\`" >> README.md ; \
 	done
+
+get_upstream:
+	wget -O imagemagick-imslp.sh \
+		https://raw.githubusercontent.com/Josef-Friedrich/imagemagick-imslp.sh/master/imagemagick-imslp.sh ; \
+		chmod a+x imagemagick-imslp.sh
