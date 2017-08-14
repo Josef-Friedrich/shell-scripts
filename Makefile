@@ -27,3 +27,6 @@ get_upstream:
 	$(call get,imagemagick-imslp.sh)
 	$(call get,mscore-to-eps.sh)
 	$(call get,rsync-backup.sh)
+	$(call get,easy-nsca.sh)
+	$(call get,maillog.sh)
+	$(call get,wordpress-url-update.sh)
