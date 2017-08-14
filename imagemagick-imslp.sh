@@ -26,9 +26,9 @@
 OUT_EXT=png
 
 _usage() {
-	echo "Usage: $(basename "$0") [-bcfhjrt] <filename-or-glob-pattern>
+	echo "Usage: imagemagick-imslp.sh [-bcfhjrt] <filename-or-glob-pattern>
 
-This is a wrapper script around imagemagick to process image files
+`imagemagick-imslp.sh` a wrapper script around imagemagick to process image files
 suitable for imslp.org (International Music Score Library Project)
 
 http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
@@ -141,7 +141,7 @@ _join() {
 	pdftk *.pdf cat output out.pdf
 }
 
-### This SEPARATOR is needed for the tests. Do not remove it! ##########
+## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
 _arguments $@
 

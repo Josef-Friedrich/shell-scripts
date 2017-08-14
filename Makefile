@@ -1,5 +1,9 @@
 .PHONY: all test bash_unit bats
 
+get = wget -O $(1) \
+	https://raw.githubusercontent.com/JosefFriedrich-shell/$(1)/master/$(1) ; \
+	chmod a+x $(1)
+
 all: test
 
 test: bash_unit bats
@@ -23,6 +27,5 @@ readme:
 	done
 
 get_upstream:
-	wget -O imagemagick-imslp.sh \
-		https://raw.githubusercontent.com/Josef-Friedrich/imagemagick-imslp.sh/master/imagemagick-imslp.sh ; \
-		chmod a+x imagemagick-imslp.sh
+	$(call get,imagemagick-imslp.sh)
+	$(call get,mscore-to-eps.sh)
