@@ -6,10 +6,7 @@ get = wget -O $(1) \
 
 all: test
 
-test: bash_unit bats
-
-bash_unit:
-	./test/bash_unit test/tests/*.bash_unit
+test: bats
 
 bats:
 	./test/bats/bin/bats test/tests
@@ -29,3 +26,4 @@ readme:
 get_upstream:
 	$(call get,imagemagick-imslp.sh)
 	$(call get,mscore-to-eps.sh)
+	$(call get,rsync-backup.sh)
