@@ -48,18 +48,12 @@ OPTIONS
 	-h, --help
 	  Show this help message.
 	-n, --no-clean
-	  Do not remove / clean intermediate *.$INTER_FORMAT files"
-
-if [ $(uname) = 'Darwin' ]; then
-	if command -v greadlink > /dev/null ; then
-		unalias readlink > /dev/null 2>&1
-		alias readlink=greadlink
-	else
-		echo "ERROR: GNU utils required for Mac. You may use
-homebrew to install them: brew install coreutils gnu-sed"
-		exit 1
-	fi
-fi
+	  Do not remove / clean intermediate *.$INTER_FORMAT files
+	-s, --short-description
+	  Show a short description / summary.
+	-v, --version
+	  Show the version number of this script.
+"
 
 # Exit codes
 # Invalid option: 2
@@ -169,10 +163,33 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
+_check_exec() {
+	if ! command -v "$1" > /dev/null 2>&1 ; then
+		echo "Missing binary “$1”!" >&2
+		exit 2
+	fi
+}
+
 ## This SEPARATOR is required for test purposes. Please don’t remove! ##
+
+if [ $(uname) = 'Darwin' ]; then
+	if command -v greadlink > /dev/null ; then
+		unalias readlink > /dev/null 2>&1
+		alias readlink=greadlink
+	else
+		echo "ERROR: GNU utils required for Mac. You may use
+homebrew to install them: brew install coreutils gnu-sed"
+		exit 1
+	fi
+fi
 
 _getopts $@
 shift $GETOPTS_SHIFT
+
+_check_exec mscore
+_check_exec pdfcrop
+_check_exec pdfinfo
+_check_exec pdftops
 
 FILE="$1"
 
