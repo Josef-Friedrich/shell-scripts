@@ -112,6 +112,8 @@ The folder must contain only one *.cue file and one audio file.
 ```
 Usage: easy-nsca.sh [<options>] <service> <check-command>
 
+A convenient script wrapper around send_nsca.
+
 Environment variables: (to place in your *rc files of your shell)
 
 	- NSCA_SERVER
@@ -127,7 +129,7 @@ Options:
 	-h:                Show this help.
 	-H NSCA_SERVER:    IP address of the Nagios server.
 	-n HOST_SERVICE:   Host of the service.
-	-p PATH_CHECK: Folder containing the check commands.
+	-p PATH_CHECK:     Folder containing the check commands.
 	                   (default: /usr/lib/nagios/plugins)
 	-o OUTPUT:         Output of the check commands.
 	-r RETURN:         Plugin return codes: 0 Ok, 1 Warning,
@@ -207,20 +209,7 @@ Options:
 ## ./imagemagick-imslp.sh
 
 ```
-Usage: imagemagick-imslp.sh [-bfht] <filename-or-glob-pattern>
-
-This is a wrapper script around imagemagick to process image files
-suitable for imslp.org (International Music Score Library Project)
-
-http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
-
-OPTIONS:
-	-c: Use CCITT Group 4 compress. This options generates a PDF file
-	-b: backup original images (add .bak to filename)
-	-f: force
-	-h: Show this help message
-	-t: threshold, default 50%
-
+Usage: imagemagick-imslp.sh [-bcfhjrt] <filename-or-glob-pattern> A wrapper script for imagemagick to process image files suitable for imslp.org (International Music Score Library Project) http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern OPTIONS: -c, --compression: Use CCITT Group 4 compression. This options generates a PDF file -b, --backup: backup original images (add .bak to filename) -f, --force: force -h, --help: Show this help message -j, --join: Join single paged PDF files to one PDF file -r, --resize: Resize 200% -t, --threshold: threshold, default 50%
 ```
 
 ## ./images-to-date-folders.sh
@@ -289,7 +278,9 @@ Options:
 ## ./mscore-to-eps.sh
 
 ```
-Usage: mscore-to-eps.sh [-h] [-n] [<path>]
+Usage: mscore-to-eps.sh [-hnsv] [<path>]
+
+Convert MuseScore files (*.mscz, *.mscx) to the EPS file format.
 
 Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
 'Inkscape'. If <path> is omitted, all MuseScore files in the
@@ -301,9 +292,10 @@ DEPENDENCIES
 	'Inkscape'
 
 OPTIONS
-	-h, --help	Show this help message.
-	-n, --no-clean 	Do not remove / clean intermediate
-	                *.pdf files
+	-h, --help
+	  Show this help message.
+	-n, --no-clean
+	  Do not remove / clean intermediate *.pdf files
 ```
 
 ## ./mv-to-alphbetical-folders.sh
@@ -387,11 +379,7 @@ rm-video-by-height.sh [-hd] [ -H <height> ] <folder>
 ```
 Usage: rsync-backup [-abBdehlLmn] <source> <destination>
 
-DESCRIPTION
-	A wrapper command for rsync with the main features:
-		- Backups in in the folder '.rsync-backup/backups'
-		- Logging per e mail.
-		- Source und destination folder checks over scp.
+A wrapper script for rsync with source und destination accessibility checks, advanced logging and backup support.
 
 OPTIONS
 	-a <path>: Creates a .rsync-backup/please-sync affirmation file for the given folder.
@@ -442,7 +430,7 @@ OPTIONS:
 
 Use this options:
 
-smartctl 6.5 2016-05-07 r4318 [x86_64-linux-4.12.4-1-ARCH] (local build)
+smartctl 6.6 2016-05-31 r4324 [x86_64-linux-4.10.0-33-generic] (local build)
 Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
 
 Usage: smartctl [options] device
@@ -548,7 +536,7 @@ Usage: smartctl [options] device
   -B [+]FILE, --drivedb=[+]FILE                                       (ATA)
         Read and replace [add] drive database from FILE
         [default is +/etc/smart_drivedb.h
-         and then    /usr/share/smartmontools/drivedb.h]
+         and then    /var/lib/smartmontools/drivedb/drivedb.h]
 
 ============================================ DEVICE SELF-TEST OPTIONS =====
 
@@ -640,6 +628,8 @@ Options:
 ```
 Usage: wordpress-url-update.sh
 
+A small shell script to update the url of wordpress sites.
+
 Options:
 	-u MySQL user
 	-p MySQL password
@@ -648,8 +638,7 @@ Options:
 	-n New URL
 	-h Show usage
 
-'wordpress-url-update.sh' is a small shell script to update the url of
-wordpress sites.
+
 
 This script uses the mysql shell command. To use this script you must have
 access to the mysql server providing the data for your wordpress site
@@ -696,6 +685,11 @@ Usage: zfs-delete-all-snapshots.sh <dataset>
 
 Options:
 	-h, --help: Show this help message.
+```
+
+## ./zfs-delete-empty-snapshots.sh
+
+```
 ```
 
 ## ./zfs-diff-walkthrough.sh
