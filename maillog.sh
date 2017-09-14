@@ -26,10 +26,14 @@ fi
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-NAME="$(basename "$0")"
+NAME="maillog.sh"
 
-_usage() {
-	echo "Usage: $NAME [-b BODY ] <subject> <text-file-to-send>
+FIRST_RELEASE=
+VERSION=1.0
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/maillog.sh"
+SHORT_DESCRIPTION='Wrapper script to easily send log informations by email.'
+
+USAGE="Usage: $NAME [-b BODY ] <subject> <text-file-to-send>
 
 Wrapper script to easily send log informations by email.
 
@@ -78,9 +82,8 @@ Options:
 	-b BODY:  Text for the body of the mail.
 	-h:       Show this help text.
 	-t:       Send a test mail (no further arguments needed)."
-}
 
-### This SEPARATOR is needed for the tests. Do not remove it! ##########
+## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
 while getopts ":b:ht" OPT; do
 	case $OPT in
@@ -88,7 +91,7 @@ while getopts ":b:ht" OPT; do
 			BODY="$OPTARG"
 			;;
 		h)
-			_usage
+			echo "$USAGE"
 			exit 0
 			;;
 		t)
@@ -111,7 +114,7 @@ fi
 FILE="$2"
 
 if [ -z "$SUBJECT" ]; then
-	_usage
+	echo "$USAGE"
 	exit 1
 fi
 

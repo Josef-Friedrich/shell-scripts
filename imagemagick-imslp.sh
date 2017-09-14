@@ -25,11 +25,12 @@
 
 OUT_EXT=png
 
-_usage() {
-	echo "Usage: imagemagick-imslp.sh [-bcfhjrt] <filename-or-glob-pattern>
+SHORT_DESCRIPTION="A wrapper script for imagemagick to process image \
+files suitable for imslp.org (International Music Score Library Project)"
 
-`imagemagick-imslp.sh` a wrapper script around imagemagick to process image files
-suitable for imslp.org (International Music Score Library Project)
+USAGE="Usage: imagemagick-imslp.sh [-bcfhjrt] <filename-or-glob-pattern>
+
+$SHORT_DESCRIPTION
 
 http://imslp.org/wiki/IMSLP:Musiknoten_beisteuern
 
@@ -43,7 +44,6 @@ OPTIONS:
 	-r, --resize:       Resize 200%
 	-t, --threshold:    threshold, default 50%
 "
-}
 
 _remove_extension() {
 	echo "$1" | sed 's/\.[[:alnum:]]*$//'
@@ -112,7 +112,7 @@ _arguments() {
 			b) OPT_BACKUP=1 ;;
 			c) OPT_COMPRESSION=1 ;;
 			f) OPT_FORCE=1 ;;
-			h) _usage ; exit 0 ;;
+			h) echo $USAGE ; exit 0 ;;
 			j) OPT_JOIN=1 ;;
 			r) OPT_RESIZE=1 ;;
 			t) OPT_THRESHOLD="$OPTARG" ;;
@@ -122,7 +122,7 @@ _arguments() {
 					backup) OPT_BACKUP=1 ;;
 					compression) OPT_COMPRESSION=1 ;;
 					force) OPT_FORCE=1 ;;
-					help) _usage ; exit 0 ;;
+					help) echo $USAGE ; exit 0 ;;
 					join) OPT_JOIN=1 ;;
 					resize) OPT_RESIZE=1 ;;
 					threshold=?*) OPT_THRESHOLD="$LONG_OPTARG" ;;

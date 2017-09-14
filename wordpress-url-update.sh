@@ -23,13 +23,60 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-##
-# wordpress-update-url
-#
-# Author: Josef Friedrich <jf@josef-friedrich.de>
-# Version: 1.0
-# Date: 2014.12.31
-##
+FIRST_RELEASE=2014-12-31
+VERSION=1.0
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/wordpress-update-url.sh"
+SHORT_DESCRIPTION='A small shell script to update the url of wordpress sites.'
+USAGE="Usage: wordpress-url-update.sh
+
+$SHORT_DESCRIPTION
+
+Options:
+	-u MySQL user
+	-p MySQL password
+	-d MySQL database
+	-o Old URL
+	-n New URL
+	-h Show usage
+
+
+
+This script uses the mysql shell command. To use this script you must have
+access to the mysql server providing the data for your wordpress site
+over the shell command.
+
+# Where is the url stored in the mysql database?
+
+	* In the table 'wp_options' in the column 'option_value'.
+	* In the table 'wp_posts' in the columns 'guid' and 'post_content'.
+
+# Command line usage:
+
+	wordpress-url-update.sh -u <user> -p <password> -d <database> -n <new-url>
+
+## Example:
+
+	wordpress-url-update.sh -u root -p 5dtaJ -d wp_db -n http://new-url.com
+
+If you use the shell script frequently on the same site, it is recommended
+to edit the script file and put there your mysql connection and url
+informations:
+
+	MYSQL_USER=\"\"
+	MYSQL_PASSWORD=\"\"
+	MYSQL_DATABASE=\"\"
+	NEW_URL=\"\"
+
+## Example:
+
+	MYSQL_USER=\"root\"
+	MYSQL_PASSWORD=\"5dtaJ\"
+	MYSQL_DATABASE=\"wp_db\"
+	NEW_URL=\"http://new-url.com\"
+
+Then you can update your wordpress site executing this short command:
+
+	wordpress-url-update.sh"
 
 MYSQL_USER=""
 MYSQL_PASSWORD=""
@@ -74,59 +121,7 @@ _update_post_content() {
 	"
 }
 
-_usage() {
-	echo "Usage: $(basename "$0")
-
-Options:
-	-u MySQL user
-	-p MySQL password
-	-d MySQL database
-	-o Old URL
-	-n New URL
-	-h Show usage
-
-'$(basename "$0")' is a small shell script to update the url of
-wordpress sites.
-
-This script uses the mysql shell command. To use this script you must have
-access to the mysql server providing the data for your wordpress site
-over the shell command.
-
-# Where is the url stored in the mysql database?
-
-	* In the table 'wp_options' in the column 'option_value'.
-	* In the table 'wp_posts' in the columns 'guid' and 'post_content'.
-
-# Command line usage:
-
-	$(basename "$0") -u <user> -p <password> -d <database> -n <new-url>
-
-## Example:
-
-	$(basename "$0") -u root -p 5dtaJ -d wp_db -n http://new-url.com
-
-If you use the shell script frequently on the same site, it is recommended
-to edit the script file and put there your mysql connection and url
-informations:
-
-	MYSQL_USER=\"\"
-	MYSQL_PASSWORD=\"\"
-	MYSQL_DATABASE=\"\"
-	NEW_URL=\"\"
-
-## Example:
-
-	MYSQL_USER=\"root\"
-	MYSQL_PASSWORD=\"5dtaJ\"
-	MYSQL_DATABASE=\"wp_db\"
-	NEW_URL=\"http://new-url.com\"
-
-Then you can update your wordpress site executing this short command:
-
-	$(basename "$0")"
-}
-
-### This SEPARATOR is needed for the tests. Do not remove it! ##########
+## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
 while getopts ":u:p:d:o:n:h" OPT; do
 	case $OPT in
@@ -136,7 +131,7 @@ while getopts ":u:p:d:o:n:h" OPT; do
 		d) MYSQL_DATABASE="$OPTARG";;
 		o) OLD_URL="$OPTARG";;
 		n) NEW_URL="$OPTARG";;
-		h) _usage; exit 0 ;;
+		h) echo "$USAGE"; exit 0 ;;
 
 		\?)
 			echo "Invalid option: -$OPTARG" >&2

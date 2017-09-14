@@ -30,3 +30,4 @@ get_upstream:
 	$(call get,easy-nsca.sh)
 	$(call get,maillog.sh)
 	$(call get,wordpress-url-update.sh)
+	$(call get,zfs-delete-empty-snapshots.sh)

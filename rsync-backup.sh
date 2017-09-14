@@ -23,6 +23,11 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+FIRST_RELEASE=2013-12-16
+VERSION=1.0
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/rsync-backup.sh"
+SHORT_DESCRIPTION='A wrapper script for rsync with source und destination accessibility checks, advanced logging and backup support.'
+
 ########################################################################
 # Variables
 ########################################################################
@@ -58,6 +63,49 @@ fi
 if [ ! -d "$TMP_FOLDER" ]; then
 	mkdir "$TMP_FOLDER"
 fi
+
+
+USAGE="Usage: rsync-backup [-abBdehlLmn] <source> <destination>
+
+$SHORT_DESCRIPTION
+
+OPTIONS
+	-a <path>: Creates a $RSYNC_FOLDER/$AFFIRMATION_FILE affirmation file for the given folder.
+	-b: Beep.
+	-B: Backup.
+	-d: Delete all log file in the log folder.
+	-e: Show execution log.
+	-h: Show help.
+	-l: Show log summary.
+	-L: Show log folder.
+	-m: Send logs per mail.
+	-n: Send NSCA message to nagios.
+
+LOG FILES
+	GENERAL LOG FILE
+		$LOG_FOLDER_HOST/summary.log
+		$LOG_FOLDER_HOST/execution.log
+
+	LOG FILE PER DATE, SOURCE AND DESTINATION
+		Directory: $LOG_FOLDER_HOST
+		Naming convention: log_\$DATE_\$HOSTNAME_\$SOURCE_\$DESTINATION.log
+
+EXCLUDES
+	To exclude some files or folders place a 'excludes' file in the destination
+	folder ($RSYNC_FOLDER/$EXCLUDE_FILE). For further informations read the
+	'--exclude-from' section in the 'rsync' manual.
+
+AFFIRMATION_FILE
+	Synchronization only works, if in both folders (source and destination) a
+	affirmation file exists ($RSYNC_FOLDER/$AFFIRMATION_FILE).
+
+CONFIGURATION
+	Custom configurations can be done in /etc/rsync-backup.conf.
+
+DEPENDENCIES
+	- rsync
+	- scp
+	- tee"
 
 ########################################################################
 # Accessibility check.
@@ -422,57 +470,6 @@ _date() {
 	date +%Y-%m-%dT%H-%M-%S
 }
 
-##
-# Show a short help text.
-##
-_help_show() {
-	echo "Usage: rsync-backup [-abBdehlLmn] <source> <destination>
-
-DESCRIPTION
-	A wrapper command for rsync with the main features:
-		- Backups in in the folder '$BACKUP_FOLDER'
-		- Logging per e mail.
-		- Source und destination folder checks over scp.
-
-OPTIONS
-	-a <path>: Creates a $RSYNC_FOLDER/$AFFIRMATION_FILE affirmation file for the given folder.
-	-b: Beep.
-	-B: Backup.
-	-d: Delete all log file in the log folder.
-	-e: Show execution log.
-	-h: Show help.
-	-l: Show log summary.
-	-L: Show log folder.
-	-m: Send logs per mail.
-	-n: Send NSCA message to nagios.
-
-LOG FILES
-	GENERAL LOG FILE
-		$LOG_FOLDER_HOST/summary.log
-		$LOG_FOLDER_HOST/execution.log
-
-	LOG FILE PER DATE, SOURCE AND DESTINATION
-		Directory: $LOG_FOLDER_HOST
-		Naming convention: log_\$DATE_\$HOSTNAME_\$SOURCE_\$DESTINATION.log
-
-EXCLUDES
-	To exclude some files or folders place a 'excludes' file in the destination
-	folder ($RSYNC_FOLDER/$EXCLUDE_FILE). For further informations read the
-	'--exclude-from' section in the 'rsync' manual.
-
-AFFIRMATION_FILE
-	Synchronization only works, if in both folders (source and destination) a
-	affirmation file exists ($RSYNC_FOLDER/$AFFIRMATION_FILE).
-
-CONFIGURATION
-	Custom configurations can be done in /etc/rsync-backup.conf.
-
-DEPENDENCIES
-	- rsync
-	- scp
-	- tee"
-}
-
 ########################################################################
 # Process
 ########################################################################
@@ -505,7 +502,7 @@ _execute() {
 				;;
 
 			h)
-				_help_show
+				echo "$USAGE"
 				exit 0
 				;;
 

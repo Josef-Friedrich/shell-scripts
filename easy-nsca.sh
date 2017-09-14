@@ -35,8 +35,13 @@ fi
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-_usage() {
-	echo "Usage: $(basename "$0") [<options>] <service> <check-command>
+FIRST_RELEASE=2016-06-28
+VERSION=1.0
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/easy-nsca.sh"
+SHORT_DESCRIPTION='A convenient script wrapper around send_nsca.'
+USAGE="Usage: $(basename "$0") [<options>] <service> <check-command>
+
+$SHORT_DESCRIPTION
 
 Environment variables: (to place in your *rc files of your shell)
 
@@ -53,7 +58,7 @@ Options:
 	-h:                Show this help.
 	-H NSCA_SERVER:    IP address of the Nagios server.
 	-n HOST_SERVICE:   Host of the service.
-	-p PATH_CHECK: Folder containing the check commands.
+	-p PATH_CHECK:     Folder containing the check commands.
 	                   (default: /usr/lib/nagios/plugins)
 	-o OUTPUT:         Output of the check commands.
 	-r RETURN:         Plugin return codes: 0 Ok, 1 Warning,
@@ -63,7 +68,6 @@ Examples:
 
 $(basename "$0") \"APT\" \"check_apt -t 100\"
 $(basename "$0") \"Disk space\" \"check_disk -w 10% -c 5% /dev/sda1\""
-}
 
 _nsca() {
 	if [ -f /usr/sbin/send_nsca ]; then
@@ -140,7 +144,7 @@ _send_nsca() {
 	fi
 }
 
-### This SEPARATOR is needed for the tests. Do not remove it! ##########
+## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
 while getopts ":c:hH:n:p:o:r:" OPT; do
 	case $OPT in
@@ -149,7 +153,7 @@ while getopts ":c:hH:n:p:o:r:" OPT; do
 			;;
 
 		h)
-			_usage
+			echo "$USAGE"
 			exit 0
 			;;
 
@@ -186,7 +190,7 @@ SERVICE="$1"
 CHECK_COMMAND="$2"
 
 if [ -z "$SERVICE" ]; then
-	_usage
+	echo "$USAGE"
 	exit 1
 fi
 

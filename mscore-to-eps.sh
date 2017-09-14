@@ -27,8 +27,13 @@ EPS_TOOL=pdftops
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-_usage() {
-	echo "Usage: $(basename "$0") [-h] [-n] [<path>]
+FIRST_RELEASE=2017-08-13
+VERSION=1.0
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/mscore-to-eps.sh"
+SHORT_DESCRIPTION='Convert MuseScore files (*.mscz, *.mscx) to the EPS file format.'
+USAGE="Usage: mscore-to-eps.sh [-hnsv] [<path>]
+
+$SHORT_DESCRIPTION
 
 Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
 'Inkscape'. If <path> is omitted, all MuseScore files in the
@@ -40,10 +45,10 @@ DEPENDENCIES
 	'Inkscape'
 
 OPTIONS
-	-h, --help	Show this help message.
-	-n, --no-clean 	Do not remove / clean intermediate
-	                *.$INTER_FORMAT files"
-}
+	-h, --help
+	  Show this help message.
+	-n, --no-clean
+	  Do not remove / clean intermediate *.$INTER_FORMAT files"
 
 if [ $(uname) = 'Darwin' ]; then
 	if command -v greadlink > /dev/null ; then
@@ -55,6 +60,46 @@ homebrew to install them: brew install coreutils gnu-sed"
 		exit 1
 	fi
 fi
+
+# Exit codes
+# Invalid option: 2
+# Missing argument: 3
+# No argument allowed: 4
+_getopts() {
+	while getopts ':hnsv-:' OPT ; do
+		case $OPT in
+			h) echo "$USAGE" ; exit 0 ;;
+			n) OPT_NO_CLEAN=1 ;;
+			s) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
+			v) echo "$VERSION" ; exit 0 ;;
+
+			\?) echo "Invalid option “-$OPTARG”!" >&2 ; exit 2 ;;
+			:) echo "Option “-$OPTARG” requires an argument!" >&2 ; exit 3 ;;
+
+			-)
+				LONG_OPTARG="${OPTARG#*=}"
+
+				case $OPTARG in
+					help) echo "$USAGE" ; exit 0 ;;
+					no-clean) OPT_NO_CLEAN=1 ;;
+					short-description) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
+					version) echo "$VERSION" ; exit 0 ;;
+
+					help*|no-clean*|short-description*|version*)
+						echo "No argument allowed for the option “--$OPTARG”!" >&2
+						exit 4
+						;;
+
+					'') break ;; # "--" terminates argument processing
+					*) echo "Invalid option “--$OPTARG”!" >&2 ; exit 2 ;;
+
+				esac
+				;;
+
+		esac
+	done
+	GETOPTS_SHIFT=$((OPTIND - 1))
+}
 
 _mscore() {
 	if [ "$(uname)" = "Darwin" ]; then
@@ -100,7 +145,7 @@ _to_eps() {
 }
 
 _clean() {
-	if [ ! "$NO_CLEAN" = "1" ]; then
+	if [ ! "$OPT_NO_CLEAN" = "1" ]; then
 		rm -f "$1".$INTER_FORMAT
 	fi
 }
@@ -124,41 +169,30 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
-### This SEPARATOR is needed for the tests. Do not remove it! ##########
+## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
-if [ "$(basename "$0")" = "mscore-to-eps.sh" ]; then
+_getopts $@
+shift $GETOPTS_SHIFT
 
-	if [ "$1" = '-n' ] || [ "$1" = '--no-clean' ]; then
-		NO_CLEAN="1"
-		shift
-	fi
+FILE="$1"
 
-	if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
-		_usage
-		exit 0
-	fi
-
-	FILE="$1"
-
-	if [ -f "$FILE" ]; then
-		_do_file "$FILE"
-		exit 0
-	fi
-
-	if [ -d "$FILE" ]; then
-		FILES=$(find "$FILE" -iname '*.mscz' -or -iname '*.mscx')
-	elif [ -z "$FILE" ]; then
-		FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
-	fi
-
-	if [ "$FILES" = '' ]; then
-		echo 'No files to convert found!'
-		_usage
-		exit 1
-	fi
-
-	for FILE in $FILES; do
-		_do_file "$FILE"
-	done
-
+if [ -f "$FILE" ]; then
+	_do_file "$FILE"
+	exit 0
 fi
+
+if [ -d "$FILE" ]; then
+	FILES=$(find "$FILE" -iname '*.mscz' -or -iname '*.mscx')
+elif [ -z "$FILE" ]; then
+	FILES=$(find . -iname '*.mscz' -or -iname '*.mscx')
+fi
+
+if [ "$FILES" = '' ]; then
+	echo 'No files to convert found!'
+	_usage
+	exit 1
+fi
+
+for FILE in $FILES; do
+	_do_file "$FILE"
+done
