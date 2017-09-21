@@ -216,7 +216,7 @@ _join() {
 _getopts $@
 
 if [ -z "$IMAGES" ]; then
-	_usage
+	echo "$USAGE" >&2
 	exit 1
 fi
 
