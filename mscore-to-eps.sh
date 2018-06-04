@@ -163,7 +163,7 @@ _do_file() {
 	_clean "$BASENAME"
 }
 
-_check_exec() {
+_check_for_executable() {
 	if ! command -v "$1" > /dev/null 2>&1 ; then
 		echo "Missing binary “$1”!" >&2
 		exit 2
@@ -186,10 +186,10 @@ fi
 _getopts $@
 shift $GETOPTS_SHIFT
 
-_check_exec mscore
-_check_exec pdfcrop
-_check_exec pdfinfo
-_check_exec pdftops
+_check_for_executable mscore
+_check_for_executable pdfcrop
+_check_for_executable pdfinfo
+_check_for_executable pdftops
 
 FILE="$1"
 

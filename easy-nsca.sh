@@ -37,7 +37,7 @@ fi
 
 FIRST_RELEASE=2016-06-28
 VERSION=1.0
-PROJECT_PAGES="https://github.com/Josef-Friedrich/easy-nsca.sh"
+PROJECT_PAGES="https://github.com/JosefFriedrich-shell/easy-nsca.sh"
 SHORT_DESCRIPTION='A convenient script wrapper around send_nsca.'
 USAGE="Usage: $(basename "$0") [<options>] <service> <check-command>
 

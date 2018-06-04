@@ -24,10 +24,13 @@ readme:
 	done
 
 get_upstream:
-	$(call get,imagemagick-imslp.sh)
-	$(call get,mscore-to-eps.sh)
-	$(call get,rsync-backup.sh)
 	$(call get,easy-nsca.sh)
+	$(call get,imagemagick-imslp.sh)
 	$(call get,maillog.sh)
+	$(call get,mscore-to-eps.sh)
+	$(call get,nsupdate-wrapper.sh)
+	$(call get,rsync-backup.sh)
+	$(call get,skeleton.sh)
+	$(call get,test-helper.sh)
 	$(call get,wordpress-url-update.sh)
 	$(call get,zfs-delete-empty-snapshots.sh)
