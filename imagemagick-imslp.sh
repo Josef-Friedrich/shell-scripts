@@ -29,7 +29,7 @@ NAME="$(basename "$0")"
 PROJECT_NAME="$(basename "$(pwd)")"
 FIRST_RELEASE=2017-08-11
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/imagemagick-imslp.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/imagemagick-imslp.sh"
 SHORT_DESCRIPTION="A wrapper script for imagemagick to process image \
 files suitable for imslp.org (International Music Score Library Project)"
 USAGE="Usage: imagemagick-imslp.sh [-bcfhjrSstv] <filename-or-glob-pattern>

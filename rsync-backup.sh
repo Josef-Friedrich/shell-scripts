@@ -25,7 +25,7 @@
 
 FIRST_RELEASE=2013-12-16
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/rsync-backup.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/rsync-backup.sh"
 SHORT_DESCRIPTION='A wrapper script for rsync with source und destination accessibility checks, advanced logging and backup support.'
 
 ########################################################################

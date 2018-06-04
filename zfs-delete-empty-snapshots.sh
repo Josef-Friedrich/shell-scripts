@@ -6,7 +6,7 @@
 
 FIRST_RELEASE=2017-08-25
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/zfs-delete-empty-snapshots.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/zfs-delete-empty-snapshots.sh"
 SHORT_DESCRIPTION='Delete empty ZFS snapshots in a secure manner.'
 USAGE="Usage: zfs-delete-empty-snapshots.sh <dataset>
 

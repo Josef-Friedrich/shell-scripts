@@ -30,7 +30,7 @@ NAME="maillog.sh"
 
 FIRST_RELEASE=
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/maillog.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/maillog.sh"
 SHORT_DESCRIPTION='Wrapper script to easily send log informations by email.'
 
 USAGE="Usage: $NAME [-b BODY ] <subject> <text-file-to-send>

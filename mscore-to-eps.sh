@@ -29,7 +29,7 @@ EPS_TOOL=pdftops
 
 FIRST_RELEASE=2017-08-13
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/mscore-to-eps.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/mscore-to-eps.sh"
 SHORT_DESCRIPTION='Convert MuseScore files (*.mscz, *.mscx) to the EPS file format.'
 USAGE="Usage: mscore-to-eps.sh [-hnsv] [<path>]
 

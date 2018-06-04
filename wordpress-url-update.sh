@@ -25,7 +25,7 @@
 
 FIRST_RELEASE=2014-12-31
 VERSION=1.0
-PROJECT_PAGES="https://github.com/JosefFriedrich-shell/wordpress-update-url.sh"
+PROJECT_PAGES="https://github.com/Josef-Friedrich/wordpress-update-url.sh"
 SHORT_DESCRIPTION='A small shell script to update the url of wordpress sites.'
 USAGE="Usage: wordpress-url-update.sh
 
