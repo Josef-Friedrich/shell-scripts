@@ -1,8 +1,6 @@
 #! /bin/sh
 
-INTER_FORMAT=pdf
-#EPS_TOOL=inkscape
-EPS_TOOL=pdftops
+MSCORE=/usr/bin/mscore3
 
 # MIT License
 #
@@ -48,7 +46,7 @@ OPTIONS
 	-h, --help
 	  Show this help message.
 	-n, --no-clean
-	  Do not remove / clean intermediate *.$INTER_FORMAT files
+	  Do not remove / clean intermediate *.pdf files
 	-s, --short-description
 	  Show a short description / summary.
 	-v, --version
@@ -60,11 +58,13 @@ OPTIONS
 # Missing argument: 3
 # No argument allowed: 4
 _getopts() {
-	while getopts ':hnsv-:' OPT ; do
+	while getopts ':ehnsSv-:' OPT ; do
 		case $OPT in
+			e) OPT_EPS=1 ;;
 			h) echo "$USAGE" ; exit 0 ;;
 			n) OPT_NO_CLEAN=1 ;;
-			s) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
+			s) OPT_SVG=1 ;;
+			S) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 			v) echo "$VERSION" ; exit 0 ;;
 
 			\?) echo "Invalid option “-$OPTARG”!" >&2 ; exit 2 ;;
@@ -74,12 +74,14 @@ _getopts() {
 				LONG_OPTARG="${OPTARG#*=}"
 
 				case $OPTARG in
+					eps) OPT_EPS=1 ;;
 					help) echo "$USAGE" ; exit 0 ;;
 					no-clean) OPT_NO_CLEAN=1 ;;
+					svg) OPT_SVG=1 ;;
 					short-description) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 					version) echo "$VERSION" ; exit 0 ;;
 
-					help*|no-clean*|short-description*|version*)
+					eps*|help*|no-clean*|svg*|short-description*|version*)
 						echo "No argument allowed for the option “--$OPTARG”!" >&2
 						exit 4
 						;;
@@ -95,72 +97,100 @@ _getopts() {
 	GETOPTS_SHIFT=$((OPTIND - 1))
 }
 
-_mscore() {
-	if [ "$(uname)" = "Darwin" ]; then
-		/Applications/MuseScore\ 2.app/Contents/MacOS/mscore \
-			--export-to "$1".$INTER_FORMAT "$2"
-	else
-		echo "Export to $1"
-		mscore --export-to "$1".$INTER_FORMAT "$2"
-	fi
-}
+# By default we build eps and svg files.
+if [ -z "$OPT_EPS" ] && [ -z "$OPT_SVG" ]; then
+	OPT_EPS=1
+	OPT_SVG=1
+fi
 
-_inkscape() {
-	if [ "$(uname)" = "Darwin" ]; then
-		INKSCAPE=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
-	else
-		INKSCAPE=inkscape
-	fi
-	$INKSCAPE \
-		--export-area-drawing \
-		--without-gui \
-		--export-eps="$1".eps "$1".$INTER_FORMAT
+_mscore_to_pdf() {
+	local MSCORE_FILE PDF_FILE
+	MSCORE_FILE="$1"
+	PDF_FILE="$2"
+	"$MSCORE" --export-to "$PDF_FILE" "$MSCORE_FILE"
 }
 
 _pdf_pages() {
-	pdfinfo "$1" | grep 'Pages:' | awk '{print $2}'
+	local PDF_FILE
+	PDF_FILE="$1"
+	pdfinfo "$PDF_FILE" | grep 'Pages:' | awk '{print $2}'
 }
 
-_pdftops() {
-	pdfcrop "$1" "$1"
-	if [ "$2" -gt 0 ]; then
-		pdftops -eps -f "$2" -l "$2" "$1" "$(echo "$1" | sed "s/\.pdf/_$2\.eps/g")"
+# $1: pdf file
+# $2: page number
+_to_eps() {
+	local PDF_FILE PAGE_NUMBER
+	PDF_FILE="$1"
+	PAGE_NUMBER="$2"
+	if [ -n "$2" ]; then
+		pdftops -eps \
+			-f "$PAGE_NUMBER" \
+			-l "$PAGE_NUMBER" \
+			"$PDF_FILE" \
+			"$(echo "$PDF_FILE" | sed "s/\.pdf/_$PAGE_NUMBER\.eps/g")"
 	else
-		pdftops -eps "$1"
+		pdftops -eps "$PDF_FILE"
+	fi
+
+}
+# Usage: pdf2svg <in file.pdf> <out file.svg> [<page no>]
+_to_svg() {
+	local PDF_FILE PAGE_NUMBER
+	PDF_FILE="$1"
+	PAGE_NUMBER="$2"
+	if [ -n "$PAGE_NUMBER" ] && [ "$PAGE_NUMBER" -gt 0 ]; then
+		pdf2svg \
+			"$PDF_FILE" \
+			"$(echo "$PDF_FILE" | sed "s/\.pdf/_$PAGE_NUMBER\.svg/g")" \
+			"$PAGE_NUMBER"
+	else
+		pdf2svg "$PDF_FILE" "$(echo "$PDF_FILE" | sed "s/\.pdf/\.svg/g")"
 	fi
 }
 
-_to_eps() {
-	if [ "$EPS_TOOL" = 'inkscape' ]; then
-		_inkscape "$1" "$2" > /dev/null 2>&1
-	else
-		_pdftops "$1".pdf "$2" > /dev/null 2>&1
+_pdf_to_vector() {
+	local PDF_FILE PAGE_NUMBER
+	PDF_FILE="$1"
+	PAGE_NUMBER="$2"
+	if [ "$OPT_EPS" -eq 1 ]; then
+		_to_eps "$PDF_FILE" "$PAGE_NUMBER"
+	fi
+	if [ "$OPT_SVG" -eq 1 ]; then
+		_to_svg "$PDF_FILE" "$PAGE_NUMBER"
 	fi
 }
 
 _clean() {
+	local PDF_FILE
+	PDF_FILE="$1"
 	if [ ! "$OPT_NO_CLEAN" = "1" ]; then
-		rm -f "$1".$INTER_FORMAT
+		rm -f "$PDF_FILE"
 	fi
 }
 
-_do_file() {
-	SCORE="$(readlink -f "$1")"
-	BASENAME=$(echo "$FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
+_convert_mscore_file() {
+	local MSCORE_FILE BASENAME PDF_FILE PAGES
+	MSCORE_FILE="$1"
 
-	_mscore "$BASENAME" "$SCORE" > /dev/null 2>&1
+	MSCORE_FILE="$(readlink -f "$MSCORE_FILE")"
+	BASENAME=$(echo "$MSCORE_FILE" | sed 's/\.mscx//g' | sed 's/\.mscy//g')
+	PDF_FILE="${BASENAME}.pdf"
 
-	PAGES=$(_pdf_pages "$BASENAME.$INTER_FORMAT")
+	_mscore_to_pdf "$MSCORE_FILE" "$PDF_FILE" > /dev/null 2>&1
+
+	pdfcrop "$PDF_FILE" "$PDF_FILE" > /dev/null 2>&1
+	PAGES=$(_pdf_pages "$PDF_FILE")
+
 	if [ "$PAGES" -gt 1 ]; then
 		I=1
 		while [ "$I" -le "$PAGES" ]; do
-			_to_eps "$BASENAME" "$I"
+			__pdf_to_vector "$PDF_FILE" "$I"
 		I=$((I + 1))
 		done
 	else
-		_to_eps "$BASENAME"
+		_pdf_to_vector "$PDF_FILE"
 	fi
-	_clean "$BASENAME"
+	_clean "$PDF_FILE"
 }
 
 _check_for_executable() {
@@ -172,29 +202,19 @@ _check_for_executable() {
 
 ## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
-if [ $(uname) = 'Darwin' ]; then
-	if command -v greadlink > /dev/null ; then
-		unalias readlink > /dev/null 2>&1
-		alias readlink=greadlink
-	else
-		echo "ERROR: GNU utils required for Mac. You may use
-homebrew to install them: brew install coreutils gnu-sed"
-		exit 1
-	fi
-fi
-
 _getopts $@
 shift $GETOPTS_SHIFT
 
-_check_for_executable mscore
+_check_for_executable "$MSCORE"
 _check_for_executable pdfcrop
 _check_for_executable pdfinfo
 _check_for_executable pdftops
+_check_for_executable pdf2svg
 
 FILE="$1"
 
 if [ -f "$FILE" ]; then
-	_do_file "$FILE"
+	_convert_mscore_file "$FILE"
 	exit 0
 fi
 
@@ -211,5 +231,5 @@ if [ "$FILES" = '' ]; then
 fi
 
 for FILE in $FILES; do
-	_do_file "$FILE"
+	_convert_mscore_file "$FILE"
 done
