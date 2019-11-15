@@ -4,7 +4,7 @@ MSCORE=/usr/bin/mscore3
 
 # MIT License
 #
-# Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
+# Copyright (c) 2016-19 Josef Friedrich <josef@friedrich.rocks>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -27,27 +27,30 @@ MSCORE=/usr/bin/mscore3
 
 FIRST_RELEASE=2017-08-13
 VERSION=1.0
-PROJECT_PAGES="https://github.com/Josef-Friedrich/mscore-to-eps.sh"
-SHORT_DESCRIPTION='Convert MuseScore files (*.mscz, *.mscx) to the EPS file format.'
-USAGE="Usage: mscore-to-eps.sh [-hnsv] [<path>]
+SHORT_DESCRIPTION='Convert MuseScore files (*.mscz, *.mscx) to the EPS or SVG file format.'
+USAGE="Usage: mscore-to-cropped-vector-graphics.sh [-ehnsSv] [<path>]
 
 $SHORT_DESCRIPTION
 
-Convert MuseScore files to eps using 'pdfcrop' and 'pdftops' or
-'Inkscape'. If <path> is omitted, all MuseScore files in the
+Convert MuseScore files to eps or svg using 'pdfcrop' and 'pdftops' and
+'pdf2svg'. If <path> is omitted, all MuseScore files in the
 current working directory are converted. <path> can be either a
 directory or a MuseScore file.
 
 DEPENDENCIES
-	'pdfcrop' (included in TeXlive) and 'pdftops' (Poppler tools) or
-	'Inkscape'
+	'pdfcrop' (included in TeXlive) and 'pdftops' (Poppler tools) and
+    'pdf2svg'
 
 OPTIONS
+	-e, --eps
+	  Create only EPS files.
 	-h, --help
 	  Show this help message.
 	-n, --no-clean
 	  Do not remove / clean intermediate *.pdf files
-	-s, --short-description
+	-s, --svg
+	  Create only SVG files.
+	-S, --short-description
 	  Show a short description / summary.
 	-v, --version
 	  Show the version number of this script.
