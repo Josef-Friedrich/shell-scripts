@@ -193,7 +193,7 @@ _convert_mscore_file() {
 	if [ "$PAGES" -gt 1 ]; then
 		I=1
 		while [ "$I" -le "$PAGES" ]; do
-			__pdf_to_vector "$PDF_FILE" "$I"
+			_pdf_to_vector "$PDF_FILE" "$I"
 		I=$((I + 1))
 		done
 	else
