@@ -28,7 +28,7 @@ MSCORE=/usr/bin/mscore3
 FIRST_RELEASE=2017-08-13
 VERSION=1.0
 SHORT_DESCRIPTION='Convert MuseScore files (*.mscz, *.mscx) to the EPS or SVG file format.'
-USAGE="Usage: mscore-to-cropped-vector-graphics.sh [-ehnsSv] [<path>]
+USAGE="Usage: mscore-to-vector.sh [-ehnsSv] [<path>]
 
 $SHORT_DESCRIPTION
 
@@ -47,7 +47,9 @@ OPTIONS
 	-h, --help
 	  Show this help message.
 	-n, --no-clean
-	  Do not remove / clean intermediate *.pdf files
+	  Do not remove / clean intermediate *.pdf files.
+	-N, --no-crop
+	  Do not crop.
 	-s, --svg
 	  Create only SVG files.
 	-S, --short-description
@@ -61,11 +63,12 @@ OPTIONS
 # Missing argument: 3
 # No argument allowed: 4
 _getopts() {
-	while getopts ':ehnsSv-:' OPT ; do
+	while getopts ':ehnNsSv-:' OPT ; do
 		case $OPT in
 			e) OPT_EPS=1 ;;
 			h) echo "$USAGE" ; exit 0 ;;
 			n) OPT_NO_CLEAN=1 ;;
+			N) OPT_NO_CROP=1 ;;
 			s) OPT_SVG=1 ;;
 			S) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 			v) echo "$VERSION" ; exit 0 ;;
@@ -80,11 +83,12 @@ _getopts() {
 					eps) OPT_EPS=1 ;;
 					help) echo "$USAGE" ; exit 0 ;;
 					no-clean) OPT_NO_CLEAN=1 ;;
+					no-crop) OPT_NO_CROP=1 ;;
 					svg) OPT_SVG=1 ;;
 					short-description) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 					version) echo "$VERSION" ; exit 0 ;;
 
-					eps*|help*|no-clean*|svg*|short-description*|version*)
+					eps*|help*|no-clean*|no-crop*|svg*|short-description*|version*)
 						echo "No argument allowed for the option “--$OPTARG”!" >&2
 						exit 4
 						;;
@@ -181,7 +185,9 @@ _convert_mscore_file() {
 
 	_mscore_to_pdf "$MSCORE_FILE" "$PDF_FILE" > /dev/null 2>&1
 
-	pdfcrop "$PDF_FILE" "$PDF_FILE" > /dev/null 2>&1
+	if [ -z "$OPT_NO_CROP" ]; then
+		pdfcrop "$PDF_FILE" "$PDF_FILE" > /dev/null 2>&1
+	fi
 	PAGES=$(_pdf_pages "$PDF_FILE")
 
 	if [ "$PAGES" -gt 1 ]; then
