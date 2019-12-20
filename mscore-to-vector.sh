@@ -104,12 +104,6 @@ _getopts() {
 	GETOPTS_SHIFT=$((OPTIND - 1))
 }
 
-# By default we build eps and svg files.
-if [ -z "$OPT_EPS" ] && [ -z "$OPT_SVG" ]; then
-	OPT_EPS=1
-	OPT_SVG=1
-fi
-
 _mscore_to_pdf() {
 	local MSCORE_FILE PDF_FILE
 	MSCORE_FILE="$1"
@@ -138,8 +132,8 @@ _to_eps() {
 	else
 		pdftops -eps "$PDF_FILE"
 	fi
-
 }
+
 # Usage: pdf2svg <in file.pdf> <out file.svg> [<page no>]
 _to_svg() {
 	local PDF_FILE PAGE_NUMBER
@@ -159,10 +153,10 @@ _pdf_to_vector() {
 	local PDF_FILE PAGE_NUMBER
 	PDF_FILE="$1"
 	PAGE_NUMBER="$2"
-	if [ "$OPT_EPS" -eq 1 ]; then
+	if [ -n "$OPT_EPS" ]; then
 		_to_eps "$PDF_FILE" "$PAGE_NUMBER"
 	fi
-	if [ "$OPT_SVG" -eq 1 ]; then
+	if [ -n "$OPT_SVG" ]; then
 		_to_svg "$PDF_FILE" "$PAGE_NUMBER"
 	fi
 }
@@ -213,6 +207,12 @@ _check_for_executable() {
 
 _getopts $@
 shift $GETOPTS_SHIFT
+
+# By default we build eps and svg files.
+if [ -z "$OPT_EPS" ] && [ -z "$OPT_SVG" ]; then
+	OPT_EPS=1
+	OPT_SVG=1
+fi
 
 _check_for_executable "$MSCORE"
 _check_for_executable pdfcrop
