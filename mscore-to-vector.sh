@@ -235,7 +235,7 @@ fi
 
 if [ "$FILES" = '' ]; then
 	echo 'No files to convert found!'
-	_usage
+	echo "$USAGE"
 	exit 1
 fi
 
