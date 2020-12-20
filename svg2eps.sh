@@ -25,8 +25,24 @@
 
 # https://gist.github.com/tama-sh/2786260
 
+_usage() {
+	echo "Usage: $(basename "$0") <svg-file>
+
+Convert a SVG file to the EPS format using inkscape.
+
+Options:
+	-h, --help: Show this help message."
+}
+
+### This SEPARATOR is needed for the tests. Do not remove it! ##########
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 for file in "$@"; do
 	if test "${file##*.}" = "svg" -a \( ! -e "${file%.svg}.eps" -o "$file" -nt "${file%.svg}.eps" \); then
-		inkscape "$file" -E "${file%.svg}.eps"
+		inkscape "$file" -o "${file%.svg}.eps"
 	fi
 done
