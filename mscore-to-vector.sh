@@ -50,6 +50,9 @@ OPTIONS
 	  Do not remove / clean intermediate *.pdf files.
 	-N, --no-crop
 	  Do not crop.
+	-p, --pdf-for-latex
+	  Create additionally to the eps a corresponding PDF file with the
+	  suffix -eps-converted-to.pdf.
 	-s, --svg
 	  Create only SVG files.
 	-S, --short-description
@@ -63,12 +66,13 @@ OPTIONS
 # Missing argument: 3
 # No argument allowed: 4
 _getopts() {
-	while getopts ':ehnNsSv-:' OPT ; do
+	while getopts ':ehnNpsSv-:' OPT ; do
 		case $OPT in
 			e) OPT_EPS=1 ;;
 			h) echo "$USAGE" ; exit 0 ;;
 			n) OPT_NO_CLEAN=1 ;;
 			N) OPT_NO_CROP=1 ;;
+			p) OPT_PDF_FOR_LATEX=1 ;;
 			s) OPT_SVG=1 ;;
 			S) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 			v) echo "$VERSION" ; exit 0 ;;
@@ -84,11 +88,12 @@ _getopts() {
 					help) echo "$USAGE" ; exit 0 ;;
 					no-clean) OPT_NO_CLEAN=1 ;;
 					no-crop) OPT_NO_CROP=1 ;;
+					pdf-for-latex) OPT_PDF_FOR_LATEX=1 ;;
 					svg) OPT_SVG=1 ;;
 					short-description) echo "$SHORT_DESCRIPTION" ; exit 0 ;;
 					version) echo "$VERSION" ; exit 0 ;;
 
-					eps*|help*|no-clean*|no-crop*|svg*|short-description*|version*)
+					eps*|help*|no-clean*|no-crop*|pdf-for-latex*|svg*|short-description*|version*)
 						echo "No argument allowed for the option “--$OPTARG”!" >&2
 						exit 4
 						;;
@@ -115,6 +120,14 @@ _pdf_pages() {
 	local PDF_FILE
 	PDF_FILE="$1"
 	pdfinfo "$PDF_FILE" | grep 'Pages:' | awk '{print $2}'
+}
+
+_eps_to_pdf() {
+	local EPS_FILE PDF_BASE_NAME
+	EPS_FILE="$1"
+	# logo.eps -> logo
+	PDF_BASE_NAME=${EPS_FILE%.eps}
+	epstopdf "$FILE" --outfile "${PDF_BASE_NAME}-eps-converted-to.pdf"
 }
 
 # $1: pdf file
@@ -211,6 +224,7 @@ shift $GETOPTS_SHIFT
 # By default we build eps and svg files.
 if [ -z "$OPT_EPS" ] && [ -z "$OPT_SVG" ]; then
 	OPT_EPS=1
+  OPT_PDF_FOR_LATEX=1
 	OPT_SVG=1
 fi
 
@@ -219,6 +233,7 @@ _check_for_executable pdfcrop
 _check_for_executable pdfinfo
 _check_for_executable pdftops
 _check_for_executable pdf2svg
+_check_for_executable epstopdf
 
 FILE="$1"
 
