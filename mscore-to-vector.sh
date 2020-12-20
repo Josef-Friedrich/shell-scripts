@@ -126,24 +126,30 @@ _eps_to_pdf() {
 	local EPS_FILE PDF_BASE_NAME
 	EPS_FILE="$1"
 	# logo.eps -> logo
-	PDF_BASE_NAME=${EPS_FILE%.eps}
-	epstopdf "$FILE" --outfile "${PDF_BASE_NAME}-eps-converted-to.pdf"
+	PDF_BASE_NAME="${EPS_FILE%.eps}"
+	epstopdf "$EPS_FILE" --outfile "${PDF_BASE_NAME}-eps-converted-to.pdf"
 }
 
 # $1: pdf file
 # $2: page number
 _to_eps() {
-	local PDF_FILE PAGE_NUMBER
+	local PDF_FILE PAGE_NUMBER EPS_FILE
 	PDF_FILE="$1"
 	PAGE_NUMBER="$2"
+
 	if [ -n "$2" ]; then
+		EPS_FILE="$(echo "$PDF_FILE" | sed "s/\.pdf/_$PAGE_NUMBER\.eps/g")"
 		pdftops -eps \
 			-f "$PAGE_NUMBER" \
 			-l "$PAGE_NUMBER" \
 			"$PDF_FILE" \
-			"$(echo "$PDF_FILE" | sed "s/\.pdf/_$PAGE_NUMBER\.eps/g")"
+			"$EPS_FILE"
 	else
+		EPS_FILE="$(echo "$PDF_FILE" | sed "s/\.pdf/\.eps/g")"
 		pdftops -eps "$PDF_FILE"
+	fi
+	if [ -n "$OPT_PDF_FOR_LATEX" ]; then
+		_eps_to_pdf "$EPS_FILE"
 	fi
 }
 
