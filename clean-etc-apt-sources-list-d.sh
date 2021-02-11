@@ -28,7 +28,7 @@ sudo rm -f /etc/apt/sources.list.d/*.distUpgrade
 # https://stackoverflow.com/a/3350246
 _clean() {
 	echo "Remove comments and whitespaces in the file $1"
-	sudo sed -i 's/#.*$//' -e '/^$/d' "$1"
+	sudo sed 's/#.*$//' -e '/^$/d' "$1"
 }
 
 FILES=/etc/apt/sources.list.d/*.list
