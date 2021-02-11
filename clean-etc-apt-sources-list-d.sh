@@ -37,7 +37,7 @@ for FILE in $FILES; do
 	_clean "$FILE"
 done
 
-sudo find /etc/apt/sources.list.d -size  0 -print -delete
+sudo find /etc/apt/sources.list.d -size 0 -print -delete
 
 sudo rm -f /etc/apt/sources.list.d/*.bak
 
