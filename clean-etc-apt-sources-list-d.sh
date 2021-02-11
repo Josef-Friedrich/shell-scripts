@@ -40,3 +40,6 @@ done
 sudo find /etc/apt/sources.list.d -size  0 -print -delete
 
 sudo rm -f /etc/apt/sources.list.d/*.bak
+
+sudo rm -f /etc/apt/sources.list.distUpgrade
+sudo rm -f /etc/apt/sources.list.save
