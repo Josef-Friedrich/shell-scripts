@@ -51,6 +51,15 @@ _get_empty_snapshots() {
 
 ## This SEPARATOR is required for test purposes. Please don’t remove! ##
 
+_usage() {
+	echo "$USAGE"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 if [ -z "$1" ]; then
 	echo "$USAGE" >&2
 	exit 1

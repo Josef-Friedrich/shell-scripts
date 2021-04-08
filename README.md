@@ -69,6 +69,19 @@ Run test with this command: `bats test`
 
 # Help messages of all scripts
 
+## ./backup-file.sh
+
+```
+Usage: backup-file.sh <file-path>
+
+	Copy the file and append .bak to the file name.
+
+
+OPTIONS:
+	-h, --help:       Show this message.
+
+```
+
 ## ./bandwidth-limiting-single-host.sh
 
 ```
@@ -91,6 +104,21 @@ bandwidth-limiting-single-host.sh [-d <network-interface> ] clear
 
 ```
 Usage: beepbox.sh [error|success|sync-start|sync-end|warning]
+```
+
+## ./clean-etc-apt-sources-list-d.sh
+
+```
+Usage: clean-etc-apt-sources-list-d.sh
+
+Clean up the folder /etc/apt/sources.list.d. Delete the backup
+files like '*.save' oder '*.distUpgrade'. Remove all comments from
+the configuration files. Then delete all empty files.
+
+
+OPTIONS:
+	-h, --help:       Show this message.
+
 ```
 
 ## ./cue-split.sh
@@ -139,6 +167,19 @@ Examples:
 
 easy-nsca.sh "APT" "check_apt -t 100"
 easy-nsca.sh "Disk space" "check_disk -w 10% -c 5% /dev/sda1"
+```
+
+## ./eps-converted-to-pdf-for-tex.sh
+
+```
+Usage: eps-converted-to-pdf-for-tex.sh
+
+Convert a EPS file to a PDF file. Append to the created PDF file
+-eps-converted-to.pdf. This suffix is needed by LaTeX to include
+the graphics into a document. Sometimes the automatic conversion fails.
+
+Options:
+	-h, --help: Show this help message.
 ```
 
 ## ./figlet-comment.sh
@@ -316,6 +357,24 @@ Options:
 	-t:       Send a test mail (no further arguments needed).
 ```
 
+## ./mp4box-mp4-split.sh
+
+```
+NAME
+      mp4box-mp4-split.sh - Split mp4 files without re-encoding.
+
+SYNOPSIS
+       mp4box-mp4-split.sh mp4-file start-time end-time
+
+DESCRIPTION
+       The  mp4-split-command  split  mp4  files  without  re-encoding.  It  uses  the mp4box-command of the GPAC framework. Both start and end time must be specified in this format:
+       hh-mm-ss, e. g. 01-34-23.
+
+EXAMPLES
+       mp4box-mp4-split.sh video.mp4 00-23-43 01-01-32
+
+```
+
 ## ./mscore-reopen.sh
 
 ```
@@ -347,6 +406,9 @@ OPTIONS
 	  Do not remove / clean intermediate *.pdf files.
 	-N, --no-crop
 	  Do not crop.
+	-p, --pdf-for-latex
+	  Create additionally to the eps a corresponding PDF file with the
+	  suffix -eps-converted-to.pdf.
 	-s, --svg
 	  Create only SVG files.
 	-S, --short-description
@@ -561,7 +623,7 @@ OPTIONS:
 
 Use this options:
 
-smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.4.0-58-generic] (local build)
+smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.8.0-48-generic] (local build)
 Copyright (C) 2002-19, Bruce Allen, Christian Franke, www.smartmontools.org
 
 Usage: smartctl [options] device
@@ -719,6 +781,22 @@ Options:
 	-h, --help: Show this help message.
 ```
 
+## ./subtitles-add-eng.sh
+
+```
+Usage: subtitles-add-eng.sh <extension>
+
+Merge english subtitle files srt into video files specified by an extension.
+
+e. g.: subtitles-add-eng.sh mkv
+
+```
+
+## ./subtitles-batch.sh
+
+```
+```
+
 ## ./svg2eps.sh
 
 ```
@@ -774,10 +852,36 @@ Options:
 ```
 ```
 
+## ./video-compress.sh
+
+```
+Usage: video-compress.sh <file-path>
+
+Compress a video using FFMPEG.
+
+OPTIONS:
+	-h, --help:       Show this message.
+
+```
+
 ## ./wayland-or-xorg.sh
 
 ```
 x11
+```
+
+## ./wireguard-easy-keygen.sh
+
+```
+Usage: wireguard-easy-keygen.sh <key-name>
+
+This little utility creates a private and a public wireguard key in
+the current working directory at once.
+
+wg genkey | tee key-name.privatekey | wg pubkey > key-name.publickey
+
+Options:
+	-h, --help: Show this help message.
 ```
 
 ## ./wordpress-url-update.sh
@@ -853,6 +957,10 @@ Options:
 ## ./zfs-delete-empty-snapshots.sh
 
 ```
+Usage: zfs-delete-empty-snapshots.sh <dataset>
+
+Delete empty ZFS snapshots in a secure manner.
+
 ```
 
 ## ./zfs-diff-walkthrough.sh

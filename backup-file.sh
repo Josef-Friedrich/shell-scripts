@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2021 Josef Friedrich <josef@friedrich.rocks>
+# Copyright (c) 2016 Josef Friedrich <josef@friedrich.rocks>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,11 +24,13 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 _usage() {
-	echo "Usage: $(basename $0) <extension>
+	echo "Usage: $(basename "$0") <file-path>
 
-Merge english subtitle files srt into video files specified by an extension.
+	Copy the file and append .bak to the file name.
 
-e. g.: $(basename $0) mkv
+
+OPTIONS:
+	-h, --help:       Show this message.
 "
 }
 
@@ -37,11 +39,16 @@ if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
 	exit 0
 fi
 
-EXTENSION=$1
+FILE="$1"
 
-if [ -z "$EXTENSION" ]; then
-  _usage
+if [ -z "$FILE" ]; then
+	_usage
 	exit 1
 fi
 
-mkvmerge -o out.$EXTENSION *.$EXTENSION --language "0:eng" *.srt
+if [ -z $FILE ]; then
+	echo "Usage: backup <file>"
+	exit 1
+fi
+
+cp "$FILE" "$FILE.bak"

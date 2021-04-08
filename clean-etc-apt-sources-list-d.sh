@@ -23,6 +23,25 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Clean up the folder /etc/apt/sources.list.d. Delete the backup
+files like '*.save' oder '*.distUpgrade'. Remove all comments from
+the configuration files. Then delete all empty files.
+
+
+OPTIONS:
+	-h, --help:       Show this message.
+"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
+
 sudo rm -f /etc/apt/sources.list.d/*.distUpgrade
 
 # https://stackoverflow.com/a/3350246

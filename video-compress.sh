@@ -29,6 +29,26 @@
 # -preset options. Those are ultrafast, superfast, veryfast, faster,
 # fast, medium, slow, slower, veryslow. Default is medium.
 
+_usage() {
+	echo "Usage: $(basename "$0") <file-path>
+
+Compress a video using FFMPEG.
+
+OPTIONS:
+	-h, --help:       Show this message.
+"
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
+if [ -z "$1" ]; then
+	_usage
+	exit 1
+fi
+
 ffmpeg -i "$1" \
   -vf scale=-2:720 \
   -c:v libx264 \
