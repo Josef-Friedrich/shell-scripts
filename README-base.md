@@ -61,9 +61,27 @@ fi
 mail -s "$SUBJECT" $MAILLOG_EMAIL < "$FILE"
 ```
 
+## Standard option `-h` or `--help`
+
+```sh
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Options:
+	-h, --help: Show this help message."
+}
+```
+
+```sh
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+```
+
 # Test
 
-Run test with this command: `bats test`
+Run test with this command: `make test`
 
 ---
 

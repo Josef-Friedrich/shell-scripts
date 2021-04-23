@@ -30,9 +30,18 @@ _control() {
 }
 
 _usage() {
-	echo "Usage: $(basename $0) disable|enable"
+	echo "Usage: $(basename $0) disable|dis|enable|en
+
+Enable the ipv6 support in the Linux kernel.
+
+Options:
+	-h, --help: Show this help message."
 }
 
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
 
 if [ -z "$1" ]; then
 	_usage

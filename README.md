@@ -61,9 +61,27 @@ fi
 mail -s "$SUBJECT" $MAILLOG_EMAIL < "$FILE"
 ```
 
+## Standard option `-h` or `--help`
+
+```sh
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Options:
+	-h, --help: Show this help message."
+}
+```
+
+```sh
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+```
+
 # Test
 
-Run test with this command: `bats test`
+Run test with this command: `make test`
 
 ---
 
@@ -303,6 +321,29 @@ Options:
 	-h, --help: Show this help message.
 ```
 
+## ./ipv6-control.sh
+
+```
+Usage: ipv6-control.sh disable|dis|enable|en
+
+Enable the ipv6 support in the Linux kernel.
+
+Options:
+	-h, --help: Show this help message.
+```
+
+## ./latexmk-recursive.sh
+
+```
+Usage: latexmk-recursive.sh
+
+Run latexmk recursively on all TeX files in the parent working directory.
+Clean all tmp files. Show OK or ERROR for the build status.
+
+Options:
+	-h, --help: Show this help message.
+```
+
 ## ./maillog.sh
 
 ```
@@ -484,10 +525,34 @@ Options:
 
 ```
 
+## ./open-by-extension.sh
+
+```
+Usage: open-by-extension.sh
+
+Open all files with the specified extension recursively in the parent
+working directory.
+
+Example:
+	open-by-extension.sh .txt (Opens all *.txt files)
+
+Options:
+	-h, --help: Show this help message.
+```
+
 ## ./otfinfo-all.sh
 
 ```
 Usage: otfinfo-all.sh
+
+Options:
+	-h, --help: Show this help message.
+```
+
+## ./pdf2eps.sh
+
+```
+Usage: pdf2eps.sh <pdf-file-without-ext> [page-number]
 
 Options:
 	-h, --help: Show this help message.
@@ -623,7 +688,7 @@ OPTIONS:
 
 Use this options:
 
-smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.8.0-48-generic] (local build)
+smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.4.0-72-generic] (local build)
 Copyright (C) 2002-19, Bruce Allen, Christian Franke, www.smartmontools.org
 
 Usage: smartctl [options] device
@@ -770,6 +835,15 @@ Usage: smartctl [options] device
           (Prints all SMART info for 3rd ATA disk of the 1st enclosure
            on Areca RAID controller)
 
+```
+
+## ./ssh-clean-known-hosts.sh
+
+```
+Usage: ssh-clean-known-hosts.sh <line-number>
+
+Options:
+	-h, --help: Show this help message.
 ```
 
 ## ./ssh-show-ids.sh

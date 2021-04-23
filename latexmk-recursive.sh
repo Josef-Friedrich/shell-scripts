@@ -23,6 +23,21 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Run latexmk recursively on all TeX files in the parent working directory.
+Clean all tmp files. Show OK or ERROR for the build status.
+
+Options:
+	-h, --help: Show this help message."
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 _latexmk () {
 	# -cd  Change to directory of source file when processing it
 	# -gg  Super go mode: clean out generated files (-CA), and then process files regardless of file timestamps

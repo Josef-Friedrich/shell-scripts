@@ -23,10 +23,22 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0") <line-number>
+
+Options:
+	-h, --help: Show this help message."
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 LINE="$1"
 
 if [ -z "$LINE" ]; then
-  echo "Usage: ssh-clean-knows-hosts <line number>"
+  _usage
   exit 1
 fi
 

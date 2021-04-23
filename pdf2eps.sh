@@ -23,11 +23,23 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0") <pdf-file-without-ext> [page-number]
+
+Options:
+	-h, --help: Show this help message."
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 FILE="$1"
 PAGE_NUMBER="$2"
 
 if [ -z "$FILE" ]; then
-	echo "Usage: $(basename $0) <pdf file without ext> <page number>"
+	_usage
 	exit 1
 fi
 

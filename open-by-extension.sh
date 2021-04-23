@@ -23,11 +23,26 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+_usage() {
+	echo "Usage: $(basename "$0")
+
+Open all files with the specified extension recursively in the parent
+working directory.
+
+Example:
+	$(basename "$0") .txt (Opens all *.txt files)
+
+Options:
+	-h, --help: Show this help message."
+}
+
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
+	_usage
+	exit 0
+fi
+
 if [ -z "$1" ]; then
-  echo "Usage: open-by-extension <extension>
-
-example: open-by-extension .txt (Opens all *.txt files)"
-
+  _usage
   exit 1
 fi
 
