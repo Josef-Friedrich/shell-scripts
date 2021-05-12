@@ -44,6 +44,6 @@ if [ -z "$FEED_URL" ]; then
 fi
 
 # apt install xmlstarlet
-curl -s "$FEED_URL" | \
+curl --silent "$FEED_URL" | \
   xmlstarlet sel -N atom="http://www.w3.org/2005/Atom" -t -m './/enclosure' -v '@url' -n | \
-  wget -i -
+  wget --continue --input-file -
