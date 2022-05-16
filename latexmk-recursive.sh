@@ -54,3 +54,10 @@ _latexmk () {
 for TEX_FILE in $(find . -iname "*.tex" | sort); do
 	_latexmk "$TEX_FILE"
 done
+
+OLD_IFS="$IFS"
+IFS=$'\n'
+for TEX_FILE in $(find . -iname "*.tex" | sort); do
+	_latexmk "$TEX_FILE"
+done
+IFS="$OLD_IFS"
