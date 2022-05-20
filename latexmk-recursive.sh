@@ -51,10 +51,6 @@ _latexmk () {
 	latexmk -cd -c -silent "$1" > /dev/null 2>&1
 }
 
-for TEX_FILE in $(find . -iname "*.tex" | sort); do
-	_latexmk "$TEX_FILE"
-done
-
 OLD_IFS="$IFS"
 IFS=$'\n'
 for TEX_FILE in $(find . -iname "*.tex" | sort); do
