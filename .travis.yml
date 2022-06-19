@@ -1,6 +1,0 @@
-language: bash
-dist: trusty
-sudo: required
-
-script:
-  - make -s test
