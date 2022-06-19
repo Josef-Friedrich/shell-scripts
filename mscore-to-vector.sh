@@ -1,10 +1,11 @@
 #! /bin/sh
 
-MSCORE=/usr/bin/mscore3
+# MSCORE=/usr/bin/mscore3
+MSCORE="flatpak run org.musescore.MuseScore"
 
 # MIT License
 #
-# Copyright (c) 2016-19 Josef Friedrich <josef@friedrich.rocks>
+# Copyright (c) 2016-22 Josef Friedrich <josef@friedrich.rocks>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -113,7 +114,7 @@ _mscore_to_pdf() {
 	local MSCORE_FILE PDF_FILE
 	MSCORE_FILE="$1"
 	PDF_FILE="$2"
-	"$MSCORE" --export-to "$PDF_FILE" "$MSCORE_FILE"
+	$MSCORE --force --export-to "$PDF_FILE" "$MSCORE_FILE"
 }
 
 _pdf_pages() {
@@ -234,7 +235,7 @@ if [ -z "$OPT_EPS" ] && [ -z "$OPT_SVG" ]; then
 	OPT_SVG=1
 fi
 
-_check_for_executable "$MSCORE"
+_check_for_executable $MSCORE
 _check_for_executable pdfcrop
 _check_for_executable pdfinfo
 _check_for_executable pdftops
