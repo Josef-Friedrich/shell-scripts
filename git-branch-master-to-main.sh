@@ -37,7 +37,28 @@ if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
 	exit 0
 fi
 
-git branch -m master main
+# Rename the local branch to the new name
+git branch --move master main
+
+# https://stackoverflow.com/a/9753364
+UPSTREAM_BRANCH="$(git rev-parse --abbrev-ref --symbolic-full-name @{u})"
+
+# https://stackoverflow.com/a/30590238
+if [ UPSTREAM_BRANCH != "origin/main" ]; then
+  # Delete the old branch on remote - where <remote> is, for example, origin
+  git push origin --delete master
+
+  # Prevent git from using the old name when pushing in the next step.
+  # Otherwise, git will use the old upstream name instead of <new_name>.
+  git branch --unset-upstream main
+
+  # Push the new branch to remote
+  git push origin main
+
+  # Reset the upstream branch for the new_name local branch
+  git push origin -u main
+fi
+
 git fetch origin
-git branch -u origin/main main
-git remote set-head origin -a
+git branch --set-upstream-to origin/main main
+git remote set-head origin --auto
