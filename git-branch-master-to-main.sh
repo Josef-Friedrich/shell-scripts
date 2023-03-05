@@ -62,3 +62,5 @@ fi
 git fetch origin
 git branch --set-upstream-to origin/main main
 git remote set-head origin --auto
+
+git branch --delete master
